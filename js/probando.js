@@ -1,8 +1,8 @@
-const boton = document.getElementById('probando')
+const ejecutar = document.getElementById('ejecutar')
 
 
 
-boton.addEventListener('click',()=>{
-    alert('ahora si xd')
-    document.getElementById("entrada").textContent='simona la mona'
+ejecutar.addEventListener('click',()=>{
+    alert(document.getElementById("entrada").textContent)
+    
 })
