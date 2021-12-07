@@ -3,6 +3,7 @@ const ejecutar = document.getElementById('ejecutar')
 
 
 ejecutar.addEventListener('click',()=>{
-    alert(document.getElementById("entrada").textContent)
-    
+    const entrada=document.getElementById("entrada").value
+    alert(entrada)
+    alert(typeof(entrada))
 })
