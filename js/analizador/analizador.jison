@@ -111,32 +111,30 @@ global
 
 expresion
     : CADENA    { $$ = $1; }
-    | aritmetica
-    | relacionales
+    | expresion IGUALDAD expresion       { $$ = ($1 == $3)? true : false; }
+	| expresion DIFERENTE expresion      { $$ = ($1 != $3)? true : false; }
+	| expresion MAYOR expresion          { $$ = ($1 > $3)? true : false; }
+	| expresion MENOR expresion          { $$ = ($1 < $3)? true : false; }
+    | expresion MAYORIGUAL expresion     { $$ = ($1 >= $3)? true : false; }
+    | expresion MENORIGUAL expresion     { $$ = ($1 <= $3)? true : false; }
+    | PARIZQ expresion PARDER            { $$ = $2; }
+    | MENOS expresion %prec UMENOS       { $$ = $2 *-1; }
+	| expresion MAS expresion            { $$ = $1 + $3; }
+	| expresion MENOS expresion          { $$ = $1 - $3; }
+	| expresion POR expresion            { $$ = $1 * $3; }
+	| expresion DIVIDIDO expresion       { $$ = $1 / $3; }
+    | ENTERO                             { $$ = Number($1);}
+    | DECIMAL                            { $$ = Number($1);}
+    | TRUE                               { $$ = true; }
+    | FALSE                              { $$ = false; }
     ;
 
 aritmetica
-    : MENOS aritmetica %prec UMENOS  { $$ = $2 *-1; }
-	| aritmetica MAS aritmetica       { $$ = $1 + $3; }
-	| aritmetica MENOS aritmetica     { $$ = $1 - $3; }
-	| aritmetica POR aritmetica       { $$ = $1 * $3; }
-	| aritmetica DIVIDIDO aritmetica  { $$ = $1 / $3; }
-    | PARIZQ aritmetica PARDER       { $$ = $2; }
-    | aritmetica MODULO aritmetica    { $$ = $1 % $3;}
-    | ENTERO    { $$ = Number($1);}
-    | DECIMAL   { $$ = Number($1);}
+    : 
     ;
 
 relacionales
-    : relacionales IGUALDAD relacionales       { $$ = ($1 == $3)? true : false; }
-	| relacionales DIFERENTE relacionales      { $$ = ($1 != $3)? true : false; }
-	| relacionales MAYOR relacionales          { $$ = ($1 > $3)? true : false; }
-	| relacionales MENOR relacionales          { $$ = ($1 < $3)? true : false; }
-    | relacionales MAYORIGUAL relacionales     { $$ = ($1 >= $3)? true : false; }
-    | relacionales MENORIGUAL relacionales     { $$ = ($1 <= $3)? true : false; }
-    | PARIZQ relacionales PARDER               { $$ = $2; }
-    | TRUE                                     { $$ = true; }
-    | FALSE                                    { $$ = false; }
+    : 
     | aritmetica                               { $$ = $1; }
     ;
 
