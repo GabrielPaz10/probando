@@ -5,7 +5,6 @@
 
 %%
 
-
 \s+                                 {}  //Se ingnoran espacio
 [ \r\t]+                            {}
 \n                                  {}
@@ -13,7 +12,6 @@
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] {}  //Comentario multilinea
 
 //operadores relacionales
-
 "=="        return '=='; //igualdad
 "!="        return '!='; //diferente
 ">"         return '>'; //mayor
@@ -21,30 +19,61 @@
 ">="        return '>='; //mayor igual
 "<="        return '<='; //menor igual
 
+//signos raros
+";"         return 'PTCOMA';
+"("         return 'PARIZQ';
+")"         return 'PARDER';
+"["         return 'CORIZQ';
+"]"         return 'CORDER';
+","         return 'COMA';
+"="         return 'IGUAL';
+"?"         return 'PREGUNTA';
+":"         return 'DOSPTS';
 
+//signos lógicos
+"&&"        return 'AND';
+"||"        return 'OR';
+"!"         return 'NOT';
 
 //Operadores Aritméticos
 "++"            return '++';        //Incremento
 "--"            return '--';        //Decremento
-"+"             return '+';         //Suma
-"-"             return '-';         //Resta
-"*"             return '*';         //Multipliación
-"/"             return '/';         //División
-"%"             return '%';         //Módulo
+"+"             return 'MAS';         //Suma
+"-"             return 'MENOS';         //Resta
+"*"             return 'POR';         //Multipliación
+"/"             return 'DIVIDIDO';         //División
+"%"             return 'MODULO';         //Módulo
+"pow"           return 'POW';
+"sqrt"          return 'SQRT';
+"sin"           return 'SIN';
+"cos"           return 'COS';
+"tan"           return 'TAN';
+
+
+//palabras reservadas
+"print"         return 'PRINT';
+"println"       return 'PRINTLN';
+"null"          return 'NULL';
+"int"           return 'INT';
+"double"        return 'DOUBLE';
+"boolean"       return 'BOOLEAN';
+"char"          return 'CHAR';
+"String"        return 'STRING';
+"struct"        return 'STRUCT';
+
 
 //valores primitivos e identificador
 \"((\\\")|[^\"\n])*\"                           { yytext = yytext.substr(1, yyleng-2); return 'CADENA'; }  //Cadena **
 \'((\\\\)|(\\n)|(\\t)|(\\\")|(\\\')|[^\'\n])\'  { yytext = yytext.substr(1, yyleng-2); return 'CARACTER'; } //Caracteres **
-[0-9]+"."[0-9]+\b               return 'DOUBLE';  //Decimal
-[0-9]+\b                        return 'INT';   //Entero
+[0-9]+("."[0-9]+)?\b            return 'DECIMAL';  //Decimal
+[0-9]+\b                        return 'ENTERO';   //Entero
 "true"                          return 'TRUE';     //Verdadero
 "false"                         return 'FALSE';    //Falso
-"null"                          return 'NULL'
 ([a-zA-Z])[a-zA-Z0-9_]*         return 'ID';       //Identificadores
 
 <<EOF>>                         return 'EOF';
 
-.   {}//{ output.setOutput(`-->Léxico, caracter: ${yytext} no pertenece al lenguaje (${yylloc.first_line}:${yylloc.first_column}).`);       errors.add(new Error("Léxico", `Caracter: ${yytext} no pertenece al lenguaje.`, yylloc.first_line, yylloc.first_column)); }
+.   { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }//{ output.setOutput(`-->Léxico, caracter: ${yytext} no pertenece al lenguaje (${yylloc.first_line}:${yylloc.first_column}).`);       errors.add(new Error("Léxico", `Caracter: ${yytext} no pertenece al lenguaje.`, yylloc.first_line, yylloc.first_column)); }
 
 /lex
 
@@ -55,25 +84,49 @@
 //%left '&&'
 //%right '!'
 %left '==' '!=' '>=' '<=' '>' '<'
-%left '+' '-'
-%left '*' '/' '%'
-//%left '++' '--'
+%left 'MAS' 'MENOS'
+%left 'POR' 'DIVIDIDO' 'MODULO'
 %right UCAST
-%left UMINUS
+%left UMENOS
 
 
 
 //analizador sintactico
 %start init
 
+%% /* Definición de la gramática */
+
 init
-    : completo EOF                {return $1;}
+    : completo EOF              
     ;
 
 completo
-    : completo global               {$1.push($2);$$=$1}
-    | global                        {$$=[$1];}
+    : completo global               
+    | global                        
     ;
 
 global
-    expresion
+    : imprimir
+;
+
+expresion
+    : CADENA    { $$ = $1; }
+    | aritmetica
+    ;
+
+aritmetica
+    : MENOS aritmetica %prec UMENOS  { $$ = $2 *-1; }
+	| aritmetica MAS aritmetica       { $$ = $1 + $3; }
+	| aritmetica MENOS aritmetica     { $$ = $1 - $3; }
+	| aritmetica POR aritmetica       { $$ = $1 * $3; }
+	| aritmetica DIVIDIDO aritmetica  { $$ = $1 / $3; }
+    | PARIZQ aritmetica PARDER       { $$ = $2; }
+    | aritmetica MODULO aritmetica    { $$ = $1 % $3;}
+    | ENTERO    { $$ = Number($1);}
+    | DECIMAL   { $$ = Number($1);}
+    ;
+
+imprimir
+    : PRINT PARIZQ expresion PARDER PTCOMA  {contenido = contenido+ $3; }
+    | PRINTLN PARIZQ expresion PARDER PTCOMA {contenido = contenido+ $3 + "\n"; }
+    ;
