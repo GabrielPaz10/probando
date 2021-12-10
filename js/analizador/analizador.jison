@@ -80,9 +80,9 @@
 
 //  Precedencias
 //%left '?' ':'
-//%left '||'
-//%left '&&'
-//%right '!'
+%left 'OR'
+%left 'AND'
+%right 'NOT'
 %left 'IGUALDAD' 'DIFERENTE' 'MAYORIGUAL' 'MENORIGUAL' 'MAYOR' 'MENOR'
 %left 'MAS' 'MENOS'
 %left 'POR' 'DIVIDIDO' 'MODULO'
@@ -124,6 +124,9 @@ expresion
 	| expresion POR expresion            { $$ = $1 * $3; }
 	| expresion DIVIDIDO expresion       { $$ = $1 / $3; }
     | expresion MODULO expresion         { $$ = $1 % $3; }
+    | expresion AND expresion            { $$ = ($1 && $3)?true:false; }
+	| expresion OR expresion             { $$ = ($1 !! $3)?true:false; }
+    | NOT expresion                      { $$ = ($1)?false:true ; }
     | ENTERO                             { $$ = Number($1);}
     | DECIMAL                            { $$ = Number($1);}
     | TRUE                               { $$ = true; }
