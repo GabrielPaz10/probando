@@ -14,10 +14,11 @@
 //operadores relacionales
 "=="        return 'IGUALDAD'; //igualdad
 "!="        return 'DIFERENTE'; //diferente
-">"         return 'MAYOR'; //mayor
-"<"         return 'MENOR'; //menor
 ">="        return 'MAYORIGUAL'; //mayor igual
 "<="        return 'MENORIGUAL'; //menor igual
+">"         return 'MAYOR'; //mayor
+"<"         return 'MENOR'; //menor
+
 
 //signos raros
 ";"         return 'PTCOMA';
@@ -125,7 +126,7 @@ expresion
 	| expresion DIVIDIDO expresion       { $$ = $1 / $3; }
     | expresion MODULO expresion         { $$ = $1 % $3; }
     | expresion AND expresion            { $$ = ($1 && $3)?true:false; }
-	| expresion OR expresion             { $$ = ($1 !! $3)?true:false; }
+	| expresion OR expresion             { $$ = ($1 || $3)?true:false; }
     | NOT expresion                      { $$ = ($1)?false:true ; }
     | ENTERO                             { $$ = Number($1);}
     | DECIMAL                            { $$ = Number($1);}
