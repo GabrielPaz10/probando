@@ -12,12 +12,12 @@
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] {}  //Comentario multilinea
 
 //operadores relacionales
-"=="        return '=='; //igualdad
-"!="        return '!='; //diferente
-">"         return '>'; //mayor
-"<"         return '<'; //menor
-">="        return '>='; //mayor igual
-"<="        return '<='; //menor igual
+"=="        return 'IGUALDAD'; //igualdad
+"!="        return 'DIFERENTE'; //diferente
+">"         return 'MAYOR'; //mayor
+"<"         return 'MENOR'; //menor
+">="        return 'MAYORIGUAL'; //mayor igual
+"<="        return 'MENORIGUAL'; //menor igual
 
 //signos raros
 ";"         return 'PTCOMA';
@@ -83,7 +83,7 @@
 //%left '||'
 //%left '&&'
 //%right '!'
-%left '==' '!=' '>=' '<=' '>' '<'
+%left 'IGUALDAD' 'DIFERENTE' 'MAYORIGUAL' 'MENORIGUAL' 'MAYOR' 'MENOR'
 %left 'MAS' 'MENOS'
 %left 'POR' 'DIVIDIDO' 'MODULO'
 %right UCAST
@@ -112,6 +112,7 @@ global
 expresion
     : CADENA    { $$ = $1; }
     | aritmetica
+    | relacionales
     ;
 
 aritmetica
@@ -124,6 +125,19 @@ aritmetica
     | aritmetica MODULO aritmetica    { $$ = $1 % $3;}
     | ENTERO    { $$ = Number($1);}
     | DECIMAL   { $$ = Number($1);}
+    ;
+
+relacionales
+    : relacionales IGUALDAD relacionales       { $$ = ($1 == $3)? true : false; }
+	| relacionales DIFERENTE relacionales      { $$ = ($1 != $3)? true : false; }
+	| relacionales MAYOR relacionales          { $$ = ($1 > $3)? true : false; }
+	| relacionales MENOR relacionales          { $$ = ($1 < $3)? true : false; }
+    | relacionales MAYORIGUAL relacionales     { $$ = ($1 >= $3)? true : false; }
+    | relacionales MENORIGUAL relacionales     { $$ = ($1 <= $3)? true : false; }
+    | PARIZQ relacionales PARDER               { $$ = $2; }
+    | TRUE                                     { $$ = true; }
+    | FALSE                                    { $$ = false; }
+    | aritmetica                               { $$ = $1; }
     ;
 
 imprimir
