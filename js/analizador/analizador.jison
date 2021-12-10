@@ -123,20 +123,13 @@ expresion
 	| expresion MENOS expresion          { $$ = $1 - $3; }
 	| expresion POR expresion            { $$ = $1 * $3; }
 	| expresion DIVIDIDO expresion       { $$ = $1 / $3; }
+    | expresion MODULO expresion         { $$ = $1 % $3; }
     | ENTERO                             { $$ = Number($1);}
     | DECIMAL                            { $$ = Number($1);}
     | TRUE                               { $$ = true; }
     | FALSE                              { $$ = false; }
     ;
 
-aritmetica
-    : 
-    ;
-
-relacionales
-    : 
-    | aritmetica                               { $$ = $1; }
-    ;
 
 imprimir
     : PRINT PARIZQ expresion PARDER PTCOMA  {contenido = contenido+ $3; }
