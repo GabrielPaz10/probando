@@ -1,5 +1,5 @@
-//import {Parametros}
 import { Instruccion } from "../abstractas/instruccion";
+import { Parametros } from "../instrucciones/funciones/parametros";
 import { Tipos } from "../tiposD/Tipos";
 import { Metodo } from "./Metodo";
 export class TablaMetodos{
@@ -10,8 +10,8 @@ export class TablaMetodos{
         this.metodos=this.metodos.concat(metodos)
     }
 
-    public agregar(tipo:Tipos,id:string,/*parametors:Parametro[],*/cuerpo:Instruccion[]){
-        this.metodos.push(new Metodo(tipo,id,'',cuerpo))
+    public agregar(tipo:Tipos,id:string,parametros:Parametros[],cuerpo:Instruccion[]){
+        this.metodos.push(new Metodo(tipo,id,parametros,cuerpo))
     }
     public get(id:string){
         var metodo= this.metodos.filter((metod:Metodo)=>metod.id==id)[0]

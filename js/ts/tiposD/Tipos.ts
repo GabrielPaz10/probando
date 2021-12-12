@@ -5,7 +5,10 @@ export enum Tipos{
     BOOLEAN=2,
     CHAR=3,
     STRING =4,
-    STRUCT=5
+    STRUCT=5,
+    NULL =6,
+    VOID=7,
+    ARRAY=8
 }
 
 export type Valor={
