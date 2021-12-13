@@ -41,7 +41,7 @@ export class Relacional extends Expresion{
                 return {tipo: Tipos.BOOLEAN, valor:(izq.valor<=dere.valor)}
         }
     }
-    public ast(metodos: TablaMetodos): Nodo {
-        throw new Error('Method not implemented.');
+    public ast(metodos: TablaMetodos): Nodo {//hola aby
+        return null
     }
 }

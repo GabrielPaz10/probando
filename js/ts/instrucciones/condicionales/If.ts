@@ -21,7 +21,7 @@ export class If extends Instruccion{
         const condi = this.condicion.ejecutar(tsGlobal,tsLocal,metodos,entorno)
         if (condi.tipo!= Tipos.BOOLEAN) {
             errores.agregar(new Error('Semantico',`La condicion debe ser tipo Bool, no ${condi.tipo} l:${this.linea} c:${this.columna}`,this.linea,this.columna,entorno))
-            consola.actualizar(`La condicion debe ser tipo Bool, no ${condi.tipo} l:${this.linea} c:${this.columna}`)
+            consola.actualizar(`La condicion debe ser tipo Bool, no ${condi.tipo} l:${this.linea} c:${this.columna}\n`)
         }
         var control
         if (condi.valor) {
