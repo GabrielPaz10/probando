@@ -2,6 +2,7 @@ import { Expresion } from '../../abstractas/expresion';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { Valor, Tipos, Nodo } from '../../tiposD/Tipos';
+import { Consola } from '../../Reportes/Consola';
 
 export enum TipoOperacion{
     SUMA,
@@ -25,6 +26,62 @@ export class Aritmetica extends Expresion{
     }
 
     public  ejecutar(tsGlobal:TablaSimbolo,tsLocal:TablaSimbolo,metodos:TablaMetodos,entorno:string):Valor{
+        let izq = this.izquierdo.ejecutar(tsGlobal,tsLocal,metodos,entorno)
+        let dere =this.derecho.ejecutar(tsGlobal,tsLocal,metodos,entorno)
+        const dominante = this.tipoDominante(izq.tipo,dere.tipo,this.operacion)
+        switch (this.operacion) {
+            case TipoOperacion.SUMA:
+                switch (dominante) {
+                    case Tipos.INT:
+                        return {tipo: Tipos.INT, valor: (Number(izq.valor) + Number(dere.valor))}
+                    case Tipos.DOUBLE:
+                        return {tipo: Tipos.DOUBLE, valor: (Number(izq.valor) + Number(dere.valor))}
+                    default:
+                        
+                        break;
+                }
+                break;
+            case TipoOperacion.RESTA:
+                switch (dominante) {
+                    case Tipos.INT:
+                        return {tipo: Tipos.INT, valor: (Number(izq.valor) - Number(dere.valor))}
+                    case Tipos.DOUBLE:
+                        return {tipo: Tipos.DOUBLE, valor: (Number(izq.valor) - Number(dere.valor))}
+                    default:
+                        
+                        break;
+                }
+                break
+            case TipoOperacion.MULTIPLICACION:
+                switch (dominante) {
+                    case Tipos.INT:
+                        return {tipo: Tipos.INT, valor: (Number(izq.valor) * Number(dere.valor))}
+                    case Tipos.DOUBLE:
+                        return {tipo: Tipos.DOUBLE, valor: (Number(izq.valor) * Number(dere.valor))}
+                    default:
+                        
+                        break;
+                }
+                break
+            case TipoOperacion.DIVISION:
+                if (dominante===Tipos.DOUBLE) {
+                    return {tipo: Tipos.DOUBLE, valor: (Number(izq.valor) / Number(dere.valor))}
+                }
+                break
+            case TipoOperacion.MODULO:
+                if (dominante===Tipos.INT) {
+                    return {tipo: Tipos.DOUBLE, valor: (Number(izq.valor) % Number(dere.valor))}
+                }
+                break
+            case TipoOperacion.CONCATENACION:
+                if (dominante===Tipos.STRING) {
+                    return {tipo: Tipos.DOUBLE, valor: (izq.valor +dere.valor)}
+                }
+                
+                break
+            default:
+                break;
+        }
         return null
     }
 
