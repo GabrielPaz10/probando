@@ -19,16 +19,17 @@ export class Print extends Instruccion{
         if (this.banderaS) {//si la bandera es verdadera, se imprime el salto (println)
             for (let index = 0; index < this.expresiones.length; index++) {
                 if(this.expresiones[index] instanceof Expresion){
-                    const valor= this.expresiones[index].ejecutar(tsGlobal,tsGlobal,metodos,entorno)
-                    consola.actualizar(valor.valor+'\n')
+                    const valor= this.expresiones[index].ejecutar(tsGlobal,tsLocal,metodos,entorno)
+                    consola.actualizar(valor.valor)
                 }else{
-                    consola.actualizar('\n')
+                    consola.actualizar('')
                 }
             }
+            consola.actualizar('\n')
         }else{//si no hay bandera no se imprime salto (print)
             for (let index = 0; index < this.expresiones.length; index++) {
                 if(this.expresiones[index] instanceof Expresion){
-                    const valor= this.expresiones[index].ejecutar(tsGlobal,tsGlobal,metodos,entorno)
+                    const valor= this.expresiones[index].ejecutar(tsGlobal,tsLocal,metodos,entorno)
                     consola.actualizar(valor.valor)
                 }else{
                     consola.actualizar('')
