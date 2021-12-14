@@ -1,3 +1,6 @@
+import { TablaMetodos } from '../Reportes/TablaMetodos';
+import { TablaSimbolo } from '../Reportes/TablaSimbolos';
+import { Nodo } from '../tiposD/Tipos';
 
 
 
@@ -13,7 +16,7 @@ export abstract class Instruccion{
         this.columna=columna
     }
 
-    public abstract ejecutar()
-    //public abstract ast()
+    public abstract ejecutar(tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo, metodos:TablaMetodos,entorno:string):any
+    public abstract ast(metodos:TablaMetodos):Nodo
     //public abstract traducir()
 }

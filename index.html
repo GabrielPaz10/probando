@@ -4,31 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://codemirror.net/theme/dracula.css" />
     <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/128/4119/4119456.png">
-    <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>Quetzal</title>
-
-    <nav class="navbar  nav-tabs navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" >
-            <img src="https://cdn-icons-png.flaticon.com/128/4119/4119456.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
-            Quetzal</a>
-        <button  type="button" class="btn btn-outline-success me-2 " id="ejecutar">Ejecutar</button>
-        <button  type="button" class="btn btn-outline-success me-2" id="ast">Ast</button>
-        <button  type="button" class="btn btn-outline-success me-2" id="tabla">Simbolos</button>
-        <button  type="button" class="btn btn-outline-success me-2" id="errores">Errores</button>
-        <button  type="button" class="btn btn-outline-success me-2" id="errores">Traducir</button>
-        <button  type="button" class="btn btn-outline-success me-2" id="errores">Reporte Gramatical</button>
-
+    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"> </script> 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/graphdracula/1.0.3/dracula.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/graphdracula/1.0.3/dracula.min.js" integrity="sha512-yRjDJDKbHSoC7TeoHjuheCXKqRhiW1jUxlYMB2PRLOyzuzS2CAxoEpPEoVWuVoeZN5G6f7AB9LVnuGtsf75ocw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    
+    <!--                     EL ENCABEZADO O INICIO                   -->
+    <nav class="navbar  nav-tabs navbar-expand-lg navbar-dark bg-dark" id="inicio">
+        <a class="navbar-brand" > <img src="https://cdn-icons-png.flaticon.com/128/4119/4119456.png" alt="" width="30" height="24" class="d-inline-block align-text-top"> Quetzal</a>
+        <button  type="button" class="btn btn-outline-success me-2 " id="ejecutar"><a class="navbar-brand">Ejecutar </a></button>
+        <button  href="http://google.com" type="button" class="btn btn-outline-success me-2" id="traducir"><a class="navbar-brand" >Traducir </a></button>
+        <button  type="button" class="btn btn-outline-success me-2" id="ast"><a class="navbar-brand" href="#mostrarast">AST </a></button>
+        <button  type="button" class="btn btn-outline-success me-2" id="tabla"><a class="navbar-brand" href="#mostrartablasimbolos">Tabla de Simbolos </a></button>
+        <button  type="button" class="btn btn-outline-success me-2" id="errores" ><a class="navbar-brand" href="#mostrartablaerrores">Tabla de Errores </a></button>
+        <button  type="button" class="btn btn-outline-success me-2" id="gramatica"><a class="navbar-brand" href="#mostrargramatica">Reporte Gramatical </a></button>
     </nav>
 </head>
 <body class="bg-dark "> 
-    <p> 
 
-
-
-    </p>
+    <!--                             LOS TEXTBOX                         -->
+    <span class="placeholder col-12 bg-success"></span>
+    <span class="placeholder col-12 "></span>
     <div class="container">
         <section class="main row">
             <div class="col-md-6">
@@ -42,9 +40,131 @@
         </section>
         <h4 style="color:whitesmoke;">Consola</h4>
             <textarea rows="20" cols="155" id="consola"></textarea>
+    </div>
+</br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>
+    <!-- Aquí estará el AST -->
+    <span class="placeholder col-12 bg-success"id="mostrarast" ></span>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <button class="btn btn-outline-success me-2" type="button"><a class="navbar-brand" href="#inicio"> <img src="https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-up-01-512.png"  width="180" height="30" class="d-inline-block align-text-top"> </a></button>
+    </div>
+    <div id="canvas"></div> 
+</br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>
+</br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>
+    <!--                     TABLA DE SIMBOLOS                   -->
+    <span class="placeholder col-12 bg-success"id="mostrartablasimbolos" ></span>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <button class="btn btn-outline-success me-2" type="button"><a class="navbar-brand" href="#inicio"> <img src="https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-up-01-512.png"  width="180" height="30" class="d-inline-block align-text-top"> </a></button>
+    </div>
+    <span class="placeholder col-12 "></span>
+    <div class="card border-light text-white bg-dark mx-auto"  style="max-width: 100rem;"">
+        <div class="card-header mx-auto"><h4 style="color:whitesmoke;">Tabla de Simbolos</h4></div>
+        <div class="card-body text-dark">
+            <table class="table table-dark table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
         
     </div>
-    <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
+</br> </br> </br> </br> </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>
+
+<!--                     TABLA DE ERRORES                   -->
+    <span class="placeholder col-12 bg-success"id="mostrartablaerrores" ></span>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <button class="btn btn-outline-success me-2" type="button"><a class="navbar-brand" href="#inicio"> <img src="https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-up-01-512.png"  width="180" height="30" class="d-inline-block align-text-top"> </a></button>
+    </div>
+    <span class="placeholder col-12 "></span>
+    <div class="card border-light text-white bg-dark mx-auto"  style="max-width: 100rem;">
+        <div class="card-header mx-auto"><h4 style="color:whitesmoke;">Tabla de Errores</h4></div>
+        <div class="card-body text-dark">
+            <table class="table table-dark table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</br> </br> </br> </br> </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>
+    <!-- Aquí estará el REPORTE GRAMATICAL -->
+    <span class="placeholder col-12 bg-success"id="mostrargramatica" ></span>
+    <div class="d-grid gap-2 col-6 mx-auto">
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <button class="btn btn-outline-success me-2" type="button"><a class="navbar-brand" href="#inicio"> <img src="https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-up-01-512.png"  width="180" height="30" class="d-inline-block align-text-top"> </a></button>
+    </div>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://i.pinimg.com/originals/1d/9c/e2/1d9ce203b7fb0ef52b5efb0489c9e1a9.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="https://hoyimagenes.net/wp-content/uploads/2016/04/DecirTequiero18.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiefYurcYCHUADuO1I0acfDedgXA89CdOUuA&usqp=CAU" class="d-block w-100" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+ 
+</br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>
+</br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br> </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>     </br>
         <style type="text/css">
             textarea{
                 background: url(http://i.imgur.com/2cOaJ.png);
@@ -56,10 +176,10 @@
                 border-color:#ccc;
                 color: honeydew;
                 }
-          </style>
+        </style>
     <script  src="./js/probando.js"></script>
     <script src="js/analizador/analizador.js"></script>
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
 </body>
 </html>

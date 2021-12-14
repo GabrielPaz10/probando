@@ -1,3 +1,6 @@
+import { TablaSimbolo } from '../Reportes/TablaSimbolos';
+import { TablaMetodos } from '../Reportes/TablaMetodos';
+import { Nodo, Valor } from '../tiposD/Tipos';
 
 
 export abstract class Expresion{
@@ -11,7 +14,7 @@ export abstract class Expresion{
         this.columna=columna
         this.linea=linea
     }
-    public abstract ejecutar()
-    //public abstract ast()
+    public abstract ejecutar(tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo, metodos:TablaMetodos,entorno:string):Valor
+    public abstract ast(metodos:TablaMetodos):Nodo
     //public abstract traducir()
 }
