@@ -19,7 +19,7 @@ export class Dowhile extends Instruccion{
         this.verError(condicion,entorno)
         do{
             var entornoLocal = new TablaSimbolo(tsLocal.getSimbolos())
-            const control = this.correrInstrucciones(tsGlobal,entornoLocal,metodos,entorno+"While")
+            const control = this.correrInstrucciones(tsGlobal,entornoLocal,metodos,entorno+"DoWhile")
             if (control!==null) {
                 if (control.tipo===TiposControl.BREAK) {
                     break
@@ -49,8 +49,8 @@ export class Dowhile extends Instruccion{
 
     private verError(condicion:Valor,entorno:string){
         if (condicion.tipo!= Tipos.BOOLEAN) {
-            consola.actualizar(`La condicion de WHILE debe ser de tipo boolean, l:${this.linea} c:${this.columna}`);
-            errores.agregar(new Error('Semantico',`La condicion de WHILE debe ser de tipo boolean, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))
+            consola.actualizar(`La condicion de DOWHILE debe ser de tipo boolean, l:${this.linea} c:${this.columna}`);
+            errores.agregar(new Error('Semantico',`La condicion de DOWHILE debe ser de tipo boolean, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))
         }
     }
     public ast(metodos: TablaMetodos): Nodo {//hola Aby
