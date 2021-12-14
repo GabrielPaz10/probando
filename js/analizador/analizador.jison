@@ -1,7 +1,7 @@
 // analizador lexico
 
 %lex
-%options case-insensitive
+%options case-sensitive
 
 %%
 
