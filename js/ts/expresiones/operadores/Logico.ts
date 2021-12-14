@@ -3,6 +3,8 @@ import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { Valor, Tipos, Nodo } from '../../tiposD/Tipos';
 import { v4 as uuidv4 } from 'uuid';
+import { consola, errores } from '../..';
+import { Error } from '../../Reportes/Error';
 
 export enum TipoLogico{
     AND,
@@ -24,7 +26,7 @@ export class Logico extends Expresion{
     public ejecutar(tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo, metodos:TablaMetodos, entorno:string):Valor{
         const izq = this.izquierdo.ejecutar(tsGlobal, tsLocal, metodos, entorno)
         const dere = this.getDer(tsGlobal, tsLocal, metodos, entorno)
-  // this.setError(leftV.type, rightV.type)
+        this.setError(izq.tipo, dere.tipo,entorno)
 
         switch(this.tipo){
             case TipoLogico.AND:
@@ -34,7 +36,7 @@ export class Logico extends Expresion{
                 return {tipo: Tipos.BOOLEAN, valor:(!izq.valor)}
 
             case TipoLogico.OR:
-                return {tipo: Tipos.BOOLEAN, valor:(izq.valor || dere.v4 as uuidv4)}
+                return {tipo: Tipos.BOOLEAN, valor:(izq.valor || dere.valor)}
         }
     }
     private getDer(tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo, metodos:TablaMetodos, entorno:string):Valor{
@@ -45,10 +47,10 @@ export class Logico extends Expresion{
         
     }
     
-    private setError(izqT:Tipos, derT:Tipos){
-        if(izqT !== Tipos.BOOLEAN && derT !== Tipos.BOOLEAN && this.tipo !== Tipos.NOT){
-          //  output.setOutput(`-->Semántico, mala operación de tipos: ${TipoLogico[this.tipo]}, entre: ${Tipos[izqT]} y ${Tipos[derT]} (${this.linea}:${this.columna}).`)
-            //throw new Error("Semántico", `Mala operación de tipos: ${TipoLogico[this.type]}, entre: ${Tipos[izqT]} y ${Tipos[derT]}.`, this.linea, this.columna)
+    private setError(izqT:Tipos, derT:Tipos,entorno:string){
+        if(izqT !== Tipos.BOOLEAN && derT !== Tipos.BOOLEAN && this.tipo !== TipoLogico.NOT){
+            consola.actualizar(`Los tipos no son operables ${izqT} y ${derT}, l:${this.linea} c:${this.columna}`);
+            errores.agregar(new Error('Semantico',`Los tipos no son operables ${izqT} y ${derT}, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))
         }
     }
     
