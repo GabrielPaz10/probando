@@ -10,6 +10,8 @@ ejecutar.addEventListener('click',()=>{
     analizador.parse(entrada)
     consola.value=contenido
 })
+
+
 // var redraw;
 // window.height = 300;
 // window.width = 400;
