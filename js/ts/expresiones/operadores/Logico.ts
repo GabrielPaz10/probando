@@ -2,7 +2,6 @@ import { Expresion } from '../../abstractas/expresion';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { Valor, Tipos, Nodo } from '../../tiposD/Tipos';
-import { v4 as uuidv4 } from 'uuid';
 import { consola, errores } from '../..';
 import { Error } from '../../Reportes/Error';
 
@@ -53,9 +52,19 @@ export class Logico extends Expresion{
             errores.agregar(new Error('Semantico',`Los tipos no son operables ${izqT} y ${derT}, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))
         }
     }
+    public generateUUID() {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        return uuid;
+    }
     
     public ast(metodos:TablaMetodos):Nodo{
-        const id = `n${uuidv4().replace(/\-/g, "")}`
+        // const id = `n${uuidv4().replace(/\-/g, "")}`
+        const id =this.generateUUID();
         const izquierda = this.izquierdo.ast(metodos)
         let ast = `${id} [label="${this.getOperation()}"];
         ${izquierda.ast}
