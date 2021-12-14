@@ -16,8 +16,8 @@ export class While extends Instruccion{
     public ejecutar(tsGlobal: TablaSimbolo, tsLocal: TablaSimbolo, metodos: TablaMetodos, entorno: string) {
         var condicion = this.condicion.ejecutar(tsGlobal,tsLocal,metodos,entorno+'While')
         if (condicion.tipo!= Tipos.BOOLEAN) {
-            consola.actualizar(`La condicion de IF debe ser de tipo boolean, l:${this.linea} c:${this.columna}`);
-            errores.agregar(new Error('Semantico',`La condicion de IF debe ser de tipo boolean, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))
+            consola.actualizar(`La condicion de WHILE debe ser de tipo boolean, l:${this.linea} c:${this.columna}`);
+            errores.agregar(new Error('Semantico',`La condicion de WHILE debe ser de tipo boolean, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))
         }
         while(condicion.valor){
             var entornoLocal = new TablaSimbolo(tsLocal.getSimbolos())
@@ -36,8 +36,8 @@ export class While extends Instruccion{
             }
             condicion = this.condicion.ejecutar(tsGlobal,tsLocal,metodos,entorno)
             if (condicion.tipo!= Tipos.BOOLEAN) {
-                consola.actualizar(`La condicion de IF debe ser de tipo boolean, l:${this.linea} c:${this.columna}`);
-                errores.agregar(new Error('Semantico',`La condicion de IF debe ser de tipo boolean, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))
+                consola.actualizar(`La condicion de WHILE debe ser de tipo boolean, l:${this.linea} c:${this.columna}`);
+                errores.agregar(new Error('Semantico',`La condicion de WHILE debe ser de tipo boolean, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))
             }
         }
     }
