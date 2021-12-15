@@ -117,7 +117,14 @@ export class Aritmetica extends Expresion{
     public tipoDominante(tipoIzquierdo:Tipos,tipoDerecho:Tipos,operador:TipoOperacion){
         switch (operador) {
             case TipoOperacion.SUMA:
-                
+                if (tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.INT) {
+                    return Tipos.INT
+                }else if((tipoIzquierdo===Tipos.DOUBLE&&tipoDerecho===Tipos.DOUBLE)
+                ||(tipoIzquierdo===Tipos.DOUBLE&&tipoDerecho===Tipos.INT)
+                ||(tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.DOUBLE)){
+                    return Tipos.DOUBLE
+                }
+                return null
             case TipoOperacion.RESTA:
                 if (tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.INT) {
                     return Tipos.INT
@@ -134,16 +141,13 @@ export class Aritmetica extends Expresion{
                 ||(tipoIzquierdo===Tipos.DOUBLE&&tipoDerecho===Tipos.INT)
                 ||(tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.DOUBLE)){
                     return Tipos.DOUBLE
-                }else if((tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.STRING)
-                ||tipoIzquierdo===Tipos.STRING&&tipoDerecho===Tipos.INT){
-                    return Tipos.STRING
                 }
                 return null
             case TipoOperacion.EXTE:
                 if (tipoIzquierdo===Tipos.STRING&&tipoDerecho===Tipos.INT) {
                     return Tipos.STRING
                 }
-                break
+                return null
             case TipoOperacion.DIVISION:
                 if ((tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.INT)
                 ||(tipoIzquierdo===Tipos.DOUBLE&&tipoDerecho===Tipos.DOUBLE)

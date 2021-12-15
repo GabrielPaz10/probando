@@ -11,7 +11,7 @@ export class TablaSimbolo{
     public agregar(simbolo:Simbolo){
         this.simbolos.push(simbolo)
     }
-    public obtenerSimbolo(id:string):Simbolo|any{
+    public obtenerSimbolo(id:string):Simbolo{
         var simbolo = this.simbolos.filter((simb:Simbolo)=>simb.id==id)[0]
         if(simbolo)
             return simbolo
