@@ -37,6 +37,7 @@
 "!"         return 'NOT';
 
 //Operadores Aritméticos
+"^"             return 'EXTE'
 "&"             return 'CONCATENACION'
 "++"            return 'INC';        //Incremento
 "--"            return 'DEC';        //Decremento
@@ -88,6 +89,7 @@
 %left 'IGUALDAD' 'DIFERENTE' 'MAYORIGUAL' 'MENORIGUAL' 'MAYOR' 'MENOR'
 %left 'MAS' 'MENOS'
 %left 'POR' 'DIVIDIDO' 'MODULO'
+%left 'INC','DEC'
 %right UCAST
 %left UMENOS
 
@@ -113,7 +115,7 @@ global
 
 expresion
     : CADENA                             { $$ = $1; }
-    
+    | expresion EXTE expresion           { $$ = $1 * $2; }
     | expresion IGUALDAD expresion       { $$ = ($1 == $3)? true : false; }
 	| expresion DIFERENTE expresion      { $$ = ($1 != $3)? true : false; }
 	| expresion MAYOR expresion          { $$ = ($1 > $3)? true : false; }
@@ -122,7 +124,7 @@ expresion
     | expresion MENORIGUAL expresion     { $$ = ($1 <= $3)? true : false; }
     | PARIZQ expresion PARDER            { $$ = $2; }
     | MENOS expresion %prec UMENOS       { $$ = $2 *-1; }
-    | expresion CONCATENACION expresion        { $$ = ($1 + $3); }
+    | expresion CONCATENACION expresion  { $$ = ($1 + $3); }
 	| expresion MAS expresion            { $$ = $1 + $3; }
 	| expresion MENOS expresion          { $$ = $1 - $3; }
 	| expresion POR expresion            { $$ = $1 * $3; }
