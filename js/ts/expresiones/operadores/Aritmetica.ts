@@ -11,7 +11,8 @@ export enum TipoOperacion{
     MULTIPLICACION,
     DIVISION,
     MODULO,
-    CONCATENACION
+    CONCATENACION,
+    EXTE
 }
 export class Aritmetica extends Expresion{
 
@@ -61,18 +62,6 @@ export class Aritmetica extends Expresion{
                         return {tipo: Tipos.INT, valor: (Number(izq.valor) * Number(dere.valor))}
                     case Tipos.DOUBLE:
                         return {tipo: Tipos.DOUBLE, valor: (Number(izq.valor) * Number(dere.valor))}
-                    case Tipos.STRING:
-                        let concatena= ''
-                        if (izq.tipo===Tipos.INT) {
-                            for (let index = 0; index < izq.valor; index++) {
-                                concatena+=dere.valor
-                            }
-                        }else if (dere.tipo===Tipos.INT){
-                            for (let index = 0; index < dere.valor; index++) {
-                                concatena+=izq.valor
-                            }
-                        }
-                        return {tipo: Tipos.STRING, valor: concatena}
                     default:
                         errores.agregar(new Error('Semantico',`No se puede Multiplicar entre los tipos ${izq.tipo} , ${dere.tipo}` ,this.linea,this.columna,entorno))
                         consola.actualizar(`No se puede multiplicar entre los tipos ${izq.tipo} , ${dere.tipo} l:${this.linea} c:${this.columna} \n`)
@@ -101,6 +90,19 @@ export class Aritmetica extends Expresion{
             case TipoOperacion.CONCATENACION:
                 if (dominante===Tipos.STRING) {
                     return {tipo: Tipos.DOUBLE, valor: (izq.valor +dere.valor)}
+                }
+                errores.agregar(new Error('Semantico',`No se puede concatenar ${izq.tipo} con ${dere.tipo}` ,this.linea,this.columna,entorno))
+                consola.actualizar(`No se puede concatenar entre los tipos ${izq.tipo} , ${dere.tipo} l:${this.linea} c:${this.columna} \n`)
+                break
+            case TipoOperacion.EXTE:
+                if (dominante===Tipos.STRING) {
+                    if (izq.tipo===Tipos.STRING&&dere.tipo===Tipos.INT) {
+                        let concatena= ''
+                        for (let index = 0; index < dere.valor; index++) {
+                            concatena+=izq.valor
+                        }
+                        return {tipo: Tipos.STRING, valor: concatena}
+                    }
                 }
                 errores.agregar(new Error('Semantico',`No se puede concatenar ${izq.tipo} con ${dere.tipo}` ,this.linea,this.columna,entorno))
                 consola.actualizar(`No se puede concatenar entre los tipos ${izq.tipo} , ${dere.tipo} l:${this.linea} c:${this.columna} \n`)
@@ -136,8 +138,12 @@ export class Aritmetica extends Expresion{
                 ||tipoIzquierdo===Tipos.STRING&&tipoDerecho===Tipos.INT){
                     return Tipos.STRING
                 }
-            
                 return null
+            case TipoOperacion.EXTE:
+                if (tipoIzquierdo===Tipos.STRING&&tipoDerecho===Tipos.INT) {
+                    return Tipos.STRING
+                }
+                break
             case TipoOperacion.DIVISION:
                 if ((tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.INT)
                 ||(tipoIzquierdo===Tipos.DOUBLE&&tipoDerecho===Tipos.DOUBLE)
