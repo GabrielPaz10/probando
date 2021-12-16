@@ -10,9 +10,12 @@ export enum Tipos{
     VOID=7,
     ARRAY=8
 }
-
+export enum Intervalo{
+    BEGIN   =0,
+    END     =1
+}
 export type Valor={
-    tipo:Tipos,
+    tipo:Tipos|Intervalo,
     valor:any
 }
 
