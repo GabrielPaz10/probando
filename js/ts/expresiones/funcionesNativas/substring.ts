@@ -31,7 +31,6 @@ export class Substring extends Expresion{
                         case Intervalo.END:
                             return {tipo:Tipos.STRING, valor: cadena.valor.substring(inicio.valor,(cadena.valor.length+1))}
                     }
-                    break
                 case Intervalo.BEGIN:
                     switch (final.tipo) {
                         case Tipos.INT:
