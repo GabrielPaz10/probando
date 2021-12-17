@@ -7,7 +7,7 @@ export class Simbolo{
     public valor:any
     public entorno:string
     public categoria:string //( variable, arreglo)
-    constructor(tipo:Tipos, id:string,valor:any,entorno:string,categoria:string){
+    constructor(tipo:Tipos, id:string,valor:any,entorno:string,categoria:string='variable'){
         this.tipo=tipo
         this.id=id
         this.valor=valor
