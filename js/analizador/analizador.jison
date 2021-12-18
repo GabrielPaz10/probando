@@ -1,3 +1,65 @@
+//importaciones
+%{
+    //salida y errores
+    const {errores,consola} =require('../ts/index.js')
+    const {Error} = require('../ts/Reportes/Error.js')
+    //tipos de datos
+    const {Tipos}= require('../ts/tiposD/Tipos.js')
+    //declaracion
+    const {Declaracion}= require('../ts/instrucciones/declaracion/declaracion.js')
+    //asignacion 
+    const {AsignacionDecInc,TipoAsignacion} = require('../ts/instrucciones/asignacion/asignacionDecInc.js')
+    const {Asignacion} = require('../ts/instrucciones/asignacion/asignacion.js')
+    //funciones
+    const { LlamadaMetodo } = require('../ts/instrucciones/funciones/llamadaMetodo.js')
+    const { Parametros } = require('../ts/instrucciones/funciones/parametros.js')
+    const { Funcion } = require('../ts/instrucciones/funciones/funcion.js')
+    const { LlamarFuncion } = require('../ts/expresiones/llamarFunciones.js')
+    const { Main } = require('../ts/instrucciones/funciones/main.js')
+    //control
+    const { Break } = require('../ts/instrucciones/control/break.js')
+    const { Continue } = require('../ts/instrucciones/control/continue.js')
+    const { Return } = require('../ts/instrucciones/control/return.js')
+    //condicionales 
+    const { Case } = require('../ts/instrucciones/condicionales/Case.js')
+    const { If } = require('../ts/instrucciones/condicionales/If.js')
+    const { Switch } = require('../ts/instrucciones/condicionales/Switch.js')
+    //ciclos
+    const { Dowhile } = require('../ts/instrucciones/ciclos/dowhile.js')
+    const { For } = require('../ts/instrucciones/ciclos/for.js')
+    const { While } = require('../ts/instrucciones/ciclos/while.js')
+    //valores 
+    const { ObtenerValor } = require('../ts/expresiones/valores/obtenerValor.js')
+    const { SetearValor } = require('../ts/expresiones/valores/setearValor.js')
+    //operadores 
+    const { TipoOperacion, Aritmetica } = require('../ts/expresiones/operadores/Aritmetica.js')
+    const { TipoLogico, Logico } = require('../ts/expresiones/operadores/Logico.js')
+    const { TiposRelacional, Relacional } = require('../ts/expresiones/operadores/Relacionales.js')
+    const { Ternario } = require('../ts/expresiones/operadores/Ternario.js')
+    const { TUnario, Unario } = require('../ts/expresiones/operadores/Unario.js')
+    const { Begin } = require('../ts/expresiones/begin.js')
+    const { End } = require('../ts/expresiones/end.js')
+    //funciones nativas faltan push y pop
+    const { Print } = require('../ts/instrucciones/Print.js')
+    const { CaracterOfPosition } = require('../ts/expresiones/funcionesNativas/caracterOfPosition.js')
+    const { Cos } = require('../ts/expresiones/funcionesNativas/coseno.js')
+    const { Length } = require('../ts/expresiones/funcionesNativas/length.js')
+    const { Parse } = require('../ts/expresiones/funcionesNativas/parse.js')
+    const { Pow } = require('../ts/expresiones/funcionesNativas/pow.js')
+    const { Sin } = require('../ts/expresiones/funcionesNativas/seno.js')
+    const { Sqrt } = require('../ts/expresiones/funcionesNativas/sqrt.js')
+    const { String } = require('../ts/expresiones/funcionesNativas/String.js')
+    const { Substring } = require('../ts/expresiones/funcionesNativas/substring.js')
+    const { Tan } = require('../ts/expresiones/funcionesNativas/tangente.js')
+    const { ToDouble } = require('../ts/expresiones/funcionesNativas/toDouble.js')
+    const { ToInt } = require('../ts/expresiones/funcionesNativas/toint.ts')
+    const { ToLowerCase } = require('../ts/expresiones/funcionesNativas/toLower.js')
+    const { ToUpperCase } = require('../ts/expresiones/funcionesNativas/toUpper.js')
+    const { Typeof } = require('../ts/expresiones/funcionesNativas/typeof.js')
+    
+%}
+
+
 // analizador lexico
 
 %lex
@@ -26,6 +88,9 @@
 ")"         return 'PARDER';
 "["         return 'CORIZQ';
 "]"         return 'CORDER';
+"{"         return 'LLAVEIZQ';
+"}"         return 'LLAVEDER';
+"."         return 'PUNTO';
 ","         return 'COMA';
 "="         return 'IGUAL';
 "?"         return 'PREGUNTA';
@@ -51,6 +116,22 @@
 "sin"           return 'SIN';
 "cos"           return 'COS';
 "tan"           return 'TAN';
+// funciones nativas 
+"caracterOfPosition"    return 'COPOSITION';
+"subString"     return 'SUBSTRING';
+"begin"         return 'BEGIN';
+"end"           return 'END';
+"length"        return 'LENGTH';
+"toLowercase"   return 'LOWERCASE';
+"toUppercase"   return 'UPPERCASE';
+"parse"         return 'PARSE';
+"toInt"         return 'TOINT';
+"toDouble"      return 'TODOUBLE';
+"string"        return 'RSTRING';
+"typeof"        return 'TYPEOF';
+"pop"           return 'POP';
+"push"          return 'PUSH';
+
 
 
 //palabras reservadas
@@ -63,6 +144,7 @@
 "char"          return 'CHAR';
 "String"        return 'STRING';
 "struct"        return 'STRUCT';
+"main"          return 'MAIN'
 
 
 //valores primitivos e identificador

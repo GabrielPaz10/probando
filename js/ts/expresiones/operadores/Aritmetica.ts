@@ -1,7 +1,7 @@
 import { Expresion } from '../../abstractas/expresion';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
-import { Valor, Tipos, Nodo } from '../../tiposD/Tipos';
+import { Valor, Tipos, Nodo, Intervalo } from '../../tiposD/Tipos';
 import { consola, errores } from '../..';
 import { Error } from '../../Reportes/Error';
 
@@ -114,7 +114,7 @@ export class Aritmetica extends Expresion{
     public ast(metodos:TablaMetodos):Nodo{
         return null
     }
-    public tipoDominante(tipoIzquierdo:Tipos,tipoDerecho:Tipos,operador:TipoOperacion){
+    public tipoDominante(tipoIzquierdo:Tipos|Intervalo,tipoDerecho:Tipos|Intervalo,operador:TipoOperacion){
         switch (operador) {
             case TipoOperacion.SUMA:
                 if (tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.INT) {

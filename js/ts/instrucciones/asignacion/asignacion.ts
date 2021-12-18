@@ -2,7 +2,7 @@ import { Expresion } from '../../abstractas/expresion';
 import { Instruccion } from '../../abstractas/instruccion';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
-import { Nodo, Valor, Tipos } from '../../tiposD/Tipos';
+import { Nodo, Valor, Tipos, Intervalo } from '../../tiposD/Tipos';
 import { Simbolo } from '../../Reportes/Simbolo';
 import { consola, errores } from '../..';
 import { Error } from '../../Reportes/Error';
@@ -33,7 +33,7 @@ export class Asignacion extends Instruccion{
         const aux = this.verificarTipo(simbolo.tipo,valor,this.linea,this.columna,entorno)
         ts.actualizar(this.id,aux.valor)
     }
-    public verificarTipo(tipo:Tipos,valor:Valor,linea:number,columna:number,entorno:string){
+    public verificarTipo(tipo:Tipos|Intervalo,valor:Valor,linea:number,columna:number,entorno:string){
         if (tipo===valor.tipo) {
             return valor
         }else if(tipo===Tipos.DOUBLE){
