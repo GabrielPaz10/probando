@@ -20,8 +20,8 @@ var expresion_1 = require("../abstractas/expresion");
 var Tipos_1 = require("../tiposD/Tipos");
 var End = /** @class */ (function (_super) {
     __extends(End, _super);
-    function End() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function End(linea, columna) {
+        return _super.call(this, linea, columna) || this;
     }
     End.prototype.ejecutar = function (tsGlobal, tsLocal, metodos, entorno) {
         return { tipo: Tipos_1.Intervalo.END, valor: Tipos_1.Intervalo.END };

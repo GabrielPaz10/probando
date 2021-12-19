@@ -145,6 +145,19 @@
 "String"        return 'STRING';
 "struct"        return 'STRUCT';
 "void"          return 'VOID';
+"if"            return 'IF';
+"else"          return 'ELSE';
+"switch"        return 'SWITCH';
+"case"          return 'CASE';
+"default"       return 'DEFAULT';
+"while"         return 'WHILE';
+"do"            return 'DO';
+"for"           return 'FOR';
+"in"            return 'IN';
+"break"         return 'BREAK';
+"continue"      return 'CONTINUE';
+"return"        return 'RETURN';
+
 //"main"          return 'MAIN';
 
 
@@ -159,7 +172,8 @@
 
 <<EOF>>                         return 'EOF';
 
-.   { consola.actualizar(`${yytext} caracter no conocido, l: ${yylloc.first_line}, c: ${yylloc.first_column}`); errores.agregar(new Error('Lexico',`Error lexico, ${yytext} caracter no conocido`, yylloc.first_line , yylloc.first_column,'')); }
+.   { consola.actualizar(`${yytext} caracter no conocido, l: ${yylloc.first_line}, c: ${yylloc.first_column}`); 
+    errores.agregar(new Error('Lexico',`Error lexico, ${yytext} caracter no conocido`, yylloc.first_line , yylloc.first_column,'')); }
 
 /lex
 
@@ -188,19 +202,18 @@ init
     ;
 
 completo
-    : completo global    { $1.push($2); $$=$1 }            
-    | global             { $$ = [$1] }           
+    : completo global    { $1.push($2); $$=$1; }            
+    | global             { $$ = [$1]; }           
     ;
 
 global
-    : imprimir PTCOMA                   {$$=$1}
-    | asignacion PTCOMA
-    | declaracion PTCOMA
-    | funcion 
-    | error 'PTCOMA' { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}`); 
-                        errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
-    | error 'LLAVEDER' { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}`); 
-                        errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
+    : asignacion PTCOMA         { $$=$1; }
+    | declaracion PTCOMA        { $$=$1; }
+    | funcion                   { $$=$1; }
+    | error 'PTCOMA'            { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}`); 
+                                errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
+    | error 'LLAVEDER'          { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}`); 
+                                errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
 ;
 
 cuerpoLocal
@@ -209,13 +222,13 @@ cuerpoLocal
     ;
 
 local
-    : condicionales 
-    | ciclos 
-    | llamadaMetodo PTCOMA
-    | asignacion PTCOMA
-    | declaracion PTCOMA
-    | control PTCOMA
-    | imprimir PTCOMA
+    : condicionales                 { $$=$1; }
+    | ciclos                        { $$=$1; }
+    | llamadaMetodo PTCOMA          { $$=$1; }
+    | asignacion PTCOMA             { $$=$1; }
+    | declaracion PTCOMA            { $$=$1; }
+    | control PTCOMA                { $$=$1; }
+    | imprimir PTCOMA               { $$=$1; }
     ;
 
 funcion
@@ -248,8 +261,8 @@ atributos
 imprimir
     : PRINT PARIZQ atributos PARDER      {$$ = new Print($3,@1.first_line, @1.first_column); }
     | PRINT PARIZQ  PARDER               {$$ = new Print([],@1.first_line, @1.first_column); }
-    | PRINTLN PARIZQ atributos PARDER    {$$ = new Print($3,@1.first_line, @1.first_column,true);; }
-    | PRINTLN PARIZQ  PARDER             {$$ = new Print([],@1.first_line, @1.first_column,true);; }
+    | PRINTLN PARIZQ atributos PARDER    {$$ = new Print($3,@1.first_line, @1.first_column,true); }
+    | PRINTLN PARIZQ  PARDER             {$$ = new Print([],@1.first_line, @1.first_column,true); }
     ;
 
 declaracion
@@ -277,6 +290,7 @@ tipoValor
     | CARACTER                          { $$ = new setearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); }
     | TRUE                              { $$ = new setearValor(Tipos.BOOLEAN, true, @1.first_line, @1.first_column); }
     | FALSE                             { $$ = new setearValor(Tipos.BOOLEAN, false, @1.first_line, @1.first_column); }
+    | ID                                { $$= new ObtenerValor($1,@1.first_line, @1.first_column);}
     ;
 
 tipo
@@ -307,8 +321,8 @@ expresion
     | MENOS expresion %prec UMENOS       { $$ = new Unario(TUnario.NEGATIVO, $2, @1.first_line, @1.first_column); }
     | expresion INC                      { $$ = new Unario(TUnario.INCREMENTO, $1, @1.first_line, @1.first_column); }
     | expresion DEC                      { $$ = new Unario(TUnario.DECREMENTO, $1, @1.first_line, @1.first_column); }
-    | BEGIN                              { $$ = new Begin(); }
-    | END                                { $$ = new End(); }
+    | BEGIN                              { $$ = new Begin(@1.first_line, @1.first_column); }
+    | END                                { $$ = new End(@1.first_line, @1.first_column); }
     | NULL                               { $$ = Tipos.NULL; }
     | ternario                           { $$=$1; }
     | nativas                            { $$=$1; }
@@ -339,4 +353,76 @@ nativas
     | TYPEOF PARIZQ expresion PARDER                                    { $$ = new Typeof($3,@1.first_line, @1.first_column); }
     | ID PUNTO PUSH PARIZQ expresion PARDER //
     | ID PUNTO POP PARIZQ PARDER //
+    ;
+
+
+condicionales
+    : ifcondicion               { $$ = $1; }
+    | switchcondicion           { $$ = $1; }
+    ;
+
+ifcondicion
+    : IF PARIZQ expresion PARDER LLAVEIZQ cuerpoLocal LLAVEDER elsecondicion    { $$= new If($3,$6,$8,@1.first_line, @1.first_column); }
+    | IF PARIZQ expresion PARDER LLAVEIZQ cuerpoLocal LLAVEDER                  { $$= new If($3,$6,null,@1.first_line, @1.first_column); }
+    | IF PARIZQ expresion PARDER LLAVEIZQ LLAVEDER elsecondicion                { $$= new If($3,[],$7,@1.first_line, @1.first_column); }
+    | IF PARIZQ expresion PARDER LLAVEIZQ LLAVEDER                              { $$= new If($3,[],null,@1.first_line, @1.first_column); }
+    ;
+
+elsecondicion
+    : ELSE ifcondicion                      { $$=$2; }
+    | ELSE LLAVEIZQ cuerpoLocal LLAVEDER    { $$=$3; }
+    | ELSE LLAVEIZQ LLAVEDER                { $$=[]; }
+    ;
+
+switchcondicion
+    : SWITCH PARIZQ expresion PARDER LLAVEIZQ casecondicion defaultcondicion LLAVEDER   { $$=new Switch($3,$6,$7,@1.first_line, @1.first_column);}
+    | SWITCH PARIZQ expresion PARDER LLAVEIZQ casecondicion LLAVEDER                    { $$=new Switch($3,$6,[],@1.first_line, @1.first_column);}
+    | SWITCH PARIZQ expresion PARDER LLAVEIZQ defaultcondicion LLAVEDER                 { $$=new Switch($3,[],$6,@1.first_line, @1.first_column);}
+    | SWITCH PARIZQ expresion PARDER LLAVEIZQ LLAVEDER                                  { $$=new Switch($3,[],[],@1.first_line, @1.first_column);}
+    ;
+
+casecondicion
+    : casecondicion CASE expresion DOSPTS cuerpoLocal       { $1.push(new Case($3,$5,@1.first_line, @1.first_column)); $$=$1; }
+    | casecondicion CASE expresion DOSPTS                   { $1.push(new Case($3,[],@1.first_line, @1.first_column)); $$=$1; }
+    | CASE expresion DOSPTS cuerpoLocal                     { $$=[new Case($2,$4,@1.first_line, @1.first_column)]; }
+    | CASE expresion DOSPTS                                 { $$=[new Case($2,[],@1.first_line, @1.first_column)]; }
+    ;
+
+defaultcondicion
+    : DEFAULT DOSPTS cuerpoLocal                            { $$=$3; }
+    | DEFAULT DOSPTS                                        { $$=[]; }
+    ;
+
+ciclos
+    : ciclowhile                {$$=$1;}
+    | ciclofor                  {$$=$1;}
+    ;
+
+ciclowhile
+    : DO LLAVEIZQ cuerpoLocal LLAVEDER WHILE PARIZQ expresion PARDER PTCOMA     { $$= new Dowhile($7,$3,@1.first_line, @1.first_column);}
+    | WHILE PARIZQ expresion PARDER LLAVEIZQ cuerpoLocal LLAVEDER               { $$= new While($3,$6,@1.first_line, @1.first_column);}
+    | DO LLAVEIZQ LLAVEDER WHILE PARIZQ expresion PARDER PTCOMA                 { $$= new Dowhile($6,[],@1.first_line, @1.first_column);}
+    | WHILE PARIZQ expresion PARDER LLAVEIZQ  LLAVEDER                          { $$= new While($3,[],@1.first_line, @1.first_column);}
+    ;
+
+ciclofor
+    : FOR PARIZQ asignacionfor PTCOMA expresion PTCOMA asignacion PARDER LLAVEIZQ cuerpoLocal LLAVEDER  {$$= new For($3,$5,$7,$10,@1.first_line, @1.first_column);}
+    | FOR PARIZQ declaracionfor PTCOMA expresion PTCOMA asignacion PARDER LLAVEIZQ cuerpoLocal LLAVEDER {$$= new For($3,$5,$7,$10,@1.first_line, @1.first_column);}
+    | FOR PARIZQ expresion IN expresion PARDER LLAVEIZQ cuerpoLocal LLAVEDER                            {}
+    | FOR expresion IN expresion LLAVEIZQ cuerpoLocal LLAVEDER                                          {}
+    ;       
+
+asignacionfor
+    : ID IGUAL expresion                 {$$ = new Asignacion($1,$3,@1.first_line, @1.first_column);}
+    ;
+
+declaracionfor
+    : tipo ID IGUAL expresion            {$$ = new Declaracion($1,$2,$3,@1.first_line, @1.first_column);}
+    ;
+
+control
+    : RETURN expresion                  {$$= new Return($2,@1.first_line, @1.first_column);}
+    | RETURN                            {$$= new Return(null,,@1.first_line, @1.first_column);}
+    | CONTINUE                          {$$= new Continue(@1.first_line, @1.first_column);}
+    | BREAK                             {$$= new Break(@1.first_line, @1.first_column);}
     ;
