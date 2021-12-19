@@ -8,7 +8,11 @@ export class Traductor{
     sfunc = "";
 
     constructor(){
-        this.traductor=''
+        this.traductor='';
+        this.temporal = 0;
+        this.etiqueta = 0;
+        this.codigo = new Array();
+        this.tempstorage = new Set();
     }
     public actualizar(cadena:string){
         this.traductor+=cadena
