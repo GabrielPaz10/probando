@@ -48,7 +48,7 @@
     const { Pow } = require('../ts/expresiones/funcionesNativas/pow.js')
     const { Sin } = require('../ts/expresiones/funcionesNativas/seno.js')
     const { Sqrt } = require('../ts/expresiones/funcionesNativas/sqrt.js')
-    const { String } = require('../ts/expresiones/funcionesNativas/String.js')
+    const { StringM } = require('../ts/expresiones/funcionesNativas/String.js')
     const { Substring } = require('../ts/expresiones/funcionesNativas/substring.js')
     const { Tan } = require('../ts/expresiones/funcionesNativas/tangente.js')
     const { ToDouble } = require('../ts/expresiones/funcionesNativas/toDouble.js')
@@ -144,7 +144,8 @@
 "char"          return 'CHAR';
 "String"        return 'STRING';
 "struct"        return 'STRUCT';
-"main"          return 'MAIN'
+"void"          return 'VOID';
+//"main"          return 'MAIN';
 
 
 //valores primitivos e identificador
@@ -158,13 +159,13 @@
 
 <<EOF>>                         return 'EOF';
 
-.   { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }//{ output.setOutput(`-->Léxico, caracter: ${yytext} no pertenece al lenguaje (${yylloc.first_line}:${yylloc.first_column}).`);       errors.add(new Error("Léxico", `Caracter: ${yytext} no pertenece al lenguaje.`, yylloc.first_line, yylloc.first_column)); }
+.   { consola.actualizar(`${yytext} caracter no conocido, l: ${yylloc.first_line}, c: ${yylloc.first_column}`); errores.agregar(new Error('Lexico',`Error lexico, ${yytext} caracter no conocido`, yylloc.first_line , yylloc.first_column,'')); }
 
 /lex
 
 
 //  Precedencias
-//%left '?' ':'
+%left 'PREGUNTA' 'DOSPTS'
 %left 'OR'
 %left 'AND'
 %right 'NOT'
@@ -183,46 +184,159 @@
 %% /* Definición de la gramática */
 
 init
-    : completo EOF              
+    : completo EOF     { return $1; }         
     ;
 
 completo
-    : completo global               
-    | global                        
+    : completo global    { $1.push($2); $$=$1 }            
+    | global             { $$ = [$1] }           
     ;
 
 global
-    : imprimir
+    : imprimir PTCOMA                   {$$=$1}
+    | asignacion PTCOMA
+    | declaracion PTCOMA
+    | funcion 
+    | error 'PTCOMA' { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}`); 
+                        errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
+    | error 'LLAVEDER' { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}`); 
+                        errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
 ;
 
-expresion
-    : CADENA                             { $$ = $1; }
-    | expresion EXTE expresion           { $$ = $1 * $2; }
-    | expresion IGUALDAD expresion       { $$ = ($1 == $3)? true : false; }
-	| expresion DIFERENTE expresion      { $$ = ($1 != $3)? true : false; }
-	| expresion MAYOR expresion          { $$ = ($1 > $3)? true : false; }
-	| expresion MENOR expresion          { $$ = ($1 < $3)? true : false; }
-    | expresion MAYORIGUAL expresion     { $$ = ($1 >= $3)? true : false; }
-    | expresion MENORIGUAL expresion     { $$ = ($1 <= $3)? true : false; }
-    | PARIZQ expresion PARDER            { $$ = $2; }
-    | MENOS expresion %prec UMENOS       { $$ = $2 *-1; }
-    | expresion CONCATENACION expresion  { $$ = ($1 + $3); }
-	| expresion MAS expresion            { $$ = $1 + $3; }
-	| expresion MENOS expresion          { $$ = $1 - $3; }
-	| expresion POR expresion            { $$ = $1 * $3; }
-	| expresion DIVIDIDO expresion       { $$ = $1 / $3; }
-    | expresion MODULO expresion         { $$ = $1 % $3; }
-    | expresion AND expresion            { $$ = ($1 && $3)?true:false; }
-	| expresion OR expresion             { $$ = ($1 || $3)?true:false; }
-    | NOT expresion                      { $$ = ($1)?false:true ; }
-    | ENTERO                             { $$ = Number($1);}
-    | DECIMAL                            { $$ = Number($1);}
-    | TRUE                               { $$ = true; }
-    | FALSE                              { $$ = false; }
+cuerpoLocal
+    : cuerpoLocal local { $1.push($2); $$=$1; }
+    | local             { $$ =[$1]; }
     ;
 
+local
+    : condicionales 
+    | ciclos 
+    | llamadaMetodo PTCOMA
+    | asignacion PTCOMA
+    | declaracion PTCOMA
+    | control PTCOMA
+    | imprimir PTCOMA
+    ;
+
+funcion
+    : VOID ID PARIZQ parametros PARDER LLAVEIZQ cuerpoLocal LLAVEDER { $$ = new Funcion(Tipos.VOID, $2,$4,$7, @1.first_line, @1.first_column); }
+    | tipo ID PARIZQ parametros PARDER LLAVEIZQ cuerpoLocal LLAVEDER { $$ = new Funcion($1, $2,$4,$7, @1.first_line, @1.first_column); }
+    | VOID ID PARIZQ PARDER LLAVEIZQ cuerpoLocal LLAVEDER            { $$ = new Funcion(Tipos.VOID, $2,[],$6, @1.first_line, @1.first_column); }
+    | tipo ID PARIZQ PARDER LLAVEIZQ cuerpoLocal LLAVEDER            { $$ = new Funcion($1, $2,[],$6, @1.first_line, @1.first_column); }
+    ;
+
+llamadaMetodo
+    : ID PARIZQ atributos PARDER    { $$ = new LlamadaMetodo($1,$3, @1.first_line, @1.first_column); }
+    | ID PARIZQ PARDER              { $$ = new LlamadaMetodo($1,[], @1.first_line, @1.first_column); }
+    ;
+
+llamadaFuncion
+    : ID PARIZQ atributos PARDER    { $$ = new LlamarFuncion($1,$3, @1.first_line, @1.first_column); }
+    | ID PARIZQ PARDER              { $$ = new LlamarFuncion($1,[], @1.first_line, @1.first_column); }
+    ;
+
+parametros 
+    : parametros COMA tipo ID        { $1.push( new Parametros($3,null,$4)); $$=$1; } //agregar parametros de arreglos parametros COMA tipo ID LLAVEIZQ LLAVEDER
+    | tipo ID                        { $$ = [new Parametros($1,null,$2)]; } //agregar parametro de arreglo tipo ID LLAVEIZQ LLAVEDER
+    ;
+
+atributos
+    : atributos COMA expresion      { $1.push($3); $$= $1; }
+    | expresion                     { $$ = [$1]; }
+    ;
 
 imprimir
-    : PRINT PARIZQ expresion PARDER PTCOMA  {contenido = contenido+ $3; }
-    | PRINTLN PARIZQ expresion PARDER PTCOMA {contenido = contenido+ $3 + "\n"; }
+    : PRINT PARIZQ atributos PARDER      {$$ = new Print($3,@1.first_line, @1.first_column); }
+    | PRINT PARIZQ  PARDER               {$$ = new Print([],@1.first_line, @1.first_column); }
+    | PRINTLN PARIZQ atributos PARDER    {$$ = new Print($3,@1.first_line, @1.first_column,true);; }
+    | PRINTLN PARIZQ  PARDER             {$$ = new Print([],@1.first_line, @1.first_column,true);; }
+    ;
+
+declaracion
+    : tipo listaId IGUAL expresion       { $$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column) ; }
+    | tipo listaId                       { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) ; }
+    ;
+
+listaId
+    : listaId COMA ID                   { $1.push($3); $$ = $1; }
+    | ID                                { $$ = [$1]; }
+    ; 
+
+asignacion
+    : ID IGUAL expresion                { $$ = new Asignacion($1, $3, @1.first_line, @1.first_column); }
+    | ID INC                            { $$ = new AsignacionDecInc($1, TipoAsignacion.INCREMENTO, @1.first_line, @1.first_column); }
+    | ID DEC                            { $$ = new AsignacionDecInc($1, TipoAsignacion.DECREMENTO, @1.first_line, @1.first_column); }
+    ;
+
+//vector
+
+tipoValor
+    : DECIMAL                           { $$ = new setearValor(Tipos.DOUBLE, Number($1), @1.first_line, @1.first_column); }
+    | ENTERO                            { $$ = new setearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column); }
+    | CADENA                            { $$ = new setearValor(Tipos.STRING, $1 , @1.first_line, @1.first_column); }
+    | CARACTER                          { $$ = new setearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); }
+    | TRUE                              { $$ = new setearValor(Tipos.BOOLEAN, true, @1.first_line, @1.first_column); }
+    | FALSE                             { $$ = new setearValor(Tipos.BOOLEAN, false, @1.first_line, @1.first_column); }
+    ;
+
+tipo
+    : BOOLEAN                           { $$ = Tipos.BOOLEAN; }
+    | CHAR                              { $$ = Tipos.CHAR; }
+    | DOUBLE                            { $$ = Tipos.DOUBLE; }
+    | INT                               { $$ = Tipos.INT; }
+    | STRING                            { $$ = Tipos.STRING; }
+    ;
+
+expresion
+    : expresion EXTE expresion           { $$ = new Aritmetica(TipoOperacion.EXTE, $1, $3, @1.first_line, @1.first_column); }
+    | expresion CONCATENACION expresion  { $$ = new Aritmetica(TipoOperacion.CONCATENACION, $1, $3, @1.first_line, @1.first_column); }
+	| expresion MAS expresion            { $$ = new Aritmetica(TipoOperacion.SUMA, $1, $3, @1.first_line, @1.first_column); }
+	| expresion MENOS expresion          { $$ = new Aritmetica(TipoOperacion.RESTA, $1, $3, @1.first_line, @1.first_column); }
+	| expresion POR expresion            { $$ = new Aritmetica(TipoOperacion.MULTIPLICACION, $1, $3, @1.first_line, @1.first_column); }
+	| expresion DIVIDIDO expresion       { $$ = new Aritmetica(TipoOperacion.DIVISION, $1, $3, @1.first_line, @1.first_column); }
+    | expresion MODULO expresion         { $$ = new Aritmetica(TipoOperacion.MODULO, $1, $3, @1.first_line, @1.first_column); }
+    | expresion AND expresion            { $$ = new Logico(TipoLogico.AND, $1, $3, @1.first_line, @1.first_column); }
+	| expresion OR expresion             { $$ = new Logico(TipoLogico.OR, $1, $3, @1.first_line, @1.first_column); }
+    | NOT expresion                      { $$ = new Logico(TipoLogico.NOT, $1, @1.first_line, @1.first_column); }
+    | expresion IGUALDAD expresion       { $$ = new Relacional(TiposRelacional.IGUAL, $1, $3, @1.first_line, @1.first_column); }
+	| expresion DIFERENTE expresion      { $$ = new Relacional(TiposRelacional.DIFERENTE, $1, $3, @1.first_line, @1.first_column); }
+    | expresion MAYORIGUAL expresion     { $$ = new Relacional(TiposRelacional.MAYORI, $1, $3, @1.first_line, @1.first_column); }
+    | expresion MENORIGUAL expresion     { $$ = new Relacional(TiposRelacional.MENORI, $1, $3, @1.first_line, @1.first_column); }
+	| expresion MAYOR expresion          { $$ = new Relacional(TiposRelacional.MAYOR, $1, $3, @1.first_line, @1.first_column); }
+	| expresion MENOR expresion          { $$ = new Relacional(TiposRelacional.MENOR, $1, $3, @1.first_line, @1.first_column); }
+    | MENOS expresion %prec UMENOS       { $$ = new Unario(TUnario.NEGATIVO, $2, @1.first_line, @1.first_column); }
+    | expresion INC                      { $$ = new Unario(TUnario.INCREMENTO, $1, @1.first_line, @1.first_column); }
+    | expresion DEC                      { $$ = new Unario(TUnario.DECREMENTO, $1, @1.first_line, @1.first_column); }
+    | BEGIN                              { $$ = new Begin(); }
+    | END                                { $$ = new End(); }
+    | NULL                               { $$ = Tipos.NULL; }
+    | ternario                           { $$=$1; }
+    | nativas                            { $$=$1; }
+    | tipoValor                          { $$=$1; }
+    | llamadaFuncion                     { $$=$1; }
+    | PARIZQ expresion PARDER            { $$ = $2; }
+    ;
+
+ternario
+    : expresion PREGUNTA expresion DOSPTS expresion { $$ = new Ternario($1, $3, $5, @1.first_line, @1.first_column); }
+    ;
+
+nativas
+    : POW PARIZQ expresion COMA expresion PARDER                        { $$= new Pow($3,$5,@1.first_line, @1.first_column); }
+    | SQRT PARIZQ expresion PARDER                                      { $$ = new Sqrt($3,@1.first_line, @1.first_column); }
+    | SIN PARIZQ expresion PARDER                                       { $$ = new Sin($3,@1.first_line, @1.first_column); }
+    | COS PARIZQ expresion PARDER                                       { $$ = new Cos($3,@1.first_line, @1.first_column); }
+    | TAN PARIZQ expresion PARDER                                       { $$ = new Tan($3,@1.first_line, @1.first_column); }
+    | expresion PUNTO COPOSITION PARIZQ expresion PARDER                { $$ = new CaracterOfPosition($1,$5,@1.first_line, @1.first_column); }
+    | expresion PUNTO SUBSTRING PARIZQ expresion COMA expresion PARDER  { $$ = new Substring($1,$5,$7,@1.first_line, @1.first_column); }
+    | expresion PUNTO LENGTH PARIZQ PARDER                              { $$ = new Length($1,@1.first_line, @1.first_column); }
+    | expresion PUNTO UPPERCASE PARIZQ PARDER                           { $$ = new toUpperCase($1,@1.first_line, @1.first_column); }
+    | expresion PUNTO LOWERCASE PARIZQ PARDER                           { $$ = new toLowerCase($1,@1.first_line, @1.first_column); }
+    | tipo PUNTO PARSE PARIZQ expresion PARDER                          { $$ = new Parse($1,$5,@1.first_line, @1.first_column); }
+    | TOINT PARIZQ expresion PARDER                                     { $$ = new toInt($3,@1.first_line, @1.first_column); }
+    | TODOUBLE PARIZQ expresion PARDER                                  { $$ = new toDouble($3,@1.first_line, @1.first_column); }
+    | RSTRING PARIZQ expresion PARDER                                   { $$ = new StringM($3,@1.first_line, @1.first_column); }
+    | TYPEOF PARIZQ expresion PARDER                                    { $$ = new Typeof($3,@1.first_line, @1.first_column); }
+    | ID PUNTO PUSH PARIZQ expresion PARDER //
+    | ID PUNTO POP PARIZQ PARDER //
     ;

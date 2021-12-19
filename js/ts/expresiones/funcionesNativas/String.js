@@ -15,19 +15,19 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.String = void 0;
+exports.StringM = void 0;
 var __1 = require("../..");
 var expresion_1 = require("../../abstractas/expresion");
 var Error_1 = require("../../Reportes/Error");
 var Tipos_1 = require("../../tiposD/Tipos");
-var String = /** @class */ (function (_super) {
-    __extends(String, _super);
-    function String(valor, linea, columna) {
+var StringM = /** @class */ (function (_super) {
+    __extends(StringM, _super);
+    function StringM(valor, linea, columna) {
         var _this = _super.call(this, linea, columna) || this;
         _this.valor = valor;
         return _this;
     }
-    String.prototype.ejecutar = function (tsGlobal, tsLocal, metodos, entorno) {
+    StringM.prototype.ejecutar = function (tsGlobal, tsLocal, metodos, entorno) {
         var valor = this.valor.ejecutar(tsGlobal, tsLocal, metodos, entorno);
         if (valor.tipo !== Tipos_1.Tipos.NULL) {
             return { tipo: Tipos_1.Tipos.STRING, valor: (valor.valor).toString() };
@@ -35,9 +35,9 @@ var String = /** @class */ (function (_super) {
         __1.errores.agregar(new Error_1.Error('Semantico', "El tipo " + valor.tipo + " no puede convertirse a STRING", this.linea, this.columna, entorno));
         __1.consola.actualizar("El tipo " + valor.tipo + " no puede convertirse a STRING\n");
     };
-    String.prototype.ast = function (metodos) {
+    StringM.prototype.ast = function (metodos) {
         return null;
     };
-    return String;
+    return StringM;
 }(expresion_1.Expresion));
-exports.String = String;
+exports.StringM = StringM;

@@ -4,7 +4,7 @@ import { Error } from '../../Reportes/Error';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { Valor, Nodo, Tipos } from '../../tiposD/Tipos';
-export class String extends Expresion{
+export class StringM extends Expresion{
     private valor:Expresion
     constructor(valor:Expresion,linea:number,columna:number){
         super(linea,columna)
