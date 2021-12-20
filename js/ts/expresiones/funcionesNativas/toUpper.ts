@@ -13,7 +13,7 @@ export class ToUpperCase extends Expresion{
     public ejecutar(tsGlobal: TablaSimbolo, tsLocal: TablaSimbolo, metodos: TablaMetodos, entorno: string): Valor {
         const cadena = this.cadena.ejecutar(tsGlobal,tsLocal,metodos,entorno)
         if (cadena.tipo===Tipos.STRING) {
-            return {tipo: Tipos.STRING,valor: (cadena.valor).toLowerCase()}
+            return {tipo: Tipos.STRING,valor: (cadena.valor).toUpperCase()}
         }
         errores.agregar(new Error('Semantico',`No se puede convertir a mayusculas con el tipo ${cadena.tipo}` ,this.linea,this.columna,entorno))
         consola.actualizar(`No se puede convertir a mayusculas con el tipo ${cadena.tipo}\n`)

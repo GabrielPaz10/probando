@@ -22,15 +22,29 @@ export class Substring extends Expresion{
         }
         const inicio = this.inicio.ejecutar(tsGlobal,tsLocal,metodos,entorno)
         const final= this.final.ejecutar(tsGlobal,tsLocal,metodos,entorno)
-        if ((inicio.tipo==Tipos.INT||inicio.tipo==Intervalo.BEGIN)&&(final.tipo==Tipos.INT||final.tipo==Intervalo.END)) {
+        if ((inicio.tipo==Tipos.DOUBLE||inicio.tipo==Tipos.INT||inicio.tipo==Intervalo.BEGIN)&&(final.tipo==Tipos.DOUBLE||final.tipo==Tipos.INT||final.tipo==Intervalo.END)) {
+            
             switch (inicio.tipo) {
-                case Tipos.INT:
+                case Tipos.DOUBLE:
                     switch (final.tipo) {
+                        case Tipos.DOUBLE:
+                            return {tipo:Tipos.STRING, valor: cadena.valor.substring(inicio.valor,final.valor)}
                         case Tipos.INT:
                             return {tipo:Tipos.STRING, valor: cadena.valor.substring(inicio.valor,final.valor)}
                         case Intervalo.END:
                             return {tipo:Tipos.STRING, valor: cadena.valor.substring(inicio.valor,(cadena.valor.length+1))}
                     }
+                    break
+                case Tipos.INT:
+                    switch (final.tipo) {
+                        case Tipos.DOUBLE:
+                            return {tipo:Tipos.STRING, valor: cadena.valor.substring(inicio.valor,final.valor)}
+                        case Tipos.INT:
+                            return {tipo:Tipos.STRING, valor: cadena.valor.substring(inicio.valor,final.valor)}
+                        case Intervalo.END:
+                            return {tipo:Tipos.STRING, valor: cadena.valor.substring(inicio.valor,(cadena.valor.length+1))}
+                    }
+                    break
                 case Intervalo.BEGIN:
                     switch (final.tipo) {
                         case Tipos.INT:

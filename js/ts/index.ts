@@ -5,6 +5,7 @@ import { TablaMetodos } from './Reportes/TablaMetodos';
 import { TablaSimbolo } from './Reportes/TablaSimbolos';
 import { Instruccion } from './abstractas/instruccion';
 import { Error } from './Reportes/Error';
+import { TiposControl } from './tiposD/Tipos';
 // const ejecutaar = document.getElementById('ejecutar')
 
 
@@ -56,9 +57,13 @@ function obtenerAst(ast:any, tsGlobal:TablaSimbolo,metodos:TablaMetodos){
 }
 function ejecutarMain(main:any, tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo,metodos:TablaMetodos){
     if (main.length===1) {
-        main[0].cuerpo.forEach((instruccion:Instruccion) => {
-            instruccion.ejecutar(tsGlobal,tsLocal,metodos,'Global')
-        });
+        
+        const control = cuerpoMain(main[0].cuerpo,tsGlobal,tsLocal,metodos,'')
+        if (control !=null&&control !=undefined) {
+            if (control.tipo==TiposControl.RETURN) {
+                if (control.valor==null) return
+            }
+        }
     }else if(main.length>1){
         consola.actualizar(`Solo puede haber un metodo Main en el programa`)
         errores.agregar(new Error('Semantico',`Solo puede haber un metodo Main en el programa`,0,0,'Global'))
@@ -66,6 +71,15 @@ function ejecutarMain(main:any, tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo,meto
         consola.actualizar(`Debe haber un metodo Main en el programa`)
         errores.agregar(new Error('Semantico',`Debe haber un metodo Main en el programa`,0,0,'Global'))
     }
+}
+function cuerpoMain(cuerpo:Instruccion[],tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo,metodos:TablaMetodos,entorno:string){
+    for(var i in cuerpo){
+        const control = cuerpo[i].ejecutar(tsGlobal,tsLocal,metodos,entorno)
+        if (control !==null && control!==undefined) {
+            return control
+        }
+    }
+    return null
 }
 export function obtenerMain(metodos:TablaMetodos):Metodo[]{
     return metodos.metodoss.filter((main:Metodo) => main.id==='main')

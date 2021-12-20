@@ -11,9 +11,9 @@ class ObtenerValor extends expresion_1.Expresion {
     }
     ejecutar(tsGlobal, tsLocal, metodos, entorno) {
         const valor = tsLocal.obtenerSimbolo(this.id);
-        if (valor === null) {
+        if (valor === null || valor === undefined) {
             const valo = tsGlobal.obtenerSimbolo(this.id);
-            if (valo === null) {
+            if (valo === null || valo === undefined) {
                 index_1.errores.agregar(new Error_1.Error('Semantico', `No se pudo encontrar la variale l:${this.linea} c:${this.columna}`, this.linea, this.columna, entorno));
                 index_1.consola.actualizar(`No se pudo encontrar la variale l:${this.linea} c:${this.columna}\n`);
             }

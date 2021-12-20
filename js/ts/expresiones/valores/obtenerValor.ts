@@ -13,9 +13,9 @@ export class ObtenerValor extends Expresion{
     }
     public ejecutar(tsGlobal: TablaSimbolo, tsLocal: TablaSimbolo, metodos: TablaMetodos, entorno: string): Valor {
         const valor = tsLocal.obtenerSimbolo(this.id)
-        if (valor===null) {
+        if (valor===null||valor===undefined) {
             const valo= tsGlobal.obtenerSimbolo(this.id)
-            if (valo===null) {
+            if (valo===null|| valo===undefined) {
                 errores.agregar(new Error('Semantico',`No se pudo encontrar la variale l:${this.linea} c:${this.columna}`,this.linea,this.columna,entorno))
                 consola.actualizar(`No se pudo encontrar la variale l:${this.linea} c:${this.columna}\n`)
             }

@@ -20,15 +20,28 @@ class Substring extends expresion_1.Expresion {
         }
         const inicio = this.inicio.ejecutar(tsGlobal, tsLocal, metodos, entorno);
         const final = this.final.ejecutar(tsGlobal, tsLocal, metodos, entorno);
-        if ((inicio.tipo == Tipos_1.Tipos.INT || inicio.tipo == Tipos_1.Intervalo.BEGIN) && (final.tipo == Tipos_1.Tipos.INT || final.tipo == Tipos_1.Intervalo.END)) {
+        if ((inicio.tipo == Tipos_1.Tipos.DOUBLE || inicio.tipo == Tipos_1.Tipos.INT || inicio.tipo == Tipos_1.Intervalo.BEGIN) && (final.tipo == Tipos_1.Tipos.DOUBLE || final.tipo == Tipos_1.Tipos.INT || final.tipo == Tipos_1.Intervalo.END)) {
             switch (inicio.tipo) {
-                case Tipos_1.Tipos.INT:
+                case Tipos_1.Tipos.DOUBLE:
                     switch (final.tipo) {
+                        case Tipos_1.Tipos.DOUBLE:
+                            return { tipo: Tipos_1.Tipos.STRING, valor: cadena.valor.substring(inicio.valor, final.valor) };
                         case Tipos_1.Tipos.INT:
                             return { tipo: Tipos_1.Tipos.STRING, valor: cadena.valor.substring(inicio.valor, final.valor) };
                         case Tipos_1.Intervalo.END:
                             return { tipo: Tipos_1.Tipos.STRING, valor: cadena.valor.substring(inicio.valor, (cadena.valor.length + 1)) };
                     }
+                    break;
+                case Tipos_1.Tipos.INT:
+                    switch (final.tipo) {
+                        case Tipos_1.Tipos.DOUBLE:
+                            return { tipo: Tipos_1.Tipos.STRING, valor: cadena.valor.substring(inicio.valor, final.valor) };
+                        case Tipos_1.Tipos.INT:
+                            return { tipo: Tipos_1.Tipos.STRING, valor: cadena.valor.substring(inicio.valor, final.valor) };
+                        case Tipos_1.Intervalo.END:
+                            return { tipo: Tipos_1.Tipos.STRING, valor: cadena.valor.substring(inicio.valor, (cadena.valor.length + 1)) };
+                    }
+                    break;
                 case Tipos_1.Intervalo.BEGIN:
                     switch (final.tipo) {
                         case Tipos_1.Tipos.INT:

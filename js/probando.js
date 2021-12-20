@@ -3,7 +3,6 @@ const { ejecutar } = require("./ts/index")
 
 const bejecutar = document.getElementById('ejecutar')
 const consolaa = document.getElementById('consola')
-let contenido =""
 
 
 bejecutar.addEventListener('click',()=>{

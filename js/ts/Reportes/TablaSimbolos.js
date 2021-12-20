@@ -13,7 +13,8 @@ class TablaSimbolo {
         var simbolo = this.simbolos.filter((simb) => simb.id == id)[0];
         if (simbolo)
             return simbolo;
-        return null;
+        else
+            return null;
     }
     getSimbolos() {
         return this.simbolos;

@@ -169,7 +169,7 @@ case 40:
  this.$ = new AsignacionDecInc($$[$0-1], TipoAsignacion.DECREMENTO, _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 41:
- this.$ = new SetearValor(Tipos.DOUBLE, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
+ this.$ = (Number.isInteger(Number($$[$0])))?new SetearValor(Tipos.INT, Number($$[$0]), _$[$0].first_line, _$[$0].first_column):new SetearValor(Tipos.DOUBLE, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
 break;
 case 42:
  this.$ = new SetearValor(Tipos.INT, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
@@ -232,7 +232,7 @@ case 61:
  this.$ = new Logico(TipoLogico.OR, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 62:
- this.$ = new Logico(TipoLogico.NOT, $$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column); 
+ this.$ = new Logico(TipoLogico.NOT, $$[$0], null,_$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 63:
  this.$ = new Relacional(TiposRelacional.IGUAL, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
@@ -385,7 +385,7 @@ case 127:
 this.$ = new Asignacion($$[$0-2],$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 128:
-this.$ = new Declaracion($$[$0-3],$$[$0-2],$$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column);
+this.$ = new Declaracion($$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line, _$[$0-3].first_column);
 break;
 case 129:
 this.$= new Return($$[$0],_$[$0-1].first_line, _$[$0-1].first_column);

@@ -89,7 +89,7 @@ export class Aritmetica extends Expresion{
                 break
             case TipoOperacion.CONCATENACION:
                 if (dominante===Tipos.STRING) {
-                    return {tipo: Tipos.DOUBLE, valor: (izq.valor +dere.valor)}
+                    return {tipo: Tipos.STRING, valor: (izq.valor +dere.valor)}
                 }
                 errores.agregar(new Error('Semantico',`No se puede concatenar ${izq.tipo} con ${dere.tipo}` ,this.linea,this.columna,entorno))
                 consola.actualizar(`No se puede concatenar entre los tipos ${izq.tipo} , ${dere.tipo} l:${this.linea} c:${this.columna} \n`)

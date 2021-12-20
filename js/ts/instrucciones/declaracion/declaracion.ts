@@ -35,7 +35,7 @@ export class Declaracion extends Instruccion{
             valor= this.valorDefecto(this.tipo)
         }
         valor= this.verificarTipo(this.tipo,valor,this.linea,this.columna,entorno)
-        tsLocal.agregar(new Simbolo(this.tipo,id,valor.Valor,entorno))
+        tsLocal.agregar(new Simbolo(this.tipo,id,valor.valor,entorno))
     }
     public ast(metodos: TablaMetodos): Nodo {
         return null

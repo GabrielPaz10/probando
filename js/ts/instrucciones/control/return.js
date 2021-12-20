@@ -10,10 +10,10 @@ class Return extends instruccion_1.Instruccion {
     }
     ejecutar(tsGlobal, tsLocal, metodos, entorno) {
         if (this.valor === null) {
-            return { tipo: Tipos_1.TiposControl.RETURN, valor: null, linea: this.linea, columna: this.columna };
+            return { tipo: Tipos_1.TiposControl.RETURN, valor: null };
         }
         const val = this.valor.ejecutar(tsGlobal, tsLocal, metodos, entorno);
-        return { tipo: Tipos_1.TiposControl.RETURN, valor: val, linea: this.linea, columna: this.columna };
+        return { tipo: Tipos_1.TiposControl.RETURN, valor: val };
     }
     ast(metodos) {
         return null;

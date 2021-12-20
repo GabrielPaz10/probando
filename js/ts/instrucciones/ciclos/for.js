@@ -16,8 +16,8 @@ class For extends instruccion_1.Instruccion {
     }
     ejecutar(tsGlobal, tsLocal, metodos, entorno) {
         var local = new TablaSimbolos_1.TablaSimbolo(tsLocal.getSimbolos());
-        this.declaracion.ejecutar(tsGlobal, tsLocal, metodos, entorno + 'For');
-        var condicion = this.condicion.ejecutar(tsGlobal, tsLocal, metodos, entorno);
+        this.declaracion.ejecutar(tsGlobal, local, metodos, entorno + 'For');
+        var condicion = this.condicion.ejecutar(tsGlobal, local, metodos, entorno);
         this.verError(condicion, entorno);
         while (condicion.valor) {
             var localFor = new TablaSimbolos_1.TablaSimbolo(local.getSimbolos());
@@ -35,7 +35,7 @@ class For extends instruccion_1.Instruccion {
                     return control;
                 }
             }
-            this.paso.ejecutar(tsGlobal, tsLocal, metodos, entorno);
+            this.paso.ejecutar(tsGlobal, localFor, metodos, entorno);
             condicion = this.condicion.ejecutar(tsGlobal, localFor, metodos, entorno);
             this.verError(condicion, entorno);
         }

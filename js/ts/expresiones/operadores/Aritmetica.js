@@ -85,7 +85,7 @@ class Aritmetica extends expresion_1.Expresion {
                 break;
             case TipoOperacion.CONCATENACION:
                 if (dominante === Tipos_1.Tipos.STRING) {
-                    return { tipo: Tipos_1.Tipos.DOUBLE, valor: (izq.valor + dere.valor) };
+                    return { tipo: Tipos_1.Tipos.STRING, valor: (izq.valor + dere.valor) };
                 }
                 index_1.errores.agregar(new Error_1.Error('Semantico', `No se puede concatenar ${izq.tipo} con ${dere.tipo}`, this.linea, this.columna, entorno));
                 index_1.consola.actualizar(`No se puede concatenar entre los tipos ${izq.tipo} , ${dere.tipo} l:${this.linea} c:${this.columna} \n`);

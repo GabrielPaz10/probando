@@ -284,7 +284,7 @@ asignacion
 //vector
 
 tipoValor
-    : DECIMAL                           { $$ = new SetearValor(Tipos.DOUBLE, Number($1), @1.first_line, @1.first_column); }
+    : DECIMAL                           { $$ = (Number.isInteger(Number($1)))?new SetearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column):new SetearValor(Tipos.DOUBLE, Number($1), @1.first_line, @1.first_column); }
     | ENTERO                            { $$ = new SetearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column); }
     | CADENA                            { $$ = new SetearValor(Tipos.STRING, $1 , @1.first_line, @1.first_column); }
     | CARACTER                          { $$ = new SetearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); }
@@ -311,7 +311,7 @@ expresion
     | expresion MODULO expresion         { $$ = new Aritmetica(TipoOperacion.MODULO, $1, $3, @1.first_line, @1.first_column); }
     | expresion AND expresion            { $$ = new Logico(TipoLogico.AND, $1, $3, @1.first_line, @1.first_column); }
 	| expresion OR expresion             { $$ = new Logico(TipoLogico.OR, $1, $3, @1.first_line, @1.first_column); }
-    | NOT expresion                      { $$ = new Logico(TipoLogico.NOT, $1, @1.first_line, @1.first_column); }
+    | NOT expresion                      { $$ = new Logico(TipoLogico.NOT, $2, null,@1.first_line, @1.first_column); }
     | expresion IGUALDAD expresion       { $$ = new Relacional(TiposRelacional.IGUAL, $1, $3, @1.first_line, @1.first_column); }
 	| expresion DIFERENTE expresion      { $$ = new Relacional(TiposRelacional.DIFERENTE, $1, $3, @1.first_line, @1.first_column); }
     | expresion MAYORIGUAL expresion     { $$ = new Relacional(TiposRelacional.MAYORI, $1, $3, @1.first_line, @1.first_column); }
@@ -417,7 +417,7 @@ asignacionfor
     ;
 
 declaracionfor
-    : tipo ID IGUAL expresion            {$$ = new Declaracion($1,$2,$3,@1.first_line, @1.first_column);}
+    : tipo ID IGUAL expresion            {$$ = new Declaracion($1,$2,$4,@1.first_line, @1.first_column);}
     ;
 
 control

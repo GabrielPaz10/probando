@@ -7,6 +7,7 @@ const TablaMetodos_1 = require("./Reportes/TablaMetodos");
 const TablaSimbolos_1 = require("./Reportes/TablaSimbolos");
 const instruccion_1 = require("./abstractas/instruccion");
 const Error_1 = require("./Reportes/Error");
+const Tipos_1 = require("./tiposD/Tipos");
 // const ejecutaar = document.getElementById('ejecutar')
 // ejecutaar.addEventListener('click',()=>{
 //     const entrada=(<HTMLInputElement>document.getElementById("entrada")).value
@@ -55,9 +56,13 @@ function obtenerAst(ast, tsGlobal, metodos) {
 }
 function ejecutarMain(main, tsGlobal, tsLocal, metodos) {
     if (main.length === 1) {
-        main[0].cuerpo.forEach((instruccion) => {
-            instruccion.ejecutar(tsGlobal, tsLocal, metodos, 'Global');
-        });
+        const control = cuerpoMain(main[0].cuerpo, tsGlobal, tsLocal, metodos, '');
+        if (control != null && control != undefined) {
+            if (control.tipo == Tipos_1.TiposControl.RETURN) {
+                if (control.valor == null)
+                    return;
+            }
+        }
     }
     else if (main.length > 1) {
         exports.consola.actualizar(`Solo puede haber un metodo Main en el programa`);
@@ -67,6 +72,15 @@ function ejecutarMain(main, tsGlobal, tsLocal, metodos) {
         exports.consola.actualizar(`Debe haber un metodo Main en el programa`);
         exports.errores.agregar(new Error_1.Error('Semantico', `Debe haber un metodo Main en el programa`, 0, 0, 'Global'));
     }
+}
+function cuerpoMain(cuerpo, tsGlobal, tsLocal, metodos, entorno) {
+    for (var i in cuerpo) {
+        const control = cuerpo[i].ejecutar(tsGlobal, tsLocal, metodos, entorno);
+        if (control !== null && control !== undefined) {
+            return control;
+        }
+    }
+    return null;
 }
 function obtenerMain(metodos) {
     return metodos.metodoss.filter((main) => main.id === 'main');
