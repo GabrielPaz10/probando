@@ -1,42 +1,25 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Substring = void 0;
-var __1 = require("../..");
-var expresion_1 = require("../../abstractas/expresion");
-var Error_1 = require("../../Reportes/Error");
-var Tipos_1 = require("../../tiposD/Tipos");
-var Substring = /** @class */ (function (_super) {
-    __extends(Substring, _super);
-    function Substring(cadena, inicio, final, linea, columna) {
-        var _this = _super.call(this, linea, columna) || this;
-        _this.cadena = cadena;
-        _this.inicio = inicio;
-        _this.final = final;
-        return _this;
+const index_1 = require("../../index");
+const expresion_1 = require("../../abstractas/expresion");
+const Error_1 = require("../../Reportes/Error");
+const Tipos_1 = require("../../tiposD/Tipos");
+class Substring extends expresion_1.Expresion {
+    constructor(cadena, inicio, final, linea, columna) {
+        super(linea, columna);
+        this.cadena = cadena;
+        this.inicio = inicio;
+        this.final = final;
     }
-    Substring.prototype.ejecutar = function (tsGlobal, tsLocal, metodos, entorno) {
-        var cadena = this.cadena.ejecutar(tsGlobal, tsLocal, metodos, entorno);
+    ejecutar(tsGlobal, tsLocal, metodos, entorno) {
+        const cadena = this.cadena.ejecutar(tsGlobal, tsLocal, metodos, entorno);
         if (cadena.tipo !== Tipos_1.Tipos.STRING) {
-            __1.errores.agregar(new Error_1.Error('Semantico', "El tipo " + cadena.tipo + " no puede generar un substring", this.linea, this.columna, entorno));
-            __1.consola.actualizar("El tipo " + cadena.tipo + " no puede generar un substring\n");
+            index_1.errores.agregar(new Error_1.Error('Semantico', `El tipo ${cadena.tipo} no puede generar un substring`, this.linea, this.columna, entorno));
+            index_1.consola.actualizar(`El tipo ${cadena.tipo} no puede generar un substring\n`);
         }
-        var inicio = this.inicio.ejecutar(tsGlobal, tsLocal, metodos, entorno);
-        var final = this.final.ejecutar(tsGlobal, tsLocal, metodos, entorno);
+        const inicio = this.inicio.ejecutar(tsGlobal, tsLocal, metodos, entorno);
+        const final = this.final.ejecutar(tsGlobal, tsLocal, metodos, entorno);
         if ((inicio.tipo == Tipos_1.Tipos.INT || inicio.tipo == Tipos_1.Intervalo.BEGIN) && (final.tipo == Tipos_1.Tipos.INT || final.tipo == Tipos_1.Intervalo.END)) {
             switch (inicio.tipo) {
                 case Tipos_1.Tipos.INT:
@@ -55,12 +38,11 @@ var Substring = /** @class */ (function (_super) {
                     }
             }
         }
-        __1.errores.agregar(new Error_1.Error('Semantico', "El tipo " + cadena.tipo + " no es valido para un intervalo", this.linea, this.columna, entorno));
-        __1.consola.actualizar("El tipo " + cadena.tipo + " no es valido para un intervalo\n");
-    };
-    Substring.prototype.ast = function (metodos) {
+        index_1.errores.agregar(new Error_1.Error('Semantico', `El tipo ${cadena.tipo} no es valido para un intervalo`, this.linea, this.columna, entorno));
+        index_1.consola.actualizar(`El tipo ${cadena.tipo} no es valido para un intervalo\n`);
+    }
+    ast(metodos) {
         return null;
-    };
-    return Substring;
-}(expresion_1.Expresion));
+    }
+}
 exports.Substring = Substring;

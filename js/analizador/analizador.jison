@@ -52,7 +52,7 @@
     const { Substring } = require('../ts/expresiones/funcionesNativas/substring.js')
     const { Tan } = require('../ts/expresiones/funcionesNativas/tangente.js')
     const { ToDouble } = require('../ts/expresiones/funcionesNativas/toDouble.js')
-    const { ToInt } = require('../ts/expresiones/funcionesNativas/toint.ts')
+    const { ToInt } = require('../ts/expresiones/funcionesNativas/toint.js')
     const { ToLowerCase } = require('../ts/expresiones/funcionesNativas/toLower.js')
     const { ToUpperCase } = require('../ts/expresiones/funcionesNativas/toUpper.js')
     const { Typeof } = require('../ts/expresiones/funcionesNativas/typeof.js')
@@ -284,12 +284,12 @@ asignacion
 //vector
 
 tipoValor
-    : DECIMAL                           { $$ = new setearValor(Tipos.DOUBLE, Number($1), @1.first_line, @1.first_column); }
-    | ENTERO                            { $$ = new setearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column); }
-    | CADENA                            { $$ = new setearValor(Tipos.STRING, $1 , @1.first_line, @1.first_column); }
-    | CARACTER                          { $$ = new setearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); }
-    | TRUE                              { $$ = new setearValor(Tipos.BOOLEAN, true, @1.first_line, @1.first_column); }
-    | FALSE                             { $$ = new setearValor(Tipos.BOOLEAN, false, @1.first_line, @1.first_column); }
+    : DECIMAL                           { $$ = new SetearValor(Tipos.DOUBLE, Number($1), @1.first_line, @1.first_column); }
+    | ENTERO                            { $$ = new SetearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column); }
+    | CADENA                            { $$ = new SetearValor(Tipos.STRING, $1 , @1.first_line, @1.first_column); }
+    | CARACTER                          { $$ = new SetearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); }
+    | TRUE                              { $$ = new SetearValor(Tipos.BOOLEAN, true, @1.first_line, @1.first_column); }
+    | FALSE                             { $$ = new SetearValor(Tipos.BOOLEAN, false, @1.first_line, @1.first_column); }
     | ID                                { $$= new ObtenerValor($1,@1.first_line, @1.first_column);}
     ;
 
@@ -344,11 +344,11 @@ nativas
     | expresion PUNTO COPOSITION PARIZQ expresion PARDER                { $$ = new CaracterOfPosition($1,$5,@1.first_line, @1.first_column); }
     | expresion PUNTO SUBSTRING PARIZQ expresion COMA expresion PARDER  { $$ = new Substring($1,$5,$7,@1.first_line, @1.first_column); }
     | expresion PUNTO LENGTH PARIZQ PARDER                              { $$ = new Length($1,@1.first_line, @1.first_column); }
-    | expresion PUNTO UPPERCASE PARIZQ PARDER                           { $$ = new toUpperCase($1,@1.first_line, @1.first_column); }
-    | expresion PUNTO LOWERCASE PARIZQ PARDER                           { $$ = new toLowerCase($1,@1.first_line, @1.first_column); }
+    | expresion PUNTO UPPERCASE PARIZQ PARDER                           { $$ = new ToUpperCase($1,@1.first_line, @1.first_column); }
+    | expresion PUNTO LOWERCASE PARIZQ PARDER                           { $$ = new ToLowerCase($1,@1.first_line, @1.first_column); }
     | tipo PUNTO PARSE PARIZQ expresion PARDER                          { $$ = new Parse($1,$5,@1.first_line, @1.first_column); }
-    | TOINT PARIZQ expresion PARDER                                     { $$ = new toInt($3,@1.first_line, @1.first_column); }
-    | TODOUBLE PARIZQ expresion PARDER                                  { $$ = new toDouble($3,@1.first_line, @1.first_column); }
+    | TOINT PARIZQ expresion PARDER                                     { $$ = new ToInt($3,@1.first_line, @1.first_column); }
+    | TODOUBLE PARIZQ expresion PARDER                                  { $$ = new ToDouble($3,@1.first_line, @1.first_column); }
     | RSTRING PARIZQ expresion PARDER                                   { $$ = new StringM($3,@1.first_line, @1.first_column); }
     | TYPEOF PARIZQ expresion PARDER                                    { $$ = new Typeof($3,@1.first_line, @1.first_column); }
     | ID PUNTO PUSH PARIZQ expresion PARDER //
@@ -422,7 +422,7 @@ declaracionfor
 
 control
     : RETURN expresion                  {$$= new Return($2,@1.first_line, @1.first_column);}
-    | RETURN                            {$$= new Return(null,,@1.first_line, @1.first_column);}
+    | RETURN                            {$$= new Return(null,@1.first_line, @1.first_column);}
     | CONTINUE                          {$$= new Continue(@1.first_line, @1.first_column);}
     | BREAK                             {$$= new Break(@1.first_line, @1.first_column);}
     ;

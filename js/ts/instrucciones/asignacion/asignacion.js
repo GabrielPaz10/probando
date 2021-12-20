@@ -1,35 +1,18 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Asignacion = void 0;
-var instruccion_1 = require("../../abstractas/instruccion");
-var Tipos_1 = require("../../tiposD/Tipos");
-var __1 = require("../..");
-var Error_1 = require("../../Reportes/Error");
-var Asignacion = /** @class */ (function (_super) {
-    __extends(Asignacion, _super);
-    function Asignacion(id, valor, linea, columna) {
-        var _this = _super.call(this, linea, columna) || this;
-        _this.id = id;
-        _this.valor = valor;
-        return _this;
+const instruccion_1 = require("../../abstractas/instruccion");
+const Tipos_1 = require("../../tiposD/Tipos");
+const index_1 = require("../../index");
+const Error_1 = require("../../Reportes/Error");
+class Asignacion extends instruccion_1.Instruccion {
+    constructor(id, valor, linea, columna) {
+        super(linea, columna);
+        this.id = id;
+        this.valor = valor;
     }
-    Asignacion.prototype.ejecutar = function (tsGlobal, tsLocal, metodos, entorno) {
-        var valor = this.valor.ejecutar(tsGlobal, tsLocal, metodos, entorno);
+    ejecutar(tsGlobal, tsLocal, metodos, entorno) {
+        const valor = this.valor.ejecutar(tsGlobal, tsLocal, metodos, entorno);
         var simbolo = tsLocal.obtenerSimbolo(this.id);
         if (simbolo) {
             this.actualizarValor(tsLocal, simbolo, valor, entorno);
@@ -40,16 +23,16 @@ var Asignacion = /** @class */ (function (_super) {
                 this.actualizarValor(tsGlobal, simbolo, valor, entorno);
             }
             else {
-                __1.errores.agregar(new Error_1.Error('Semantico', "Variable " + this.id + " no declarada", this.linea, this.columna, entorno));
-                __1.consola.actualizar("Variable " + this.id + " no declarada l:" + this.linea + ", c:" + this.columna + "\n");
+                index_1.errores.agregar(new Error_1.Error('Semantico', `Variable ${this.id} no declarada`, this.linea, this.columna, entorno));
+                index_1.consola.actualizar(`Variable ${this.id} no declarada l:${this.linea}, c:${this.columna}\n`);
             }
         }
-    };
-    Asignacion.prototype.actualizarValor = function (ts, simbolo, valor, entorno) {
-        var aux = this.verificarTipo(simbolo.tipo, valor, this.linea, this.columna, entorno);
+    }
+    actualizarValor(ts, simbolo, valor, entorno) {
+        const aux = this.verificarTipo(simbolo.tipo, valor, this.linea, this.columna, entorno);
         ts.actualizar(this.id, aux.valor);
-    };
-    Asignacion.prototype.verificarTipo = function (tipo, valor, linea, columna, entorno) {
+    }
+    verificarTipo(tipo, valor, linea, columna, entorno) {
         if (tipo === valor.tipo) {
             return valor;
         }
@@ -74,12 +57,11 @@ var Asignacion = /** @class */ (function (_super) {
                 return { tipo: tipo, valor: (valor.valor < 0) ? Math.ceil(valor.valor) : Math.floor(valor.valor) };
             }
         }
-        __1.errores.agregar(new Error_1.Error('Semantico', "Tipos incompatibles, " + valor.tipo + " no se puede convertir a " + tipo, this.linea, this.columna, entorno));
-        __1.consola.actualizar("Tipos incompatibles, " + valor.tipo + " no se puede convertir a " + tipo + " l:" + this.linea + ", c:" + this.columna + "\n");
-    };
-    Asignacion.prototype.ast = function (metodos) {
+        index_1.errores.agregar(new Error_1.Error('Semantico', `Tipos incompatibles, ${valor.tipo} no se puede convertir a ${tipo}`, this.linea, this.columna, entorno));
+        index_1.consola.actualizar(`Tipos incompatibles, ${valor.tipo} no se puede convertir a ${tipo} l:${this.linea}, c:${this.columna}\n`);
+    }
+    ast(metodos) {
         return null;
-    };
-    return Asignacion;
-}(instruccion_1.Instruccion));
+    }
+}
 exports.Asignacion = Asignacion;

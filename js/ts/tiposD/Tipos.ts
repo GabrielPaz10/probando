@@ -1,14 +1,14 @@
 
 export enum Tipos{
-    INT=0,
-    DOUBLE=1,
-    BOOLEAN=2,
-    CHAR=3,
-    STRING =4,
-    STRUCT=5,
-    NULL =6,
-    VOID=7,
-    ARRAY=8
+    INT='int',
+    DOUBLE='double',
+    BOOLEAN='boolean',
+    CHAR='char',
+    STRING ='String',
+    STRUCT='struct',
+    NULL ='null',
+    VOID='null',
+    ARRAY='array'
 }
 export enum Intervalo{
     BEGIN   =0,

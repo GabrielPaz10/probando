@@ -1,45 +1,28 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Declaracion = void 0;
-var instruccion_1 = require("../../abstractas/instruccion");
-var Tipos_1 = require("../../tiposD/Tipos");
-var __1 = require("../..");
-var Error_1 = require("../../Reportes/Error");
-var Simbolo_1 = require("../../Reportes/Simbolo");
-var Declaracion = /** @class */ (function (_super) {
-    __extends(Declaracion, _super);
-    function Declaracion(tipo, id, valor, fila, columna) {
-        var _this = _super.call(this, fila, columna) || this;
-        _this.tipo = tipo;
-        _this.id = id;
-        _this.valor = valor;
-        return _this;
+const instruccion_1 = require("../../abstractas/instruccion");
+const Tipos_1 = require("../../tiposD/Tipos");
+const index_1 = require("../../index");
+const Error_1 = require("../../Reportes/Error");
+const Simbolo_1 = require("../../Reportes/Simbolo");
+class Declaracion extends instruccion_1.Instruccion {
+    constructor(tipo, id, valor, fila, columna) {
+        super(fila, columna);
+        this.tipo = tipo;
+        this.id = id;
+        this.valor = valor;
     }
-    Declaracion.prototype.ejecutar = function (tsGlobal, tsLocal, metodos, entorno) {
+    ejecutar(tsGlobal, tsLocal, metodos, entorno) {
         for (var i in this.id) {
             this.declarar(this.id[i], tsGlobal, tsLocal, metodos, entorno);
         }
-    };
-    Declaracion.prototype.declarar = function (id, tsGlobal, tsLocal, metodos, entorno) {
-        var aux = tsLocal.obtenerSimbolo(id);
+    }
+    declarar(id, tsGlobal, tsLocal, metodos, entorno) {
+        const aux = tsLocal.obtenerSimbolo(id);
         if (aux) {
-            __1.errores.agregar(new Error_1.Error('Semantico', "La variable " + id + " ya esta definida", this.linea, this.columna, entorno));
-            __1.consola.actualizar("La variable " + id + " ya esta definida l:" + this.linea + ", c:" + this.columna + "\n");
+            index_1.errores.agregar(new Error_1.Error('Semantico', `La variable ${id} ya esta definida`, this.linea, this.columna, entorno));
+            index_1.consola.actualizar(`La variable ${id} ya esta definida l:${this.linea}, c:${this.columna}\n`);
         }
         var valor;
         if (this.valor) {
@@ -50,11 +33,11 @@ var Declaracion = /** @class */ (function (_super) {
         }
         valor = this.verificarTipo(this.tipo, valor, this.linea, this.columna, entorno);
         tsLocal.agregar(new Simbolo_1.Simbolo(this.tipo, id, valor.Valor, entorno));
-    };
-    Declaracion.prototype.ast = function (metodos) {
+    }
+    ast(metodos) {
         return null;
-    };
-    Declaracion.prototype.verificarTipo = function (tipo, valor, linea, columna, entorno) {
+    }
+    verificarTipo(tipo, valor, linea, columna, entorno) {
         if (tipo === valor.tipo) {
             return valor;
         }
@@ -79,10 +62,10 @@ var Declaracion = /** @class */ (function (_super) {
                 return { tipo: tipo, valor: (valor.valor < 0) ? Math.ceil(valor.valor) : Math.floor(valor.valor) };
             }
         }
-        __1.errores.agregar(new Error_1.Error('Semantico', "Tipos incompatibles, " + valor.tipo + " no se puede convertir a " + tipo, this.linea, this.columna, entorno));
-        __1.consola.actualizar("Tipos incompatibles, " + valor.tipo + " no se puede convertir a " + tipo + " l:" + this.linea + ", c:" + this.columna + "\n");
-    };
-    Declaracion.prototype.valorDefecto = function (tipo) {
+        index_1.errores.agregar(new Error_1.Error('Semantico', `Tipos incompatibles, ${valor.tipo} no se puede convertir a ${tipo}`, this.linea, this.columna, entorno));
+        index_1.consola.actualizar(`Tipos incompatibles, ${valor.tipo} no se puede convertir a ${tipo} l:${this.linea}, c:${this.columna}\n`);
+    }
+    valorDefecto(tipo) {
         if (tipo === Tipos_1.Tipos.INT) {
             return { tipo: Tipos_1.Tipos.INT, valor: 0 };
         }
@@ -98,7 +81,6 @@ var Declaracion = /** @class */ (function (_super) {
         else if (tipo === Tipos_1.Tipos.STRING) {
             return { tipo: Tipos_1.Tipos.STRING, valor: "" };
         }
-    };
-    return Declaracion;
-}(instruccion_1.Instruccion));
+    }
+}
 exports.Declaracion = Declaracion;

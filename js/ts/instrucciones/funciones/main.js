@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
-var Main = /** @class */ (function () {
-    function Main(metodo) {
+class Main {
+    constructor(metodo) {
         this.metodo = metodo;
     }
-    Main.prototype.ejectuar = function (metodos) {
+    ejectuar(metodos) {
         metodos.push(this.metodo);
-    };
-    return Main;
-}());
+    }
+}
 exports.Main = Main;

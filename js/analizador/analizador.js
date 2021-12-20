@@ -169,22 +169,22 @@ case 40:
  this.$ = new AsignacionDecInc($$[$0-1], TipoAsignacion.DECREMENTO, _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 41:
- this.$ = new setearValor(Tipos.DOUBLE, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new SetearValor(Tipos.DOUBLE, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
 break;
 case 42:
- this.$ = new setearValor(Tipos.INT, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new SetearValor(Tipos.INT, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
 break;
 case 43:
- this.$ = new setearValor(Tipos.STRING, $$[$0] , _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new SetearValor(Tipos.STRING, $$[$0] , _$[$0].first_line, _$[$0].first_column); 
 break;
 case 44:
- this.$ = new setearValor(Tipos.CHAR, $$[$0], _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new SetearValor(Tipos.CHAR, $$[$0], _$[$0].first_line, _$[$0].first_column); 
 break;
 case 45:
- this.$ = new setearValor(Tipos.BOOLEAN, true, _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new SetearValor(Tipos.BOOLEAN, true, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 46:
- this.$ = new setearValor(Tipos.BOOLEAN, false, _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new SetearValor(Tipos.BOOLEAN, false, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 47:
  this.$= new ObtenerValor($$[$0],_$[$0].first_line, _$[$0].first_column);
@@ -301,19 +301,19 @@ case 88:
  this.$ = new Length($$[$0-4],_$[$0-4].first_line, _$[$0-4].first_column); 
 break;
 case 89:
- this.$ = new toUpperCase($$[$0-4],_$[$0-4].first_line, _$[$0-4].first_column); 
+ this.$ = new ToUpperCase($$[$0-4],_$[$0-4].first_line, _$[$0-4].first_column); 
 break;
 case 90:
- this.$ = new toLowerCase($$[$0-4],_$[$0-4].first_line, _$[$0-4].first_column); 
+ this.$ = new ToLowerCase($$[$0-4],_$[$0-4].first_line, _$[$0-4].first_column); 
 break;
 case 91:
  this.$ = new Parse($$[$0-5],$$[$0-1],_$[$0-5].first_line, _$[$0-5].first_column); 
 break;
 case 92:
- this.$ = new toInt($$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column); 
+ this.$ = new ToInt($$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column); 
 break;
 case 93:
- this.$ = new toDouble($$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column); 
+ this.$ = new ToDouble($$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column); 
 break;
 case 94:
  this.$ = new StringM($$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column); 
@@ -391,7 +391,7 @@ case 129:
 this.$= new Return($$[$0],_$[$0-1].first_line, _$[$0-1].first_column);
 break;
 case 130:
-this.$= new Return(null,,_$[$0].first_line, _$[$0].first_column);
+this.$= new Return(null,_$[$0].first_line, _$[$0].first_column);
 break;
 case 131:
 this.$= new Continue(_$[$0].first_line, _$[$0].first_column);
@@ -703,7 +703,7 @@ _handle_error:
     const { Substring } = require('../ts/expresiones/funcionesNativas/substring.js')
     const { Tan } = require('../ts/expresiones/funcionesNativas/tangente.js')
     const { ToDouble } = require('../ts/expresiones/funcionesNativas/toDouble.js')
-    const { ToInt } = require('../ts/expresiones/funcionesNativas/toint.ts')
+    const { ToInt } = require('../ts/expresiones/funcionesNativas/toint.js')
     const { ToLowerCase } = require('../ts/expresiones/funcionesNativas/toLower.js')
     const { ToUpperCase } = require('../ts/expresiones/funcionesNativas/toUpper.js')
     const { Typeof } = require('../ts/expresiones/funcionesNativas/typeof.js')

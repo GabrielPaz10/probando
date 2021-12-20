@@ -3,15 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TiposControl = exports.Intervalo = exports.Tipos = void 0;
 var Tipos;
 (function (Tipos) {
-    Tipos[Tipos["INT"] = 0] = "INT";
-    Tipos[Tipos["DOUBLE"] = 1] = "DOUBLE";
-    Tipos[Tipos["BOOLEAN"] = 2] = "BOOLEAN";
-    Tipos[Tipos["CHAR"] = 3] = "CHAR";
-    Tipos[Tipos["STRING"] = 4] = "STRING";
-    Tipos[Tipos["STRUCT"] = 5] = "STRUCT";
-    Tipos[Tipos["NULL"] = 6] = "NULL";
-    Tipos[Tipos["VOID"] = 7] = "VOID";
-    Tipos[Tipos["ARRAY"] = 8] = "ARRAY";
+    Tipos["INT"] = "int";
+    Tipos["DOUBLE"] = "double";
+    Tipos["BOOLEAN"] = "boolean";
+    Tipos["CHAR"] = "char";
+    Tipos["STRING"] = "String";
+    Tipos["STRUCT"] = "struct";
+    Tipos["NULL"] = "null";
+    Tipos["VOID"] = "null";
+    Tipos["ARRAY"] = "array";
 })(Tipos = exports.Tipos || (exports.Tipos = {}));
 var Intervalo;
 (function (Intervalo) {

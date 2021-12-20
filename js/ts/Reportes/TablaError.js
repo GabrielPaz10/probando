@@ -1,19 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TablaError = void 0;
-var TablaError = /** @class */ (function () {
-    function TablaError() {
+class TablaError {
+    constructor() {
         this.errores = [];
     }
-    TablaError.prototype.vaciar = function () {
+    vaciar() {
         this.errores = [];
-    };
-    TablaError.prototype.agregar = function (error) {
+    }
+    agregar(error) {
         this.errores.push(error);
-    };
-    TablaError.prototype.get = function () {
+    }
+    get() {
         return this.errores;
-    };
-    return TablaError;
-}());
+    }
+}
 exports.TablaError = TablaError;

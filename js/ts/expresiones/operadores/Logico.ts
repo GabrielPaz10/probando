@@ -2,7 +2,7 @@ import { Expresion } from '../../abstractas/expresion';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { Valor, Tipos, Nodo, Intervalo } from '../../tiposD/Tipos';
-import { consola, errores } from '../..';
+import { consola, errores } from '../../index';
 import { Error } from '../../Reportes/Error';
 
 export enum TipoLogico{

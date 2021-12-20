@@ -1,23 +1,8 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Relacional = exports.TiposRelacional = void 0;
-var expresion_1 = require("../../abstractas/expresion");
-var Tipos_1 = require("../../tiposD/Tipos");
+const expresion_1 = require("../../abstractas/expresion");
+const Tipos_1 = require("../../tiposD/Tipos");
 var TiposRelacional;
 (function (TiposRelacional) {
     TiposRelacional[TiposRelacional["MAYORI"] = 0] = "MAYORI";
@@ -27,18 +12,16 @@ var TiposRelacional;
     TiposRelacional[TiposRelacional["IGUAL"] = 4] = "IGUAL";
     TiposRelacional[TiposRelacional["MENOR"] = 5] = "MENOR";
 })(TiposRelacional = exports.TiposRelacional || (exports.TiposRelacional = {}));
-var Relacional = /** @class */ (function (_super) {
-    __extends(Relacional, _super);
-    function Relacional(relacion, izquierda, derecho, linea, columna) {
-        var _this = _super.call(this, linea, columna) || this;
-        _this.relacion = relacion;
-        _this.izquierda = izquierda;
-        _this.derecho = derecho;
-        return _this;
+class Relacional extends expresion_1.Expresion {
+    constructor(relacion, izquierda, derecho, linea, columna) {
+        super(linea, columna);
+        this.relacion = relacion;
+        this.izquierda = izquierda;
+        this.derecho = derecho;
     }
-    Relacional.prototype.ejecutar = function (tsGlobal, tsLocal, metodos, entorno) {
-        var izq = this.izquierda.ejecutar(tsGlobal, tsLocal, metodos, entorno);
-        var dere = this.derecho.ejecutar(tsGlobal, tsLocal, metodos, entorno);
+    ejecutar(tsGlobal, tsLocal, metodos, entorno) {
+        const izq = this.izquierda.ejecutar(tsGlobal, tsLocal, metodos, entorno);
+        const dere = this.derecho.ejecutar(tsGlobal, tsLocal, metodos, entorno);
         switch (this.relacion) {
             case TiposRelacional.IGUAL:
                 return { tipo: Tipos_1.Tipos.BOOLEAN, valor: (izq.valor == dere.valor) };
@@ -53,10 +36,9 @@ var Relacional = /** @class */ (function (_super) {
             case TiposRelacional.MENORI:
                 return { tipo: Tipos_1.Tipos.BOOLEAN, valor: (izq.valor <= dere.valor) };
         }
-    };
-    Relacional.prototype.ast = function (metodos) {
+    }
+    ast(metodos) {
         return null;
-    };
-    return Relacional;
-}(expresion_1.Expresion));
+    }
+}
 exports.Relacional = Relacional;

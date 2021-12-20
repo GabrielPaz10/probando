@@ -1,19 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Consola = void 0;
-var Consola = /** @class */ (function () {
-    function Consola() {
+class Consola {
+    constructor() {
         this.consola = '';
     }
-    Consola.prototype.actualizar = function (cadena) {
+    actualizar(cadena) {
         this.consola += cadena;
-    };
-    Consola.prototype.limpiar = function () {
+    }
+    limpiar() {
         this.consola = '';
-    };
-    Consola.prototype.publicar = function () {
+    }
+    publicar() {
         return this.consola;
-    };
-    return Consola;
-}());
+    }
+}
 exports.Consola = Consola;

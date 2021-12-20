@@ -1,4 +1,4 @@
-import { consola, errores } from "../..";
+import { consola, errores } from "../../index";
 import { Expresion } from "../../abstractas/expresion";
 import { Error } from "../../Reportes/Error";
 import { TablaMetodos } from "../../Reportes/TablaMetodos";
@@ -13,7 +13,7 @@ export class ToInt extends Expresion{
     }
     public ejecutar(tsGlobal: TablaSimbolo, tsLocal: TablaSimbolo, metodos: TablaMetodos, entorno: string): Valor {
         const valor = this.expresion.ejecutar(tsGlobal,tsLocal,metodos,entorno)
-        if (valor.tipo===Tipos.INT|| valor.tipo===Tipos.BOOLEAN) {
+        if (valor.tipo===Tipos.DOUBLE|| valor.tipo===Tipos.BOOLEAN) {
             return {tipo:Tipos.INT,valor:(valor.valor<0)?Math.ceil(valor.valor):Math.floor(valor.valor)}
         }
         errores.agregar(new Error('Semantico',`No se puede Truncar con un tipo ${valor.tipo}` ,this.linea,this.columna,entorno))

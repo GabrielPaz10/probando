@@ -193,6 +193,7 @@ export class Traductor{
     }
 
     //guardar temporales en funciones
+    /*
     public guardartems(entorno: Entorno) : number{
         if(this.tempstorage.size > 0){
             const temp = this.newTem(); 
@@ -231,5 +232,5 @@ export class Traductor{
             this.addComentario('Fin Obteniendo temporales');
             entorno.size = pos;
         }
-    }
+    }*/
 }

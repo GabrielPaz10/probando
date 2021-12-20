@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Case = void 0;
-var Case = /** @class */ (function () {
-    function Case(valor, cuerpo) {
+class Case {
+    constructor(valor, cuerpo) {
         this.valor = valor;
         this.cuerpo = cuerpo;
     }
-    Case.prototype.ast = function (metodos) {
+    ast(metodos) {
         return null;
-    };
-    Case.prototype.obtenerCuerpo = function (metodos) {
+    }
+    obtenerCuerpo(metodos) {
         return null;
-    };
-    return Case;
-}());
+    }
+}
 exports.Case = Case;

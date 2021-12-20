@@ -3,7 +3,7 @@ import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { Nodo, Tipos, TiposControl } from '../../tiposD/Tipos';
 import { Expresion } from '../../abstractas/expresion';
-import { consola, errores } from '../..';
+import { consola, errores } from '../../index';
 import { Error } from '../../Reportes/Error';
 import { Metodo } from '../../Reportes/Metodo';
 import { Simbolo } from '../../Reportes/Simbolo';
