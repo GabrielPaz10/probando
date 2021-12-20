@@ -1,4 +1,4 @@
-import { consola, errores } from "../..";
+import { consola, errores } from "../../index";
 import { Expresion } from "../../abstractas/expresion";
 import { Instruccion } from '../../abstractas/instruccion';
 import { Error } from "../../Reportes/Error";

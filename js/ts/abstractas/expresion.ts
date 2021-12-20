@@ -15,6 +15,6 @@ export abstract class Expresion{
         this.linea=linea
     }
     public abstract ejecutar(tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo, metodos:TablaMetodos,entorno:string):Valor
-    public abstract ast(metodos:TablaMetodos):Nodo
+    public abstract ast(metodos:TablaMetodos):Nodo  
     //public abstract traducir()
 }

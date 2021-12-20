@@ -1,8 +1,8 @@
 import { Expresion } from '../../abstractas/expresion';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
-import { Valor, Tipos, Nodo } from '../../tiposD/Tipos';
-import { consola, errores } from '../..';
+import { Valor, Tipos, Nodo, Intervalo } from '../../tiposD/Tipos';
+import { consola, errores } from '../../index';
 import { Error } from '../../Reportes/Error';
 
 export enum TipoOperacion{
@@ -11,7 +11,8 @@ export enum TipoOperacion{
     MULTIPLICACION,
     DIVISION,
     MODULO,
-    CONCATENACION
+    CONCATENACION,
+    EXTE
 }
 export class Aritmetica extends Expresion{
 
@@ -61,18 +62,6 @@ export class Aritmetica extends Expresion{
                         return {tipo: Tipos.INT, valor: (Number(izq.valor) * Number(dere.valor))}
                     case Tipos.DOUBLE:
                         return {tipo: Tipos.DOUBLE, valor: (Number(izq.valor) * Number(dere.valor))}
-                    case Tipos.STRING:
-                        let concatena= ''
-                        if (izq.tipo===Tipos.INT) {
-                            for (let index = 0; index < izq.valor; index++) {
-                                concatena+=dere.valor
-                            }
-                        }else if (dere.tipo===Tipos.INT){
-                            for (let index = 0; index < dere.valor; index++) {
-                                concatena+=izq.valor
-                            }
-                        }
-                        return {tipo: Tipos.STRING, valor: concatena}
                     default:
                         errores.agregar(new Error('Semantico',`No se puede Multiplicar entre los tipos ${izq.tipo} , ${dere.tipo}` ,this.linea,this.columna,entorno))
                         consola.actualizar(`No se puede multiplicar entre los tipos ${izq.tipo} , ${dere.tipo} l:${this.linea} c:${this.columna} \n`)
@@ -100,7 +89,20 @@ export class Aritmetica extends Expresion{
                 break
             case TipoOperacion.CONCATENACION:
                 if (dominante===Tipos.STRING) {
-                    return {tipo: Tipos.DOUBLE, valor: (izq.valor +dere.valor)}
+                    return {tipo: Tipos.STRING, valor: (izq.valor +dere.valor)}
+                }
+                errores.agregar(new Error('Semantico',`No se puede concatenar ${izq.tipo} con ${dere.tipo}` ,this.linea,this.columna,entorno))
+                consola.actualizar(`No se puede concatenar entre los tipos ${izq.tipo} , ${dere.tipo} l:${this.linea} c:${this.columna} \n`)
+                break
+            case TipoOperacion.EXTE:
+                if (dominante===Tipos.STRING) {
+                    if (izq.tipo===Tipos.STRING&&dere.tipo===Tipos.INT) {
+                        let concatena= ''
+                        for (let index = 0; index < dere.valor; index++) {
+                            concatena+=izq.valor
+                        }
+                        return {tipo: Tipos.STRING, valor: concatena}
+                    }
                 }
                 errores.agregar(new Error('Semantico',`No se puede concatenar ${izq.tipo} con ${dere.tipo}` ,this.linea,this.columna,entorno))
                 consola.actualizar(`No se puede concatenar entre los tipos ${izq.tipo} , ${dere.tipo} l:${this.linea} c:${this.columna} \n`)
@@ -112,10 +114,17 @@ export class Aritmetica extends Expresion{
     public ast(metodos:TablaMetodos):Nodo{
         return null
     }
-    public tipoDominante(tipoIzquierdo:Tipos,tipoDerecho:Tipos,operador:TipoOperacion){
+    public tipoDominante(tipoIzquierdo:Tipos|Intervalo,tipoDerecho:Tipos|Intervalo,operador:TipoOperacion){
         switch (operador) {
             case TipoOperacion.SUMA:
-                
+                if (tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.INT) {
+                    return Tipos.INT
+                }else if((tipoIzquierdo===Tipos.DOUBLE&&tipoDerecho===Tipos.DOUBLE)
+                ||(tipoIzquierdo===Tipos.DOUBLE&&tipoDerecho===Tipos.INT)
+                ||(tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.DOUBLE)){
+                    return Tipos.DOUBLE
+                }
+                return null
             case TipoOperacion.RESTA:
                 if (tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.INT) {
                     return Tipos.INT
@@ -132,11 +141,12 @@ export class Aritmetica extends Expresion{
                 ||(tipoIzquierdo===Tipos.DOUBLE&&tipoDerecho===Tipos.INT)
                 ||(tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.DOUBLE)){
                     return Tipos.DOUBLE
-                }else if((tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.STRING)
-                ||tipoIzquierdo===Tipos.STRING&&tipoDerecho===Tipos.INT){
+                }
+                return null
+            case TipoOperacion.EXTE:
+                if (tipoIzquierdo===Tipos.STRING&&tipoDerecho===Tipos.INT) {
                     return Tipos.STRING
                 }
-            
                 return null
             case TipoOperacion.DIVISION:
                 if ((tipoIzquierdo===Tipos.INT&&tipoDerecho===Tipos.INT)

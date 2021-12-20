@@ -13,10 +13,10 @@ export class Return extends Instruccion{
     }
     public ejecutar(tsGlobal: TablaSimbolo, tsLocal: TablaSimbolo, metodos: TablaMetodos, entorno: string) {
         if (this.valor===null) {
-            return {tipo: TiposControl.RETURN, valor:null, linea: this.linea, columna: this.columna}
+            return {tipo: TiposControl.RETURN, valor:null}
         }
         const val= this.valor.ejecutar(tsGlobal,tsLocal,metodos,entorno)
-        return {tipo: TiposControl.RETURN, valor:val, linea: this.linea, columna: this.columna}
+        return {tipo: TiposControl.RETURN, valor:val}
     }
     public ast(metodos: TablaMetodos): Nodo {
         return null

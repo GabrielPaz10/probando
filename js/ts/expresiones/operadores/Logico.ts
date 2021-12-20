@@ -1,8 +1,8 @@
 import { Expresion } from '../../abstractas/expresion';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { TablaMetodos } from '../../Reportes/TablaMetodos';
-import { Valor, Tipos, Nodo } from '../../tiposD/Tipos';
-import { consola, errores } from '../..';
+import { Valor, Tipos, Nodo, Intervalo } from '../../tiposD/Tipos';
+import { consola, errores } from '../../index';
 import { Error } from '../../Reportes/Error';
 
 export enum TipoLogico{
@@ -46,7 +46,7 @@ export class Logico extends Expresion{
         
     }
     
-    private setError(izqT:Tipos, derT:Tipos,entorno:string){
+    private setError(izqT:Tipos|Intervalo, derT:Tipos|Intervalo,entorno:string){
         if(izqT !== Tipos.BOOLEAN && derT !== Tipos.BOOLEAN && this.tipo !== TipoLogico.NOT){
             consola.actualizar(`Los tipos no son operables ${izqT} y ${derT}, l:${this.linea} c:${this.columna}`);
             errores.agregar(new Error('Semantico',`Los tipos no son operables ${izqT} y ${derT}, l:${this.linea} c:${this.columna}`,this.linea,this.columna, entorno))

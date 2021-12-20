@@ -1,14 +1,17 @@
-const ejecutar = document.getElementById('ejecutar')
-const consola = document.getElementById('consola')
-let contenido =""
+const { ejecutar } = require("./ts/index")
 
 
-ejecutar.addEventListener('click',()=>{
+const bejecutar = document.getElementById('ejecutar')
+const consolaa = document.getElementById('consola')
+
+
+bejecutar.addEventListener('click',()=>{
     const entrada=document.getElementById("entrada").value
     alert(entrada)
     alert(typeof(entrada))
-    analizador.parse(entrada)
-    consola.value=contenido
+    
+    //analizador.parse(entrada)
+    consolaa.value=ejecutar(entrada)
 })
 
 

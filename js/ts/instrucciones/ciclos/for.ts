@@ -1,4 +1,4 @@
-import { consola, errores } from "../..";
+import { consola, errores } from "../../index";
 import { Expresion } from "../../abstractas/expresion";
 import { Instruccion } from "../../abstractas/instruccion";
 import { Error } from "../../Reportes/Error";
@@ -20,8 +20,8 @@ export class For extends Instruccion{
     } 
     public ejecutar(tsGlobal: TablaSimbolo, tsLocal: TablaSimbolo, metodos: TablaMetodos, entorno: string) {
         var local = new TablaSimbolo(tsLocal.getSimbolos())
-        this.declaracion.ejecutar(tsGlobal,tsLocal,metodos,entorno+'For')
-        var condicion = this.condicion.ejecutar(tsGlobal,tsLocal,metodos,entorno)
+        this.declaracion.ejecutar(tsGlobal,local,metodos,entorno+'For')
+        var condicion = this.condicion.ejecutar(tsGlobal,local,metodos,entorno)
         this.verError(condicion,entorno)
         while (condicion.valor) {
             var localFor = new TablaSimbolo(local.getSimbolos())
@@ -37,7 +37,7 @@ export class For extends Instruccion{
                     return control
                 }
             }
-            this.paso.ejecutar(tsGlobal,tsLocal,metodos,entorno)
+            this.paso.ejecutar(tsGlobal,localFor,metodos,entorno)
             condicion= this.condicion.ejecutar(tsGlobal,localFor,metodos,entorno)
             this.verError(condicion,entorno)
         }
