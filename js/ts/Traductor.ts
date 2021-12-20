@@ -1,3 +1,4 @@
+import { TablaSimbolo } from './Reportes/TablaSimbolos';
 export class Traductor{
     private traductor:string
     private static traductor: Traductor;
@@ -190,13 +191,13 @@ export class Traductor{
 
     //guardar temporales en funciones
 
-    public guardartems(entorno: Entorno) : number{
+    public guardartems(tabla: TablaSimbolo) : number{
         if(this.tempstorage.size > 0){
             const temp = this.newTem(); 
             let tamanio = 0;
 
             this.addComentario('Guardando temporales');
-            this.addExp(temp,'p',entorno.size,'+');
+            this.addExp(temp,'p',tabla.size,'+');
             this.tempstorage.forEach((value)=>{
                 tamanio++;
                 this.setstack(temp,value);
@@ -206,12 +207,12 @@ export class Traductor{
             });
             this.addComentario('Fin Guardando temporales');
         }
-        let cad = entorno.size;
-        entorno.size = cad + this.tempstorage.size;
+        let cad = tabla.size;
+        tabla.size = cad + this.tempstorage.size;
         return cad;
     }
 
-    public recoverTemps(entorno: Entorno, pos: number){
+    public recoverTemps(tabla: TablaSimbolo, pos: number){
         if(this.tempstorage.size > 0){
             const temp = this.newTem(); 
             let tamanio = 0;
@@ -226,7 +227,7 @@ export class Traductor{
                 }
             });
             this.addComentario('Fin Obteniendo temporales');
-            entorno.size = pos;
+            tabla.size = pos;
         }
     }
 }
