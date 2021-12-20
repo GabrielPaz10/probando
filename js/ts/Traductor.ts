@@ -48,23 +48,19 @@ export class Traductor{
 
     public static getInstancia(){
         return this.traductor || (this.traductor = new this());
-    }
-
-    
+    }  
     //Genarar temporal
     public newTem(){
         const cadtem = 'T' + this.temporal;
         this.temporal++;
         return cadtem;
     }
-
     //Generar Etiqueta
     public newEtiq(){
         const cadtem = 'L' + this.etiqueta;
         this.etiqueta++;
         return cadtem;
     }
-
     //Cadena agregar goto
     public addGoto(etiq: string){
         const cadtem = this.sfunc + "goto " + etiq + ";";
@@ -193,7 +189,7 @@ export class Traductor{
     }
 
     //guardar temporales en funciones
-    /*
+
     public guardartems(entorno: Entorno) : number{
         if(this.tempstorage.size > 0){
             const temp = this.newTem(); 
@@ -232,5 +228,5 @@ export class Traductor{
             this.addComentario('Fin Obteniendo temporales');
             entorno.size = pos;
         }
-    }*/
+    }
 }
