@@ -4,8 +4,8 @@ export class Metodo{
     public tipo: Tipos
     public id:string
     public parametros:any[]|any
-    public cuerpo:Instruccion[]
-    constructor(tipo:Tipos,id:string,parametros:any[]|any,cuerpo:Instruccion[]){
+    public cuerpo:any[]
+    constructor(tipo:Tipos,id:string,parametros:any[]|any,cuerpo:any[]){
         this.tipo=tipo
         this.id=id
         this.parametros=parametros

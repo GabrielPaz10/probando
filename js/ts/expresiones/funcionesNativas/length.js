@@ -12,7 +12,7 @@ class Length extends expresion_1.Expresion {
     }
     ejecutar(tsGlobal, tsLocal, metodos, entorno) {
         const valor = this.valor.ejecutar(tsGlobal, tsLocal, metodos, entorno);
-        if (valor.tipo !== Tipos_1.Tipos.STRING) { //agregar lo de arreglos 
+        if (valor.tipo !== Tipos_1.Tipos.STRING && valor.tipo !== Tipos_1.Tipos.ARRAY) { //agregar lo de arreglos 
             index_1.errores.agregar(new Error_1.Error('Semantico', `No se puede devolver LENGTH con un tipo ${valor.tipo}`, this.linea, this.columna, entorno));
             index_1.consola.actualizar(`No se puede devolver LENGTH con un tipo ${valor.tipo}\n`);
         }

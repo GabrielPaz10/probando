@@ -27,6 +27,7 @@ export class Arreglo extends Instruccion{
             errores.agregar(new Error('Semantico',`La variable ${this.id} ya se encuentra definida`,this.linea,this.columna,entorno))
         }
         let vector:Array<Valor>=[]
+        
         if (this.valor instanceof Expresion) {
             vector=[]
         }else{

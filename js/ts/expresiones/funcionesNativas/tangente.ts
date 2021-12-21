@@ -14,7 +14,7 @@ export class Tan extends Expresion{
     public ejecutar(tsGlobal: TablaSimbolo, tsLocal: TablaSimbolo, metodos: TablaMetodos, entorno: string): Valor {
         const angulo = this.angulo.ejecutar(tsGlobal,tsLocal,metodos,entorno)
         if (angulo.tipo===Tipos.INT || angulo.tipo===Tipos.DOUBLE) {
-            return {tipo:Tipos.DOUBLE,valor:(Math.tan(angulo.valor)*(180/(Math.PI)))}
+            return {tipo:Tipos.DOUBLE,valor:(Math.tan(angulo.valor))}
         }
         
         errores.agregar(new Error('Semantico',`No se puede calcular la tangente con el tipo ${angulo.tipo}` ,this.linea,this.columna,entorno))

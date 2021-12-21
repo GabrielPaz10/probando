@@ -5,7 +5,8 @@ import { TablaMetodos } from './Reportes/TablaMetodos';
 import { TablaSimbolo } from './Reportes/TablaSimbolos';
 import { Instruccion } from './abstractas/instruccion';
 import { Error } from './Reportes/Error';
-import { TiposControl } from './tiposD/Tipos';
+import { TiposControl, Valor } from './tiposD/Tipos';
+import { Expresion } from './abstractas/expresion';
 // const ejecutaar = document.getElementById('ejecutar')
 
 
@@ -49,7 +50,7 @@ export function ejecutar(entrada:string):string{
 function obtenerAst(ast:any, tsGlobal:TablaSimbolo,metodos:TablaMetodos){
     for(const instruction of ast){
         try {
-            if(instruction instanceof Instruccion)
+            if(instruction instanceof Instruccion || instruction instanceof Expresion)
                 instruction.ejecutar(tsGlobal, tsGlobal, metodos, "-")
         } catch (error) {
             if(error instanceof Error) errores.agregar(error)
@@ -73,11 +74,14 @@ function ejecutarMain(main:any, tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo,meto
         errores.agregar(new Error('Semantico',`Debe haber un metodo Main en el programa`,0,0,'Global'))
     }
 }
-function cuerpoMain(cuerpo:Instruccion[],tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo,metodos:TablaMetodos,entorno:string){
+function cuerpoMain(cuerpo:any[],tsGlobal:TablaSimbolo, tsLocal:TablaSimbolo,metodos:TablaMetodos,entorno:string){
     for(var i in cuerpo){
         const control = cuerpo[i].ejecutar(tsGlobal,tsLocal,metodos,entorno)
-        if (control !==null && control!==undefined) {
-            return control
+        if (control !==null && control!==undefined ) {
+            if (control.tipo===TiposControl.BREAK ||control.tipo===TiposControl.CONTINUE||control.tipo===TiposControl.RETURN) {
+                return control
+            }
+            
         }
     }
     return null

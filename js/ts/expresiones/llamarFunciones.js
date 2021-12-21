@@ -39,6 +39,28 @@ class LlamarFuncion extends expresion_1.Expresion {
                     this.ponerError(`Mas atributos de los esperados`, this.linea, this.columna, entorno);
                 }
             }
+            else if (metodo.tipo === Tipos_1.Tipos.VOID) {
+                if (metodo.parametros.length === this.parametros.length) {
+                    var tsLocal2 = this.obtenerEntorno(metodo, tsGlobal, tsLocal, metodos, entorno);
+                    const control = this.ejecutarMetodo(metodo.cuerpo, tsGlobal, tsLocal2, metodos, entorno);
+                    //para los retornos
+                    if (control !== null && control !== undefined) {
+                        if (control === Tipos_1.TiposControl.RETURN) {
+                            if (control.valor === null) {
+                                return;
+                            }
+                            this.ponerError(`No se puede retornar tipo: ${control.valor.tipo} en metodo VOID`, this.linea, this.columna, entorno);
+                        }
+                    }
+                    return;
+                }
+                else if (metodo.parametros.length >= this.parametros.length) {
+                    this.ponerError(`Hay menos parametros de los esperados`, this.linea, this.columna, entorno);
+                }
+                else {
+                    this.ponerError(`Hay mas parametros de los esperados`, this.linea, this.columna, entorno);
+                }
+            }
             this.ponerError(`Funcion no asignada de forma correcta`, this.linea, this.columna, entorno);
         }
         this.ponerError(`El metodo ${this.id} no se pudo encontrar`, this.linea, this.columna, entorno);

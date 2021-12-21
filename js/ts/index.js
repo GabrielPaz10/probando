@@ -8,6 +8,7 @@ const TablaSimbolos_1 = require("./Reportes/TablaSimbolos");
 const instruccion_1 = require("./abstractas/instruccion");
 const Error_1 = require("./Reportes/Error");
 const Tipos_1 = require("./tiposD/Tipos");
+const expresion_1 = require("./abstractas/expresion");
 // const ejecutaar = document.getElementById('ejecutar')
 // ejecutaar.addEventListener('click',()=>{
 //     const entrada=(<HTMLInputElement>document.getElementById("entrada")).value
@@ -47,7 +48,7 @@ exports.ejecutar = ejecutar;
 function obtenerAst(ast, tsGlobal, metodos) {
     for (const instruction of ast) {
         try {
-            if (instruction instanceof instruccion_1.Instruccion)
+            if (instruction instanceof instruccion_1.Instruccion || instruction instanceof expresion_1.Expresion)
                 instruction.ejecutar(tsGlobal, tsGlobal, metodos, "-");
         }
         catch (error) {
@@ -79,7 +80,9 @@ function cuerpoMain(cuerpo, tsGlobal, tsLocal, metodos, entorno) {
     for (var i in cuerpo) {
         const control = cuerpo[i].ejecutar(tsGlobal, tsLocal, metodos, entorno);
         if (control !== null && control !== undefined) {
-            return control;
+            if (control.tipo === Tipos_1.TiposControl.BREAK || control.tipo === Tipos_1.TiposControl.CONTINUE || control.tipo === Tipos_1.TiposControl.RETURN) {
+                return control;
+            }
         }
     }
     return null;

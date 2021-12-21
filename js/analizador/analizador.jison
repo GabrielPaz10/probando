@@ -214,6 +214,7 @@ global
     | declaracion PTCOMA        { $$=$1; }
     | funcion                   { $$=$1; }
     | vector PTCOMA             { $$=$1; }
+    | expresion PTCOMA              {$$=$1;}
     | error PTCOMA            { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
                                 errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
     | error LLAVEDER          { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
@@ -229,7 +230,7 @@ local
     : condicionales                 { $$=$1; }
     | vector PTCOMA                 { $$=$1; }
     | ciclos                        { $$=$1; }
-    | llamadaMetodo PTCOMA          { $$=$1; }
+    | llamadaFuncion PTCOMA         { $$=$1; }
     | asignacion PTCOMA             { $$=$1; }
     | declaracion PTCOMA            { $$=$1; }
     | control PTCOMA                { $$=$1; }
@@ -311,7 +312,7 @@ tipoValor
     | CARACTER                          { $$ = new SetearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); }
     | TRUE                              { $$ = new SetearValor(Tipos.BOOLEAN, true, @1.first_line, @1.first_column); }
     | FALSE                             { $$ = new SetearValor(Tipos.BOOLEAN, false, @1.first_line, @1.first_column); }
-    | ID                                { $$= new ObtenerValor($1,@1.first_line, @1.first_column);}
+    | ID                                 { $$= new ObtenerValor($1,@1.first_line, @1.first_column);}
     ;
 
 tipo
@@ -350,6 +351,7 @@ expresion
     | tipoValor                          { $$=$1; }
     | llamadaFuncion                     { $$=$1; }
     | estructuras                        { $$=$1; }
+    
     | PARIZQ expresion PARDER            { $$ = $2; }
     ;
 
@@ -367,7 +369,7 @@ nativas
     | SIN PARIZQ expresion PARDER                                       { $$ = new Sin($3,@1.first_line, @1.first_column); }
     | COS PARIZQ expresion PARDER                                       { $$ = new Cos($3,@1.first_line, @1.first_column); }
     | TAN PARIZQ expresion PARDER                                       { $$ = new Tan($3,@1.first_line, @1.first_column); }
-    | expresion PUNTO COPOSITION PARIZQ expresion PARDER                { $$ = new CaracterOfPosition($1,$5,@1.first_line, @1.first_column); }
+    | cop                                                               { $$=$1;}
     | expresion PUNTO SUBSTRING PARIZQ expresion COMA expresion PARDER  { $$ = new Substring($1,$5,$7,@1.first_line, @1.first_column); }
     | expresion PUNTO LENGTH PARIZQ PARDER                              { $$ = new Length($1,@1.first_line, @1.first_column); }
     | expresion PUNTO UPPERCASE PARIZQ PARDER                           { $$ = new ToUpperCase($1,@1.first_line, @1.first_column); }
@@ -381,7 +383,9 @@ nativas
     | ID PUNTO POP PARIZQ PARDER //                                       {}
     ;
 
-
+cop
+    : expresion PUNTO COPOSITION PARIZQ expresion PARDER                { $$ = new CaracterOfPosition($1,$5,@1.first_line, @1.first_column); }
+    ;
 condicionales
     : ifcondicion               { $$ = $1; }
     | switchcondicion           { $$ = $1; }

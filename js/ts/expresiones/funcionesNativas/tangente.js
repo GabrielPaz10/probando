@@ -13,7 +13,7 @@ class Tan extends expresion_1.Expresion {
     ejecutar(tsGlobal, tsLocal, metodos, entorno) {
         const angulo = this.angulo.ejecutar(tsGlobal, tsLocal, metodos, entorno);
         if (angulo.tipo === Tipos_1.Tipos.INT || angulo.tipo === Tipos_1.Tipos.DOUBLE) {
-            return { tipo: Tipos_1.Tipos.DOUBLE, valor: (Math.tan(angulo.valor) * (180 / (Math.PI))) };
+            return { tipo: Tipos_1.Tipos.DOUBLE, valor: (Math.tan(angulo.valor)) };
         }
         index_1.errores.agregar(new Error_1.Error('Semantico', `No se puede calcular la tangente con el tipo ${angulo.tipo}`, this.linea, this.columna, entorno));
         index_1.consola.actualizar(`No se puede calcular la tangente con el tipo ${angulo.tipo}\n`);
