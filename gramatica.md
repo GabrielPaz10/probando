@@ -42,3 +42,97 @@ COMENTARIO MULTILÍNEA       [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 - declaracionfor
 - control
 
+## No Terminales
+- IGUALDAD
+- DIFERENTE
+- MAYORIGUAL
+- MENORIGUAL
+- MAYOR
+- MENOR
+- PTCOMA
+- PARIZQ
+- PARDER
+- CORIZQ
+- CORDER
+- LLAVEIZQ
+- LLAVEDER
+- PUNTO
+- COMA
+- IGUAL
+- PREGUNTA
+- DOSPTS
+- AND
+- OR
+- NOT
+- EXTE
+- CONCATENACION
+- INC
+- DEC
+- MAS
+- MENOS
+- POR
+- DIVIDIDO
+- MODULO
+- POW
+- SQRT
+- SIN
+- COS
+- TAN
+- COPOSITION
+- SUBSTRING
+- BEGIN
+- END
+- LENGTH
+- LOWERCASE
+- UPPERCASE
+- PARSE
+- TOINT
+- TODOUBLE
+- RSTRING
+- TYPEOF
+- POP
+- PUSH
+- PRINT
+- PRINTLN
+- NULL
+- INT
+- DOUBLE
+- BOOLEAN
+- CHAR
+- STRING
+- STRUCT
+- VOID
+- IF
+- ELSE
+- SWITCH
+- CASE
+- DEFAULT
+- WHILE
+- DO
+- FOR
+- IN
+- BREAK
+- CONTINUE
+- RETURN
+- CADENA
+- CARACTER
+- DECIMAL
+- ENTERO
+- TRUE
+- FALSE
+- ID
+- EOF
+
+## PRECEDENCIA
+```
+Izquierda       'PREGUNTA' 'DOSPTS'
+Izquierda       'OR'
+Izquierda       'AND'
+Derecha         'NOT'
+Izquierda       'IGUALDAD' 'DIFERENTE' 'MAYORIGUAL' 'MENORIGUAL' 'MAYOR' 'MENOR'
+Izquierda       'MAS' 'MENOS'
+Izquierda       'POR' 'DIVIDIDO' 'MODULO'
+Izquierda       'INC','DEC'
+Derecha         UCAST (Casteos)
+Izquierda       UMENOS (Negativos)
+```
