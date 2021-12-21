@@ -36,9 +36,11 @@ class AsignacionDecInc extends instruccion_1.Instruccion {
         if (simbolo.tipo === Tipos_1.Tipos.INT || simbolo.tipo === Tipos_1.Tipos.DOUBLE) {
             if (this.tipo === TipoAsignacion.DECREMENTO) {
                 ts.actualizar(this.id, simbolo.valor - 1);
+                index_1.simbolos.actualizar(this.id, simbolo.valor - 1);
             }
             else if (this.tipo === TipoAsignacion.INCREMENTO) {
                 ts.actualizar(this.id, simbolo.valor + 1);
+                index_1.simbolos.actualizar(this.id, simbolo.valor + 1);
             }
             return;
         }

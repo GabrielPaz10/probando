@@ -197,7 +197,7 @@ export class Traductor{
             let tamanio = 0;
 
             this.addComentario('Guardando temporales');
-            this.addExp(temp,'p',tabla.size,'+');
+            //this.addExp(temp,'p',tabla.size,'+');
             this.tempstorage.forEach((value)=>{
                 tamanio++;
                 this.setstack(temp,value);
@@ -207,8 +207,8 @@ export class Traductor{
             });
             this.addComentario('Fin Guardando temporales');
         }
-        let cad = tabla.size;
-        tabla.size = cad + this.tempstorage.size;
+        let cad = 0/*tabla.size;*/
+        /*tabla.size*/cad = cad + this.tempstorage.size;
         return cad;
     }
 
@@ -227,7 +227,7 @@ export class Traductor{
                 }
             });
             this.addComentario('Fin Obteniendo temporales');
-            tabla.size = pos;
+            //tabla.size = pos;
         }
     }
 }

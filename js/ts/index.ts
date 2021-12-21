@@ -19,6 +19,7 @@ import { TiposControl } from './tiposD/Tipos';
 // })
 export const consola = new Consola()
 export const errores = new TablaError()
+export const simbolos = new TablaSimbolo([])
 const analizador = require('../analizador/analizador.js')
 let main :any[]=[]
 let metodos:TablaMetodos
@@ -27,7 +28,7 @@ let ast:any
 function limpiarTodo(){
     consola.limpiar()
     errores.vaciar()
-    
+    simbolos.limpiar()
 }
 export function ejecutar(entrada:string):string{
     limpiarTodo()

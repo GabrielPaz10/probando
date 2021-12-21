@@ -7,9 +7,11 @@
     const {Tipos}= require('../ts/tiposD/Tipos.js')
     //declaracion
     const {Declaracion}= require('../ts/instrucciones/declaracion/declaracion.js')
+    const {Arreglo} = require('../ts/instrucciones/declaracion/Arreglo.js')
     //asignacion 
     const {AsignacionDecInc,TipoAsignacion} = require('../ts/instrucciones/asignacion/asignacionDecInc.js')
     const {Asignacion} = require('../ts/instrucciones/asignacion/asignacion.js')
+    const {AsignacionArreglo} = require('../ts/instrucciones/asignacion/AsignacionArreglo.js')
     //funciones
     const { LlamadaMetodo } = require('../ts/instrucciones/funciones/llamadaMetodo.js')
     const { Parametros } = require('../ts/instrucciones/funciones/parametros.js')
@@ -31,6 +33,7 @@
     //valores 
     const { ObtenerValor } = require('../ts/expresiones/valores/obtenerValor.js')
     const { SetearValor } = require('../ts/expresiones/valores/setearValor.js')
+    const {ObtenerVector} = require('../ts/expresiones/valores/obtenerVector.js')
     //operadores 
     const { TipoOperacion, Aritmetica } = require('../ts/expresiones/operadores/Aritmetica.js')
     const { TipoLogico, Logico } = require('../ts/expresiones/operadores/Logico.js')
@@ -172,7 +175,7 @@
 
 <<EOF>>                         return 'EOF';
 
-.   { consola.actualizar(`${yytext} caracter no conocido, l: ${yylloc.first_line}, c: ${yylloc.first_column}`); 
+.   { consola.actualizar(`${yytext} caracter no conocido, l: ${yylloc.first_line}, c: ${yylloc.first_column}\n`); 
     errores.agregar(new Error('Lexico',`Error lexico, ${yytext} caracter no conocido`, yylloc.first_line , yylloc.first_column,'')); }
 
 /lex
@@ -210,9 +213,10 @@ global
     : asignacion PTCOMA         { $$=$1; }
     | declaracion PTCOMA        { $$=$1; }
     | funcion                   { $$=$1; }
-    | error 'PTCOMA'            { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}`); 
+    | vector PTCOMA             { $$=$1; }
+    | error PTCOMA            { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
                                 errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
-    | error 'LLAVEDER'          { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}`); 
+    | error LLAVEDER          { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
                                 errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
 ;
 
@@ -223,12 +227,27 @@ cuerpoLocal
 
 local
     : condicionales                 { $$=$1; }
+    | vector PTCOMA                 { $$=$1; }
     | ciclos                        { $$=$1; }
     | llamadaMetodo PTCOMA          { $$=$1; }
     | asignacion PTCOMA             { $$=$1; }
     | declaracion PTCOMA            { $$=$1; }
     | control PTCOMA                { $$=$1; }
     | imprimir PTCOMA               { $$=$1; }
+    ;
+
+vector 
+    : declaracionVector                                             { $$=$1; }
+    | asignacionVector                                              { $$=$1; }
+    ;
+
+declaracionVector
+    : tipo  CORIZQ CORDER ID IGUAL CORIZQ atributos CORDER           { $$= new Arreglo($4,$1,null,$7,@1.first_line, @1.first_column) ; }
+    | tipo  CORIZQ CORDER ID                                         { $$= new Arreglo($4,$1,null,null,@1.first_line, @1.first_column) ;}
+    ;
+
+asignacionVector
+    : ID CORIZQ expresion CORDER IGUAL expresion                    { $$ = new AsignacionArreglo($1,$3,$6,@1.first_line, @1.first_column); }
     ;
 
 funcion
@@ -249,8 +268,10 @@ llamadaFuncion
     ;
 
 parametros 
-    : parametros COMA tipo ID        { $1.push( new Parametros($3,null,$4)); $$=$1; } //agregar parametros de arreglos parametros COMA tipo ID LLAVEIZQ LLAVEDER
-    | tipo ID                        { $$ = [new Parametros($1,null,$2)]; } //agregar parametro de arreglo tipo ID LLAVEIZQ LLAVEDER
+    : parametros COMA tipo ID               { $1.push( new Parametros($3,null,$4)); $$=$1; } //agregar parametros de arreglos parametros COMA tipo ID LLAVEIZQ LLAVEDER
+    | parametros COMA tipo ID CORIZQ CORDER { $1.push( new Parametros(Tipos.ARRAY,$3,$4)); $$=$1; }
+    | tipo ID                               { $$ = [new Parametros($1,null,$2)]; } //agregar parametro de arreglo tipo ID LLAVEIZQ LLAVEDER
+    | tipo ID CORIZQ CORDER                 { $$ = [new Parametros(Tipos.ARRAY,$1,$2)]; }
     ;
 
 atributos
@@ -328,7 +349,12 @@ expresion
     | nativas                            { $$=$1; }
     | tipoValor                          { $$=$1; }
     | llamadaFuncion                     { $$=$1; }
+    | estructuras                        { $$=$1; }
     | PARIZQ expresion PARDER            { $$ = $2; }
+    ;
+
+estructuras
+    : ID CORIZQ expresion CORDER          { $$ = new ObtenerVector($1,$3,@1.first_line, @1.first_column); }
     ;
 
 ternario
@@ -351,8 +377,8 @@ nativas
     | TODOUBLE PARIZQ expresion PARDER                                  { $$ = new ToDouble($3,@1.first_line, @1.first_column); }
     | RSTRING PARIZQ expresion PARDER                                   { $$ = new StringM($3,@1.first_line, @1.first_column); }
     | TYPEOF PARIZQ expresion PARDER                                    { $$ = new Typeof($3,@1.first_line, @1.first_column); }
-    | ID PUNTO PUSH PARIZQ expresion PARDER //
-    | ID PUNTO POP PARIZQ PARDER //
+    | ID PUNTO PUSH PARIZQ expresion PARDER //                            {}
+    | ID PUNTO POP PARIZQ PARDER //                                       {}
     ;
 
 

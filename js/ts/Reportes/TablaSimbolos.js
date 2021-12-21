@@ -9,6 +9,9 @@ class TablaSimbolo {
     agregar(simbolo) {
         this.simbolos.push(simbolo);
     }
+    limpiar() {
+        this.simbolos = [];
+    }
     obtenerSimbolo(id) {
         var simbolo = this.simbolos.filter((simb) => simb.id == id)[0];
         if (simbolo)

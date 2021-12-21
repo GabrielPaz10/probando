@@ -31,6 +31,7 @@ class Asignacion extends instruccion_1.Instruccion {
     actualizarValor(ts, simbolo, valor, entorno) {
         const aux = this.verificarTipo(simbolo.tipo, valor, this.linea, this.columna, entorno);
         ts.actualizar(this.id, aux.valor);
+        index_1.simbolos.actualizar(this.id, aux.valor);
     }
     verificarTipo(tipo, valor, linea, columna, entorno) {
         if (tipo === valor.tipo) {

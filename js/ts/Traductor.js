@@ -161,5 +161,42 @@ class Traductor {
             this.tempstorage.delete(temp);
         }
     }
+    //guardar temporales en funciones
+    guardartems(tabla) {
+        if (this.tempstorage.size > 0) {
+            const temp = this.newTem();
+            let tamanio = 0;
+            this.addComentario('Guardando temporales');
+            //this.addExp(temp,'p',tabla.size,'+');
+            this.tempstorage.forEach((value) => {
+                tamanio++;
+                this.setstack(temp, value);
+                if (tamanio != this.tempstorage.size) {
+                    this.addExp(temp, temp, '1', '+');
+                }
+            });
+            this.addComentario('Fin Guardando temporales');
+        }
+        let cad = 0; /*tabla.size;*/
+        /*tabla.size*/ cad = cad + this.tempstorage.size;
+        return cad;
+    }
+    recoverTemps(tabla, pos) {
+        if (this.tempstorage.size > 0) {
+            const temp = this.newTem();
+            let tamanio = 0;
+            this.addComentario('Obteniendo temporales');
+            this.addExp(temp, 'p', pos, '+');
+            this.tempstorage.forEach((value) => {
+                tamanio++;
+                this.getstack(value, temp);
+                if (tamanio != this.tempstorage.size) {
+                    this.addExp(temp, temp, '1', '+');
+                }
+            });
+            this.addComentario('Fin Obteniendo temporales');
+            //tabla.size = pos;
+        }
+    }
 }
 exports.Traductor = Traductor;

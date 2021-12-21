@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerMain = exports.ejecutar = exports.errores = exports.consola = void 0;
+exports.obtenerMain = exports.ejecutar = exports.simbolos = exports.errores = exports.consola = void 0;
 const Consola_1 = require("./Reportes/Consola");
 const TablaError_1 = require("./Reportes/TablaError");
 const TablaMetodos_1 = require("./Reportes/TablaMetodos");
@@ -16,6 +16,7 @@ const Tipos_1 = require("./tiposD/Tipos");
 // })
 exports.consola = new Consola_1.Consola();
 exports.errores = new TablaError_1.TablaError();
+exports.simbolos = new TablaSimbolos_1.TablaSimbolo([]);
 const analizador = require('../analizador/analizador.js');
 let main = [];
 let metodos;
@@ -23,6 +24,7 @@ let ast;
 function limpiarTodo() {
     exports.consola.limpiar();
     exports.errores.vaciar();
+    exports.simbolos.limpiar();
 }
 function ejecutar(entrada) {
     limpiarTodo();

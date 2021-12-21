@@ -32,7 +32,9 @@ class Declaracion extends instruccion_1.Instruccion {
             valor = this.valorDefecto(this.tipo);
         }
         valor = this.verificarTipo(this.tipo, valor, this.linea, this.columna, entorno);
-        tsLocal.agregar(new Simbolo_1.Simbolo(this.tipo, id, valor.valor, entorno));
+        let simbolo = new Simbolo_1.Simbolo(this.tipo, id, valor.valor, entorno);
+        tsLocal.agregar(simbolo);
+        index_1.simbolos.agregar(simbolo);
     }
     ast(metodos) {
         return null;

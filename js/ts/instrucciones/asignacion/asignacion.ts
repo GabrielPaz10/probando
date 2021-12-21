@@ -4,7 +4,7 @@ import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { Nodo, Valor, Tipos, Intervalo } from '../../tiposD/Tipos';
 import { Simbolo } from '../../Reportes/Simbolo';
-import { consola, errores } from '../../index';
+import { consola, errores, simbolos } from '../../index';
 import { Error } from '../../Reportes/Error';
 export class Asignacion extends Instruccion{
     private id:string
@@ -32,6 +32,7 @@ export class Asignacion extends Instruccion{
     private actualizarValor(ts:TablaSimbolo,simbolo:Simbolo, valor:Valor,entorno){
         const aux = this.verificarTipo(simbolo.tipo,valor,this.linea,this.columna,entorno)
         ts.actualizar(this.id,aux.valor)
+        simbolos.actualizar(this.id,aux.valor)
     }
     public verificarTipo(tipo:Tipos|Intervalo,valor:Valor,linea:number,columna:number,entorno:string){
         if (tipo===valor.tipo) {

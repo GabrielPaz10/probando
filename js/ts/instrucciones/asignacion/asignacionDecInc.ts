@@ -3,7 +3,7 @@ import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { Nodo, Tipos } from '../../tiposD/Tipos';
 import { Simbolo } from '../../Reportes/Simbolo';
-import { consola, errores } from '../../index';
+import { consola, errores, simbolos } from '../../index';
 import { Error } from '../../Reportes/Error';
 export enum TipoAsignacion{
     DECREMENTO,
@@ -35,8 +35,10 @@ export class AsignacionDecInc extends Instruccion{
         if (simbolo.tipo===Tipos.INT || simbolo.tipo===Tipos.DOUBLE) {
             if (this.tipo===TipoAsignacion.DECREMENTO) {
                 ts.actualizar(this.id, simbolo.valor-1)
+                simbolos.actualizar(this.id,simbolo.valor-1)
             }else if(this.tipo===TipoAsignacion.INCREMENTO){
                 ts.actualizar(this.id,simbolo.valor+1)
+                simbolos.actualizar(this.id,simbolo.valor+1)
             }
             return;
         }

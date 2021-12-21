@@ -3,6 +3,8 @@ import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { Nodo, Tipos } from '../../tiposD/Tipos';
 import { Parametros } from './parametros';
+import { simbolos } from '../../index';
+import { Simbolo } from '../../Reportes/Simbolo';
 export class Funcion extends Instruccion{
     private tipo:Tipos
     private id:string
@@ -17,6 +19,7 @@ export class Funcion extends Instruccion{
     }
     public ejecutar(tsGlobal: TablaSimbolo, tsLocal: TablaSimbolo, metodos: TablaMetodos, entorno: string) {
         metodos.agregar(this.tipo,this.id,this.parametros,this.cuerpo)
+        simbolos.agregar(new Simbolo(this.tipo,this.id,null,entorno,"Funcion"))
     }
     public ast(metodos: TablaMetodos): Nodo {
         return null

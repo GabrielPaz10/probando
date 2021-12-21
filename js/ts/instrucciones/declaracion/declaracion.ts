@@ -3,7 +3,7 @@ import { TablaMetodos } from '../../Reportes/TablaMetodos';
 import { TablaSimbolo } from '../../Reportes/TablaSimbolos';
 import { Nodo, Tipos, Valor } from '../../tiposD/Tipos';
 import { Expresion } from '../../abstractas/expresion';
-import { consola, errores } from '../../index';
+import { consola, errores, simbolos } from '../../index';
 import { Error } from '../../Reportes/Error';
 import { Simbolo } from '../../Reportes/Simbolo';
 export class Declaracion extends Instruccion{
@@ -35,7 +35,10 @@ export class Declaracion extends Instruccion{
             valor= this.valorDefecto(this.tipo)
         }
         valor= this.verificarTipo(this.tipo,valor,this.linea,this.columna,entorno)
-        tsLocal.agregar(new Simbolo(this.tipo,id,valor.valor,entorno))
+
+        let simbolo:Simbolo = new Simbolo(this.tipo,id,valor.valor,entorno)
+        tsLocal.agregar(simbolo)
+        simbolos.agregar(simbolo)
     }
     public ast(metodos: TablaMetodos): Nodo {
         return null
