@@ -23,8 +23,8 @@ btnerrores.addEventListener('click',()=>{
 // })
 
 function generarTablaErrores() {
-    // var div = document.getElementById("tablaerrores");
-    // div.innerHTML = "";
+     var div = document.getElementById("tablaerrores");
+     div.innerHTML = "";
 
     let table = document.createElement('table');
     let thead = document.createElement('thead');
@@ -70,6 +70,8 @@ function generarTablaErrores() {
         row_2.appendChild(row_2_data_5);
         tbody.appendChild(row_2);
          }
+        table.appendChild(thead);
+        table.appendChild(tbody);
     
     // Adding the entire table to the body tag
     document.getElementById('tablaerrores').appendChild(table);
