@@ -96,7 +96,7 @@
 "]"         return 'CORDER';
 "{"         return 'LLAVEIZQ';
 "}"         return 'LLAVEDER';
-//"."         return 'PUNTO';
+
 ","         return 'COMA';
 "="         return 'IGUAL';
 "?"         return 'PREGUNTA';
@@ -175,6 +175,7 @@
 "true"                          return 'TRUE';     //Verdadero
 "false"                         return 'FALSE';    //Falso
 ([a-zA-Z])[a-zA-Z0-9_]*         return 'ID';       //Identificadores
+"."         return 'PUNTO';
 
 <<EOF>>                         return 'EOF';
 
@@ -215,6 +216,7 @@ completo
 global
     : asignacion PTCOMA         { $$=$1; }
     | declaracion PTCOMA        { $$=$1; }
+    | creacionstruct PTCOMA     {}
     | funcion                   { $$=$1; }
     | vector PTCOMA             { $$=$1; }
     | expresion PTCOMA              {$$=$1;}
@@ -223,6 +225,10 @@ global
     | error LLAVEDER          { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
                                 errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
 ;
+
+creacionstruct
+    : STRUCT ID LLAVEIZQ parametros LLAVEDER
+    ;
 
 cuerpoLocal
     : cuerpoLocal local { $1.push($2); $$=$1; }
@@ -244,6 +250,19 @@ local
 vector 
     : declaracionVector                                             { $$=$1; }
     | asignacionVector                                              { $$=$1; }
+    ;
+
+structs
+    : decStruct                     {} 
+    | asigStruct                    {}
+    ;
+
+decStruct
+    :ID ID IGUAL ID PARIZQ atributos PARDER         {}
+    ;
+
+asigStruct
+    : ID PUNTO ID
     ;
 
 declaracionVector
