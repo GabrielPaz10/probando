@@ -84,238 +84,551 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- gramatical.unshift("init := completo EOF"); return $$[$0-1];  
+ gramatical.unshift("init := completo EOF");
+                        instruccionesR.unshift("{ init.val = completo.val }");
+                        return $$[$0-1];  
 break;
 case 2:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1]; gramatical.unshift("completo := completo global"); 
+ $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
+                            gramatical.unshift("completo := completo global"); 
+                            instruccionesR.unshift('{ completo.val.agregar(global) }');
+                            
 break;
 case 3:
- this.$ = [$$[$0]]; gramatical.unshift("completo := global");
+ this.$ = [$$[$0]]; 
+                            gramatical.unshift("completo := global");
+                            instruccionesR.unshift(" { completo.val = [global] } ");
+                            
 break;
 case 4:
- this.$=$$[$0-1];gramatical.unshift("global := asginacion ;"); 
+ this.$=$$[$0-1];
+                                    gramatical.unshift("global := asginacion ;"); 
+                                    instruccionesR.unshift("{ global.val = asignacion.val }");
+                                    
 break;
 case 5:
- this.$=$$[$0-1];gramatical.unshift("global := declaracion ;"); 
+ this.$=$$[$0-1]; 
+                                    gramatical.unshift("global := declaracion ;"); 
+                                    instruccionesR.unshift("{ global.val = declaracion.val }");
+                                    
 break;
 case 7:
- this.$=$$[$0];gramatical.unshift("global := funcion"); 
+ this.$=$$[$0];
+                                    gramatical.unshift("global := funcion"); 
+                                    instruccionesR.unshift("{ global.val = funcion.val }");
+                                    
 break;
-case 8: case 16: case 18: case 19: case 20: case 21: case 22: case 125:
- this.$=$$[$0-1]; 
+case 8:
+ this.$=$$[$0-1];
+                                    gramatical.unshift("global := vector PTCOMA"); 
+                                    instruccionesR.unshift("{ global.val = vector.val }");
+                                    
 break;
 case 9:
 this.$=$$[$0-1];
+                                        gramatical.unshift("global := expresion PTCOMA"); 
+                                        instruccionesR.unshift("{ global.val = expresion.val }");
+                                    
 break;
 case 10: case 11:
  consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
                                 errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); 
 break;
 case 13:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
+ $$[$0-1].push($$[$0]); 
+                            this.$=$$[$0-1]; 
+                            gramatical.unshift("cuerpoLocal := cuerpoLocal local"); 
+                            instruccionesR.unshift("{ cuerpoLocal.val.push(local.val); cuerpoLocal.val= cuerpoLocal.val; }");
+                        
 break;
 case 14:
- this.$ =[$$[$0]]; 
+ this.$ =[$$[$0]];
+                            gramatical.unshift("cuerpoLocal := local"); 
+                            instruccionesR.unshift("{ cuerpoLocal.val = local.val }");
+                        
 break;
-case 15: case 17: case 23: case 24: case 92: case 93: case 94: case 95: case 96: case 124: case 135:
+case 15:
  this.$=$$[$0]; 
+                                        gramatical.unshift("local := condicionales"); 
+                                        instruccionesR.unshift("{ local.val = condicionales.val }");
+                                    
+break;
+case 16:
+ this.$=$$[$0-1]; 
+                                        gramatical.unshift("local := vector PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = vector.val }");
+                                    
+break;
+case 17:
+ this.$=$$[$0]; 
+                                        gramatical.unshift("local := ciclos"); 
+                                        instruccionesR.unshift("{ local.val = ciclos.val }");
+                                    
+break;
+case 18:
+ this.$=$$[$0-1]; 
+                                        gramatical.unshift("local := asignacion PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = asignacion.val }");
+                                    
+break;
+case 19:
+ this.$=$$[$0-1]; 
+                                        gramatical.unshift("local := declaracion PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = declaracion.val }");
+                                    
+break;
+case 20:
+ this.$=$$[$0-1]; 
+                                        gramatical.unshift("local := control PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = control.val }");
+                                    
+break;
+case 21:
+ this.$=$$[$0-1]; 
+                                        gramatical.unshift("local := imprimir PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = imprimir.val }");
+                                    
+break;
+case 22:
+ this.$=$$[$0-1]; 
+                                        gramatical.unshift("local := expresion PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = expresion.val }");
+                                    
+break;
+case 23:
+ this.$=$$[$0]; 
+                                                                        gramatical.unshift("vector := declaracionVector"); 
+                                                                        instruccionesR.unshift("{ vector.val = declaracionVector.val }");
+                                                                    
+break;
+case 24:
+ this.$=$$[$0]; 
+                                                                        gramatical.unshift("vector := asignacionVector"); 
+                                                                        instruccionesR.unshift("{ vector.val = asignacionVector.val }");
+                                                                    
 break;
 case 29:
  this.$= new Arreglo($$[$0-4],$$[$0-7],null,$$[$0-1],_$[$0-7].first_line, _$[$0-7].first_column) ; 
+                                                                        gramatical.unshift("declaracionVector := tipo CORIZQ CORDER ID IGUAL CORIZQ atributos CORDER"); 
+                                                                        instruccionesR.unshift("{ declaraionVector.val = new Arreglo(ID.lexval, tipo.val, null,atributos.val,fila,columna) }");
+                                                                    
 break;
 case 30:
  this.$= new Arreglo($$[$0],$$[$0-3],null,null,_$[$0-3].first_line, _$[$0-3].first_column) ;
+                                                                        gramatical.unshift("declaracionVector := tipo CORIZQ CORDER ID"); 
+                                                                        instruccionesR.unshift("{ declaraionVector.val = new Arreglo(ID.lexval, tipo.val, null,null,fila,columna) }");
+                                                                    
 break;
 case 31:
  this.$ = new AsignacionArreglo($$[$0-5],$$[$0-3],$$[$0],_$[$0-5].first_line, _$[$0-5].first_column); 
+                                                                        gramatical.unshift("asignacionVector := tipo CORIZQ expresion CORDER ID IGUAL expresion"); 
+                                                                        instruccionesR.unshift("{ asignacionVector.val = new AsignacionArreglo(tipo.val, expresion.val, expresion2.val,fila,columna) }");
+                                                                    
 break;
 case 32:
  this.$ = new Funcion(Tipos.VOID, $$[$0-6],$$[$0-4],$$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column); 
+                                                                        gramatical.unshift("funcion := VOID ID PARIZQ parametros PARDER LLAVEIZQ cuerpolocal LLAVEDER"); 
+                                                                        instruccionesR.unshift("{ funcion.val = new Funcion(VOID.lexval, ID.val, parametros.var,cuerpolocal.val,fila,columna) }");
+                                                                    
 break;
 case 33:
  this.$ = new Funcion($$[$0-7], $$[$0-6],$$[$0-4],$$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column); 
+                                                                        gramatical.unshift("funcion := tipo ID PARIZQ parametros PARDER LLAVEIZQ cuerpolocal LLAVEDER"); 
+                                                                        instruccionesR.unshift("{ funcion.val = new Funcion(tipo.val, ID.val, parametros.var,cuerpolocal.val,fila,columna) }");
+                                                                    
 break;
 case 34:
  this.$ = new Funcion(Tipos.VOID, $$[$0-5],[],$$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column); 
+                                                                        gramatical.unshift("funcion := VOID ID PARIZQ PARDER LLAVEIZQ cuerpolocal LLAVEDER"); 
+                                                                        instruccionesR.unshift("{ funcion.val = new Funcion(VOID.lexval, ID.val, [],cuerpolocal.val,fila,columna) }");
+                                                                    
 break;
 case 35:
  this.$ = new Funcion($$[$0-6], $$[$0-5],[],$$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column); 
+                                                                        gramatical.unshift("funcion := tipo ID PARIZQ PARDER LLAVEIZQ cuerpolocal LLAVEDER"); 
+                                                                        instruccionesR.unshift("{ funcion.val = new Funcion(tipo.val, ID.val, [],cuerpolocal.val,fila,columna) }");
+                                                                    
 break;
 case 36:
  this.$ = new LlamadaMetodo($$[$0-3],$$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); 
+                                        gramatical.unshift("llamadaMetodo := ID PARIZQ atributos PARDER"); 
+                                        instruccionesR.unshift("{ llamadaMetodo.val = new LlamadaMetodo(ID.val, atributos.val,fila,columna) }");
+                                    
 break;
 case 37:
  this.$ = new LlamadaMetodo($$[$0-2],[], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                        gramatical.unshift("llamadaMetodo := ID PARIZQ PARDER"); 
+                                        instruccionesR.unshift("{ llamadaMetodo.val = new LlamadaMetodo(ID.val, [],fila,columna) }");
+                                    
 break;
 case 38:
  this.$ = new LlamarFuncion($$[$0-3],$$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); 
+                                        gramatical.unshift("llamadaFuncion := ID PARIZQ atributos PARDER"); 
+                                        instruccionesR.unshift("{ llamadaFuncion.val = new LlamadaFuncion(ID.val, atributos.val,fila,columna) }");
+                                    
 break;
 case 39:
  this.$ = new LlamarFuncion($$[$0-2],[], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                        gramatical.unshift("llamadaFuncion := ID PARIZQ PARDER"); 
+                                        instruccionesR.unshift("{ llamadaFuncion.val = new LlamadaFuncion(ID.val, [],fila,columna) }");
+                                    
 break;
 case 40:
- $$[$0-3].push( new Parametros($$[$0-1],null,$$[$0])); this.$=$$[$0-3]; 
+ $$[$0-3].push( new Parametros($$[$0-1],null,$$[$0])); 
+                                                this.$=$$[$0-3]; 
+                                                gramatical.unshift("parametros := parametros COMA tipo ID"); 
+                                                instruccionesR.unshift("{ parametros.val = new Parametros(tipo.val, null,ID.val) }");
+                                            
 break;
 case 41:
- $$[$0-5].push( new Parametros(Tipos.ARRAY,$$[$0-3],$$[$0])); this.$=$$[$0-5]; 
+ $$[$0-5].push( new Parametros(Tipos.ARRAY,$$[$0-3],$$[$0])); 
+                                                this.$=$$[$0-5]; 
+                                                gramatical.unshift("parametros := parametros COMA tipo CORIZQ CORDER ID"); 
+                                                instruccionesR.unshift("{ parametros.val = new Parametros(ARRAY.lexval, tipo.val,ID.val) }");
+                                            
 break;
 case 42:
  this.$ = [new Parametros($$[$0-1],null,$$[$0])]; 
+                                                gramatical.unshift("parametros :=  tipo ID"); 
+                                                instruccionesR.unshift("{ parametros.val = new Parametros(tipo.val, null,ID.val) }");
+                                            
 break;
 case 43:
  this.$ = [new Parametros(Tipos.ARRAY,$$[$0-3],$$[$0-2])]; 
+                                                gramatical.unshift("parametros := tipo CORIZQ CORDER ID"); 
+                                                instruccionesR.unshift("{ parametros.val = new Parametros(ARRAY.lexval, tipo.val,ID.val) }");
+                                            
 break;
 case 44:
- $$[$0-2].push($$[$0]); this.$= $$[$0-2]; 
+ $$[$0-2].push($$[$0]); 
+                                        this.$= $$[$0-2]; 
+                                        gramatical.unshift("atributos := atributos COMA expresion"); 
+                                        instruccionesR.unshift("{ atributps.val.push(expresion.val) }");
+                                    
 break;
 case 45:
  this.$ = [$$[$0]]; 
+                                        gramatical.unshift("atributos := expresion"); 
+                                        instruccionesR.unshift("{ atributps.val= [expresion.val] }");
+                                    
 break;
 case 46:
 this.$ = new Print($$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column); 
+                                            gramatical.unshift("imprimir := PRINT PARIZQ atributos PARDER"); 
+                                            instruccionesR.unshift("{ imprimir.val = new Print(atributos.val, linea, columna) }");
+                                        
 break;
 case 47:
 this.$ = new Print([],_$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("imprimir := PRINT PARIZQ PARDER"); 
+                                            instruccionesR.unshift("{ imprimir.val = new Print([], linea, columna) }");
+                                        
 break;
 case 48:
 this.$ = new Print($$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column,true); 
+                                            gramatical.unshift("imprimir := PRINTLN PARIZQ atributos PARDER"); 
+                                            instruccionesR.unshift("{ imprimir.val = new Print(atributos.val, linea, columna, true) }");
+                                        
 break;
 case 49:
 this.$ = new Print([],_$[$0-2].first_line, _$[$0-2].first_column,true); 
+                                            gramatical.unshift("imprimir := PRINTLN PARIZQ PARDER"); 
+                                            instruccionesR.unshift("{ imprimir.val = new Print([], linea, columna,true) }");
+                                        
 break;
 case 50:
  this.$ = new Declaracion($$[$0-3], $$[$0-2], $$[$0], _$[$0-3].first_line, _$[$0-3].first_column) ;
                                             gramatical.unshift("declaracion := tipo listaId IGUAL expresion ");
+                                            instruccionesR.unshift("declaracion.val = new Declaracion(tipo.val,listaId.val,expresion.val,linea,columna)");
+                                            
 break;
 case 51:
  this.$ = new Declaracion($$[$0-1], $$[$0], null, _$[$0-1].first_line, _$[$0-1].first_column) ;
                                             gramatical.unshift("declaracion := tipo listaId ");
+                                            instruccionesR.unshift("declaracion.val = new Declaracion(tipo.val,listaId.val,null,linea,columna)");
+                                        
 break;
 case 52:
- $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; gramatical.unshift("listaId := listaId COMA ID");
+ $$[$0-2].push($$[$0]); 
+                                            this.$ = $$[$0-2]; 
+                                            gramatical.unshift("listaId := listaId COMA ID");
+                                            instruccionesR.unshift("listaId.val.push(ID.val)");
+                                        
 break;
 case 53:
- this.$ = [$$[$0]]; gramatical.unshift("listaId := ID");
+ this.$ = [$$[$0]]; 
+                                            gramatical.unshift("listaId := ID");
+                                            instruccionesR.unshift("listaId.val= [ID.val]");
+                                        
 break;
 case 54:
  this.$ = new Asignacion($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("asignacion := ID IGUAL expresion");
+                                            instruccionesR.unshift("asignacion.val= new Asignacion(ID.val,expresion.val,linea,columna)");
+                                        
 break;
 case 55:
  this.$ = new AsignacionDecInc($$[$0-1], TipoAsignacion.INCREMENTO, _$[$0-1].first_line, _$[$0-1].first_column); 
+                                            gramatical.unshift("asignacion := ID INC");
+                                            instruccionesR.unshift("asignacion.val= new AsignacionDecInc(ID.val,INCREMENTO.lexval,linea,columna)");
+                                        
 break;
 case 56:
  this.$ = new AsignacionDecInc($$[$0-1], TipoAsignacion.DECREMENTO, _$[$0-1].first_line, _$[$0-1].first_column); 
+                                            gramatical.unshift("asignacion := ID DEC");
+                                            instruccionesR.unshift("asignacion.val= new AsignacionDecInc(ID.val,DECREMENTO.lexval,linea,columna)");
+                                        
 break;
 case 57:
  this.$ = new Asignacion($$[$0-3], [], _$[$0-3].first_line, _$[$0-3].first_column); 
+                                            gramatical.unshift("asignacion := ID IGUAL CORIZQ CORDER");
+                                            instruccionesR.unshift("asignacion.val= new Asignacion(ID.val,[],linea,columna)");
+                                        
 break;
 case 58:
  this.$ = (Number.isInteger(Number($$[$0])))?new SetearValor(Tipos.INT, Number($$[$0]), _$[$0].first_line, _$[$0].first_column):new SetearValor(Tipos.DOUBLE, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
+                                            gramatical.unshift("tipoValor := DECIMAL");
+                                            instruccionesR.unshift("tipo.val= (DECIMAL.val esEntero)? new SetearValor(INT.lexval, DECIMAL.val,linea,columna):new SetearValor(DOUBLE.lexval,DECIMAL.val,linea,columna)");
+                                        
 break;
 case 59:
  this.$ = new SetearValor(Tipos.INT, Number($$[$0]), _$[$0].first_line, _$[$0].first_column); 
+                                            gramatical.unshift("tipoValor := ENTERO");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(INT.lexval, ENTERO.val, linea,columna)");
+                                        
 break;
 case 60:
  this.$ = new SetearValor(Tipos.STRING, $$[$0] , _$[$0].first_line, _$[$0].first_column); 
+                                            gramatical.unshift("tipoValor := CADENA");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(STRING.lexval, CADENA.val, linea,columna)");
+                                        
 break;
 case 61:
  this.$ = new SetearValor(Tipos.CHAR, $$[$0], _$[$0].first_line, _$[$0].first_column); 
+                                            gramatical.unshift("tipoValor := CARACTER");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(CHAR.lexval, CARACTER.val, linea,columna)");
+                                        
 break;
 case 62:
  this.$ = new SetearValor(Tipos.BOOLEAN, true, _$[$0].first_line, _$[$0].first_column); 
+                                            gramatical.unshift("tipoValor := TRUE");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(BOOLEAN.lexval, true, linea,columna)");
+                                        
 break;
 case 63:
  this.$ = new SetearValor(Tipos.BOOLEAN, false, _$[$0].first_line, _$[$0].first_column); 
+                                            gramatical.unshift("tipoValor := false");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(BOOLEAN.lexval, false, linea,columna)");
+                                        
 break;
 case 64:
  this.$= new ObtenerValor($$[$0],_$[$0].first_line, _$[$0].first_column);
+                                            gramatical.unshift("tipoValor := ID");
+                                            instruccionesR.unshift("tipoValor.val= new ObtenerValor(ID.lexval, linea,columna)");
+                                        
 break;
 case 65:
  this.$ = Tipos.BOOLEAN; 
+                                            gramatical.unshift("tipo := BOOLEAN");
+                                            instruccionesR.unshift("tipo.val= BOOLEAN.lexval");
+                                        
 break;
 case 66:
  this.$ = Tipos.CHAR; 
+                                            gramatical.unshift("tipo := CHAR");
+                                            instruccionesR.unshift("tipo.val= CHAR.lexval");
+                                        
 break;
 case 67:
  this.$ = Tipos.DOUBLE; 
+                                            gramatical.unshift("tipo := DOUBLE");
+                                            instruccionesR.unshift("tipo.val= DOUBLE.lexval");
+                                        
 break;
 case 68:
  this.$ = Tipos.INT; 
+                                            gramatical.unshift("tipo := INT");
+                                            instruccionesR.unshift("tipo.val= INT.lexval");
+                                        
 break;
 case 69:
  this.$ = Tipos.STRING; 
+                                            gramatical.unshift("tipo := STRING");
+                                            instruccionesR.unshift("tipo.val= STRING.lexval");
+                                        
 break;
 case 70:
  this.$ = new Aritmetica(TipoOperacion.EXTE, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion EXTE expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(^,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 71:
  this.$ = new Aritmetica(TipoOperacion.CONCATENACION, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion CONCATENACION expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(&,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 72:
  this.$ = new Aritmetica(TipoOperacion.SUMA, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion MAS expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(+,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 73:
  this.$ = new Aritmetica(TipoOperacion.RESTA, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion MENOS expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(-,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 74:
  this.$ = new Aritmetica(TipoOperacion.MULTIPLICACION, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion POR expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(*,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 75:
  this.$ = new Aritmetica(TipoOperacion.DIVISION, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion DIVIDIDO expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(/,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 76:
  this.$ = new Aritmetica(TipoOperacion.MODULO, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion MODULO expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(%,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 77:
  this.$ = new Logico(TipoLogico.AND, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion AND expresion");
+                                            instruccionesR.unshift("expresion.val= new Logico(&&,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 78:
  this.$ = new Logico(TipoLogico.OR, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion OR expresion");
+                                            instruccionesR.unshift("expresion.val= new Logico(||,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 79:
  this.$ = new Logico(TipoLogico.NOT, $$[$0], null,_$[$0-1].first_line, _$[$0-1].first_column); 
+                                            gramatical.unshift("expresion :=  NOT expresion");
+                                            instruccionesR.unshift("expresion.val= new Logico(!,expresion.val,null,linea.columna)");
+                                        
 break;
 case 80:
  this.$ = new Relacional(TiposRelacional.IGUAL, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion IGUALDAD expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(==,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 81:
  this.$ = new Relacional(TiposRelacional.DIFERENTE, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion DIFERENTE expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(!=,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 82:
  this.$ = new Relacional(TiposRelacional.MAYORI, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion MAYORI expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(>=,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 83:
  this.$ = new Relacional(TiposRelacional.MENORI, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion MENORI expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(<=,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 84:
  this.$ = new Relacional(TiposRelacional.MAYOR, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion MAYOR expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(>,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 85:
  this.$ = new Relacional(TiposRelacional.MENOR, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+                                            gramatical.unshift("expresion := expresion MENOR expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(<,expresion.val,expresion2.val,linea.columna)");
+                                        
 break;
 case 86:
  this.$ = new Unario(TUnario.NEGATIVO, $$[$0], _$[$0-1].first_line, _$[$0-1].first_column); 
+                                            gramatical.unshift("expresion := MENOS expresion");
+                                            instruccionesR.unshift("expresion.val= new Unario(NEGATIVOlexval,expresion.val,linea.columna)");
+                                        
 break;
 case 87:
  this.$ = new Unario(TUnario.INCREMENTO, $$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column); 
+                                            gramatical.unshift("expresion := INC expresion");
+                                            instruccionesR.unshift("expresion.val= new Unario(INC.lexval,expresion.val,linea.columna)");
+                                        
 break;
 case 88:
  this.$ = new Unario(TUnario.DECREMENTO, $$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column); 
+                                            gramatical.unshift("expresion := DEC expresion");
+                                            instruccionesR.unshift("expresion.val= new Unario(DEC.lexval,expresion.val,linea.columna)");
+                                        
 break;
 case 89:
  this.$ = new Begin(_$[$0].first_line, _$[$0].first_column); 
+                                            gramatical.unshift("expresion := BEGIN");
+                                            instruccionesR.unshift("expresion.val= new Begin(BEGIN.lexval,linea.columna)");
+                                        
 break;
 case 90:
  this.$ = new End(_$[$0].first_line, _$[$0].first_column); 
+                                            gramatical.unshift("expresion := END");
+                                            instruccionesR.unshift("expresion.val= new End(END.lexval,linea.columna)");
+                                        
 break;
 case 91:
  this.$ = Tipos.NULL; 
+                                            gramatical.unshift("expresion := NULL");
+                                            instruccionesR.unshift("expresion.val= NULL.lexval");
+                                        
+break;
+case 92:
+ this.$=$$[$0]; 
+                                            gramatical.unshift("expresion := ternario");
+                                            instruccionesR.unshift("expresion.val= ternario.val");
+                                        
+break;
+case 93:
+ this.$=$$[$0]; 
+                                            gramatical.unshift("expresion := nativas");
+                                            instruccionesR.unshift("expresion.val= nativas.val");
+                                        
+break;
+case 94:
+ this.$=$$[$0]; 
+                                            gramatical.unshift("expresion := tipoValor");
+                                            instruccionesR.unshift("expresion.val= tipoValor.val");
+                                        
+break;
+case 95:
+ this.$=$$[$0]; 
+                                            gramatical.unshift("expresion := llamadaFuncion");
+                                            instruccionesR.unshift("expresion.val= llamadaFuncion.val");
+                                        
+break;
+case 96:
+ this.$=$$[$0]; 
+                                            gramatical.unshift("expresion := estructuras");
+                                            instruccionesR.unshift("expresion.val= estructuras.val");
+                                        
 break;
 case 97:
- this.$ = $$[$0-1]; 
+ this.$ = $$[$0-1];
+                                            gramatical.unshift("expresion := PARIZQ expresion PARDER");
+                                            instruccionesR.unshift("expresion.val= expresion.val");
+                                        
 break;
 case 98:
  this.$ = new ObtenerVector($$[$0-3],$$[$0-1],_$[$0-3].first_line, _$[$0-3].first_column); 
+                                                
+                                            
 break;
 case 99:
  this.$ = new Ternario($$[$0-4], $$[$0-2], $$[$0], _$[$0-4].first_line, _$[$0-4].first_column); 
@@ -388,6 +701,12 @@ case 122:
 break;
 case 123:
  this.$= new If($$[$0-3],[],null,_$[$0-5].first_line, _$[$0-5].first_column); 
+break;
+case 124: case 135:
+ this.$=$$[$0]; 
+break;
+case 125:
+ this.$=$$[$0-1]; 
 break;
 case 126: case 136:
  this.$=[]; 
@@ -711,7 +1030,7 @@ _handle_error:
 }};
 
     //salida y errores
-    const {errores,consola,gramatical} =require('../ts/index.js')
+    const {errores,consola,gramatical,instruccionesR} =require('../ts/index.js')
     const {Error} = require('../ts/Reportes/Error.js')
     //tipos de datos
     const {Tipos}= require('../ts/tiposD/Tipos.js')

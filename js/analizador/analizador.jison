@@ -228,7 +228,7 @@ global
                                     }
     | declaracion PTCOMA        { $$=$1; 
                                     gramatical.unshift("global := declaracion ;"); 
-                                    instruccionesR.unshift("{ global.val = declaracion.val }";)
+                                    instruccionesR.unshift("{ global.val = declaracion.val }");
                                     }
     | creacionstruct PTCOMA     {}
     | funcion                   { $$=$1;
@@ -344,115 +344,317 @@ asignacionVector
     ;
 
 funcion
-    : VOID ID PARIZQ parametros PARDER LLAVEIZQ cuerpoLocal LLAVEDER { $$ = new Funcion(Tipos.VOID, $2,$4,$7, @1.first_line, @1.first_column); }
-    | tipo ID PARIZQ parametros PARDER LLAVEIZQ cuerpoLocal LLAVEDER { $$ = new Funcion($1, $2,$4,$7, @1.first_line, @1.first_column); }
-    | VOID ID PARIZQ PARDER LLAVEIZQ cuerpoLocal LLAVEDER            { $$ = new Funcion(Tipos.VOID, $2,[],$6, @1.first_line, @1.first_column); }
-    | tipo ID PARIZQ PARDER LLAVEIZQ cuerpoLocal LLAVEDER            { $$ = new Funcion($1, $2,[],$6, @1.first_line, @1.first_column); }
+    : VOID ID PARIZQ parametros PARDER LLAVEIZQ cuerpoLocal LLAVEDER{ $$ = new Funcion(Tipos.VOID, $2,$4,$7, @1.first_line, @1.first_column); 
+                                                                        gramatical.unshift("funcion := VOID ID PARIZQ parametros PARDER LLAVEIZQ cuerpolocal LLAVEDER"); 
+                                                                        instruccionesR.unshift("{ funcion.val = new Funcion(VOID.lexval, ID.val, parametros.var,cuerpolocal.val,fila,columna) }");
+                                                                    }
+    | tipo ID PARIZQ parametros PARDER LLAVEIZQ cuerpoLocal LLAVEDER{ $$ = new Funcion($1, $2,$4,$7, @1.first_line, @1.first_column); 
+                                                                        gramatical.unshift("funcion := tipo ID PARIZQ parametros PARDER LLAVEIZQ cuerpolocal LLAVEDER"); 
+                                                                        instruccionesR.unshift("{ funcion.val = new Funcion(tipo.val, ID.val, parametros.var,cuerpolocal.val,fila,columna) }");
+                                                                    }
+    | VOID ID PARIZQ PARDER LLAVEIZQ cuerpoLocal LLAVEDER           { $$ = new Funcion(Tipos.VOID, $2,[],$6, @1.first_line, @1.first_column); 
+                                                                        gramatical.unshift("funcion := VOID ID PARIZQ PARDER LLAVEIZQ cuerpolocal LLAVEDER"); 
+                                                                        instruccionesR.unshift("{ funcion.val = new Funcion(VOID.lexval, ID.val, [],cuerpolocal.val,fila,columna) }");
+                                                                    }
+    | tipo ID PARIZQ PARDER LLAVEIZQ cuerpoLocal LLAVEDER           { $$ = new Funcion($1, $2,[],$6, @1.first_line, @1.first_column); 
+                                                                        gramatical.unshift("funcion := tipo ID PARIZQ PARDER LLAVEIZQ cuerpolocal LLAVEDER"); 
+                                                                        instruccionesR.unshift("{ funcion.val = new Funcion(tipo.val, ID.val, [],cuerpolocal.val,fila,columna) }");
+                                                                    }
     ;
 
 llamadaMetodo
-    : ID PARIZQ atributos PARDER    { $$ = new LlamadaMetodo($1,$3, @1.first_line, @1.first_column); }
-    | ID PARIZQ PARDER              { $$ = new LlamadaMetodo($1,[], @1.first_line, @1.first_column); }
+    : ID PARIZQ atributos PARDER    { $$ = new LlamadaMetodo($1,$3, @1.first_line, @1.first_column); 
+                                        gramatical.unshift("llamadaMetodo := ID PARIZQ atributos PARDER"); 
+                                        instruccionesR.unshift("{ llamadaMetodo.val = new LlamadaMetodo(ID.val, atributos.val,fila,columna) }");
+                                    }
+    | ID PARIZQ PARDER              { $$ = new LlamadaMetodo($1,[], @1.first_line, @1.first_column); 
+                                        gramatical.unshift("llamadaMetodo := ID PARIZQ PARDER"); 
+                                        instruccionesR.unshift("{ llamadaMetodo.val = new LlamadaMetodo(ID.val, [],fila,columna) }");
+                                    }
     ;
 
 llamadaFuncion
-    : ID PARIZQ atributos PARDER    { $$ = new LlamarFuncion($1,$3, @1.first_line, @1.first_column); }
-    | ID PARIZQ PARDER              { $$ = new LlamarFuncion($1,[], @1.first_line, @1.first_column); }
+    : ID PARIZQ atributos PARDER    { $$ = new LlamarFuncion($1,$3, @1.first_line, @1.first_column); 
+                                        gramatical.unshift("llamadaFuncion := ID PARIZQ atributos PARDER"); 
+                                        instruccionesR.unshift("{ llamadaFuncion.val = new LlamadaFuncion(ID.val, atributos.val,fila,columna) }");
+                                    }
+    | ID PARIZQ PARDER              { $$ = new LlamarFuncion($1,[], @1.first_line, @1.first_column); 
+                                        gramatical.unshift("llamadaFuncion := ID PARIZQ PARDER"); 
+                                        instruccionesR.unshift("{ llamadaFuncion.val = new LlamadaFuncion(ID.val, [],fila,columna) }");
+                                    }
     ;
 
 parametros 
-    : parametros COMA tipo ID               { $1.push( new Parametros($3,null,$4)); $$=$1; } //agregar parametros de arreglos parametros COMA tipo ID LLAVEIZQ LLAVEDER
-    | parametros COMA tipo CORIZQ CORDER ID { $1.push( new Parametros(Tipos.ARRAY,$3,$6)); $$=$1; }
-    | tipo ID                               { $$ = [new Parametros($1,null,$2)]; } //agregar parametro de arreglo tipo ID LLAVEIZQ LLAVEDER
-    | tipo ID CORIZQ CORDER                 { $$ = [new Parametros(Tipos.ARRAY,$1,$2)]; }
+    : parametros COMA tipo ID               { $1.push( new Parametros($3,null,$4)); 
+                                                $$=$1; 
+                                                gramatical.unshift("parametros := parametros COMA tipo ID"); 
+                                                instruccionesR.unshift("{ parametros.val = new Parametros(tipo.val, null,ID.val) }");
+                                            } 
+    | parametros COMA tipo CORIZQ CORDER ID { $1.push( new Parametros(Tipos.ARRAY,$3,$6)); 
+                                                $$=$1; 
+                                                gramatical.unshift("parametros := parametros COMA tipo CORIZQ CORDER ID"); 
+                                                instruccionesR.unshift("{ parametros.val = new Parametros(ARRAY.lexval, tipo.val,ID.val) }");
+                                            }
+    | tipo ID                               { $$ = [new Parametros($1,null,$2)]; 
+                                                gramatical.unshift("parametros :=  tipo ID"); 
+                                                instruccionesR.unshift("{ parametros.val = new Parametros(tipo.val, null,ID.val) }");
+                                            } 
+    | tipo ID CORIZQ CORDER                 { $$ = [new Parametros(Tipos.ARRAY,$1,$2)]; 
+                                                gramatical.unshift("parametros := tipo CORIZQ CORDER ID"); 
+                                                instruccionesR.unshift("{ parametros.val = new Parametros(ARRAY.lexval, tipo.val,ID.val) }");
+                                            }
     ;
 
 atributos
-    : atributos COMA expresion      { $1.push($3); $$= $1; }
-    | expresion                     { $$ = [$1]; }
+    : atributos COMA expresion      { $1.push($3); 
+                                        $$= $1; 
+                                        gramatical.unshift("atributos := atributos COMA expresion"); 
+                                        instruccionesR.unshift("{ atributps.val.push(expresion.val) }");
+                                    }
+    | expresion                     { $$ = [$1]; 
+                                        gramatical.unshift("atributos := expresion"); 
+                                        instruccionesR.unshift("{ atributps.val= [expresion.val] }");
+                                    }
     ;
 
 imprimir
-    : PRINT PARIZQ atributos PARDER      {$$ = new Print($3,@1.first_line, @1.first_column); }
-    | PRINT PARIZQ  PARDER               {$$ = new Print([],@1.first_line, @1.first_column); }
-    | PRINTLN PARIZQ atributos PARDER    {$$ = new Print($3,@1.first_line, @1.first_column,true); }
-    | PRINTLN PARIZQ  PARDER             {$$ = new Print([],@1.first_line, @1.first_column,true); }
+    : PRINT PARIZQ atributos PARDER     {$$ = new Print($3,@1.first_line, @1.first_column); 
+                                            gramatical.unshift("imprimir := PRINT PARIZQ atributos PARDER"); 
+                                            instruccionesR.unshift("{ imprimir.val = new Print(atributos.val, linea, columna) }");
+                                        }
+    | PRINT PARIZQ  PARDER               {$$ = new Print([],@1.first_line, @1.first_column); 
+                                            gramatical.unshift("imprimir := PRINT PARIZQ PARDER"); 
+                                            instruccionesR.unshift("{ imprimir.val = new Print([], linea, columna) }");
+                                        }
+    | PRINTLN PARIZQ atributos PARDER   {$$ = new Print($3,@1.first_line, @1.first_column,true); 
+                                            gramatical.unshift("imprimir := PRINTLN PARIZQ atributos PARDER"); 
+                                            instruccionesR.unshift("{ imprimir.val = new Print(atributos.val, linea, columna, true) }");
+                                        }
+    | PRINTLN PARIZQ  PARDER            {$$ = new Print([],@1.first_line, @1.first_column,true); 
+                                            gramatical.unshift("imprimir := PRINTLN PARIZQ PARDER"); 
+                                            instruccionesR.unshift("{ imprimir.val = new Print([], linea, columna,true) }");
+                                        }
     ;
 
 declaracion
     : tipo listaId IGUAL expresion       { $$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column) ;
-                                            gramatical.unshift("declaracion := tipo listaId IGUAL expresion ");}
+                                            gramatical.unshift("declaracion := tipo listaId IGUAL expresion ");
+                                            instruccionesR.unshift("declaracion.val = new Declaracion(tipo.val,listaId.val,expresion.val,linea,columna)");
+                                            }
     | tipo listaId                       { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) ;
-                                            gramatical.unshift("declaracion := tipo listaId ");}
+                                            gramatical.unshift("declaracion := tipo listaId ");
+                                            instruccionesR.unshift("declaracion.val = new Declaracion(tipo.val,listaId.val,null,linea,columna)");
+                                        }
     ;
 
 listaId
-    : listaId COMA ID                   { $1.push($3); $$ = $1; gramatical.unshift("listaId := listaId COMA ID");}
-    | ID                                { $$ = [$1]; gramatical.unshift("listaId := ID");}
+    : listaId COMA ID                   { $1.push($3); 
+                                            $$ = $1; 
+                                            gramatical.unshift("listaId := listaId COMA ID");
+                                            instruccionesR.unshift("listaId.val.push(ID.val)");
+                                        }
+    | ID                                { $$ = [$1]; 
+                                            gramatical.unshift("listaId := ID");
+                                            instruccionesR.unshift("listaId.val= [ID.val]");
+                                        }
     ; 
 
 asignacion
-    : ID IGUAL expresion                { $$ = new Asignacion($1, $3, @1.first_line, @1.first_column); }
-    | ID INC                            { $$ = new AsignacionDecInc($1, TipoAsignacion.INCREMENTO, @1.first_line, @1.first_column); }
-    | ID DEC                            { $$ = new AsignacionDecInc($1, TipoAsignacion.DECREMENTO, @1.first_line, @1.first_column); }
-    | ID IGUAL CORIZQ CORDER            { $$ = new Asignacion($1, [], @1.first_line, @1.first_column); }
+    : ID IGUAL expresion                { $$ = new Asignacion($1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("asignacion := ID IGUAL expresion");
+                                            instruccionesR.unshift("asignacion.val= new Asignacion(ID.val,expresion.val,linea,columna)");
+                                        }
+    | ID INC                            { $$ = new AsignacionDecInc($1, TipoAsignacion.INCREMENTO, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("asignacion := ID INC");
+                                            instruccionesR.unshift("asignacion.val= new AsignacionDecInc(ID.val,INCREMENTO.lexval,linea,columna)");
+                                        }
+    | ID DEC                            { $$ = new AsignacionDecInc($1, TipoAsignacion.DECREMENTO, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("asignacion := ID DEC");
+                                            instruccionesR.unshift("asignacion.val= new AsignacionDecInc(ID.val,DECREMENTO.lexval,linea,columna)");
+                                        }
+    | ID IGUAL CORIZQ CORDER            { $$ = new Asignacion($1, [], @1.first_line, @1.first_column); 
+                                            gramatical.unshift("asignacion := ID IGUAL CORIZQ CORDER");
+                                            instruccionesR.unshift("asignacion.val= new Asignacion(ID.val,[],linea,columna)");
+                                        }
     
     ;
 
 //vector
 
 tipoValor
-    : DECIMAL                           { $$ = (Number.isInteger(Number($1)))?new SetearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column):new SetearValor(Tipos.DOUBLE, Number($1), @1.first_line, @1.first_column); }
-    | ENTERO                            { $$ = new SetearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column); }
-    | CADENA                            { $$ = new SetearValor(Tipos.STRING, $1 , @1.first_line, @1.first_column); }
-    | CARACTER                          { $$ = new SetearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); }
-    | TRUE                              { $$ = new SetearValor(Tipos.BOOLEAN, true, @1.first_line, @1.first_column); }
-    | FALSE                             { $$ = new SetearValor(Tipos.BOOLEAN, false, @1.first_line, @1.first_column); }
-    | ID                                { $$= new ObtenerValor($1,@1.first_line, @1.first_column);}
+    : DECIMAL                           { $$ = (Number.isInteger(Number($1)))?new SetearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column):new SetearValor(Tipos.DOUBLE, Number($1), @1.first_line, @1.first_column); 
+                                            gramatical.unshift("tipoValor := DECIMAL");
+                                            instruccionesR.unshift("tipo.val= (DECIMAL.val esEntero)? new SetearValor(INT.lexval, DECIMAL.val,linea,columna):new SetearValor(DOUBLE.lexval,DECIMAL.val,linea,columna)");
+                                        }
+    | ENTERO                            { $$ = new SetearValor(Tipos.INT, Number($1), @1.first_line, @1.first_column); 
+                                            gramatical.unshift("tipoValor := ENTERO");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(INT.lexval, ENTERO.val, linea,columna)");
+                                        }
+    | CADENA                            { $$ = new SetearValor(Tipos.STRING, $1 , @1.first_line, @1.first_column); 
+                                            gramatical.unshift("tipoValor := CADENA");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(STRING.lexval, CADENA.val, linea,columna)");
+                                        }
+    | CARACTER                          { $$ = new SetearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("tipoValor := CARACTER");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(CHAR.lexval, CARACTER.val, linea,columna)");
+                                        }
+    | TRUE                              { $$ = new SetearValor(Tipos.BOOLEAN, true, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("tipoValor := TRUE");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(BOOLEAN.lexval, true, linea,columna)");
+                                        }
+    | FALSE                             { $$ = new SetearValor(Tipos.BOOLEAN, false, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("tipoValor := false");
+                                            instruccionesR.unshift("tipoValor.val= new SetearValor(BOOLEAN.lexval, false, linea,columna)");
+                                        }
+    | ID                                { $$= new ObtenerValor($1,@1.first_line, @1.first_column);
+                                            gramatical.unshift("tipoValor := ID");
+                                            instruccionesR.unshift("tipoValor.val= new ObtenerValor(ID.lexval, linea,columna)");
+                                        }
     ;
 
 tipo
-    : BOOLEAN                           { $$ = Tipos.BOOLEAN; }
-    | CHAR                              { $$ = Tipos.CHAR; }
-    | DOUBLE                            { $$ = Tipos.DOUBLE; }
-    | INT                               { $$ = Tipos.INT; }
-    | STRING                            { $$ = Tipos.STRING; }
+    : BOOLEAN                           { $$ = Tipos.BOOLEAN; 
+                                            gramatical.unshift("tipo := BOOLEAN");
+                                            instruccionesR.unshift("tipo.val= BOOLEAN.lexval");
+                                        }
+    | CHAR                              { $$ = Tipos.CHAR; 
+                                            gramatical.unshift("tipo := CHAR");
+                                            instruccionesR.unshift("tipo.val= CHAR.lexval");
+                                        }
+    | DOUBLE                            { $$ = Tipos.DOUBLE; 
+                                            gramatical.unshift("tipo := DOUBLE");
+                                            instruccionesR.unshift("tipo.val= DOUBLE.lexval");
+                                        }
+    | INT                               { $$ = Tipos.INT; 
+                                            gramatical.unshift("tipo := INT");
+                                            instruccionesR.unshift("tipo.val= INT.lexval");
+                                        }
+    | STRING                            { $$ = Tipos.STRING; 
+                                            gramatical.unshift("tipo := STRING");
+                                            instruccionesR.unshift("tipo.val= STRING.lexval");
+                                        }
     ;
 
 expresion
-    : expresion EXTE expresion           { $$ = new Aritmetica(TipoOperacion.EXTE, $1, $3, @1.first_line, @1.first_column); }
-    | expresion CONCATENACION expresion  { $$ = new Aritmetica(TipoOperacion.CONCATENACION, $1, $3, @1.first_line, @1.first_column); }
-	| expresion MAS expresion            { $$ = new Aritmetica(TipoOperacion.SUMA, $1, $3, @1.first_line, @1.first_column); }
-	| expresion MENOS expresion          { $$ = new Aritmetica(TipoOperacion.RESTA, $1, $3, @1.first_line, @1.first_column); }
-	| expresion POR expresion            { $$ = new Aritmetica(TipoOperacion.MULTIPLICACION, $1, $3, @1.first_line, @1.first_column); }
-	| expresion DIVIDIDO expresion       { $$ = new Aritmetica(TipoOperacion.DIVISION, $1, $3, @1.first_line, @1.first_column); }
-    | expresion MODULO expresion         { $$ = new Aritmetica(TipoOperacion.MODULO, $1, $3, @1.first_line, @1.first_column); }
-    | expresion AND expresion            { $$ = new Logico(TipoLogico.AND, $1, $3, @1.first_line, @1.first_column); }
-	| expresion OR expresion             { $$ = new Logico(TipoLogico.OR, $1, $3, @1.first_line, @1.first_column); }
-    | NOT expresion                      { $$ = new Logico(TipoLogico.NOT, $2, null,@1.first_line, @1.first_column); }
-    | expresion IGUALDAD expresion       { $$ = new Relacional(TiposRelacional.IGUAL, $1, $3, @1.first_line, @1.first_column); }
-	| expresion DIFERENTE expresion      { $$ = new Relacional(TiposRelacional.DIFERENTE, $1, $3, @1.first_line, @1.first_column); }
-    | expresion MAYORIGUAL expresion     { $$ = new Relacional(TiposRelacional.MAYORI, $1, $3, @1.first_line, @1.first_column); }
-    | expresion MENORIGUAL expresion     { $$ = new Relacional(TiposRelacional.MENORI, $1, $3, @1.first_line, @1.first_column); }
-	| expresion MAYOR expresion          { $$ = new Relacional(TiposRelacional.MAYOR, $1, $3, @1.first_line, @1.first_column); }
-	| expresion MENOR expresion          { $$ = new Relacional(TiposRelacional.MENOR, $1, $3, @1.first_line, @1.first_column); }
-    | MENOS expresion %prec UMENOS       { $$ = new Unario(TUnario.NEGATIVO, $2, @1.first_line, @1.first_column); }
-    | expresion INC                      { $$ = new Unario(TUnario.INCREMENTO, $1, @1.first_line, @1.first_column); }
-    | expresion DEC                      { $$ = new Unario(TUnario.DECREMENTO, $1, @1.first_line, @1.first_column); }
-    | BEGIN                              { $$ = new Begin(@1.first_line, @1.first_column); }
-    | END                                { $$ = new End(@1.first_line, @1.first_column); }
-    | NULL                               { $$ = Tipos.NULL; }
-    | ternario                           { $$=$1; }
-    | nativas                            { $$=$1; }
-    | tipoValor                          { $$=$1; }
-    | llamadaFuncion                     { $$=$1; }
-    | estructuras                        { $$=$1; }
+    : expresion EXTE expresion           { $$ = new Aritmetica(TipoOperacion.EXTE, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion EXTE expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(^,expresion.val,expresion2.val,linea.columna)");
+                                        }
+    | expresion CONCATENACION expresion  { $$ = new Aritmetica(TipoOperacion.CONCATENACION, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion CONCATENACION expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(&,expresion.val,expresion2.val,linea.columna)");
+                                        }
+	| expresion MAS expresion            { $$ = new Aritmetica(TipoOperacion.SUMA, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion MAS expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(+,expresion.val,expresion2.val,linea.columna)");
+                                        }
+	| expresion MENOS expresion          { $$ = new Aritmetica(TipoOperacion.RESTA, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion MENOS expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(-,expresion.val,expresion2.val,linea.columna)");
+                                        }
+	| expresion POR expresion            { $$ = new Aritmetica(TipoOperacion.MULTIPLICACION, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion POR expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(*,expresion.val,expresion2.val,linea.columna)");
+                                        }
+	| expresion DIVIDIDO expresion       { $$ = new Aritmetica(TipoOperacion.DIVISION, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion DIVIDIDO expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(/,expresion.val,expresion2.val,linea.columna)");
+                                        }
+    | expresion MODULO expresion         { $$ = new Aritmetica(TipoOperacion.MODULO, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion MODULO expresion");
+                                            instruccionesR.unshift("expresion.val= new Aritmetica(%,expresion.val,expresion2.val,linea.columna)");
+                                        }
+    | expresion AND expresion            { $$ = new Logico(TipoLogico.AND, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion AND expresion");
+                                            instruccionesR.unshift("expresion.val= new Logico(&&,expresion.val,expresion2.val,linea.columna)");
+                                        }
+	| expresion OR expresion             { $$ = new Logico(TipoLogico.OR, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion OR expresion");
+                                            instruccionesR.unshift("expresion.val= new Logico(||,expresion.val,expresion2.val,linea.columna)");
+                                        }
+    | NOT expresion                      { $$ = new Logico(TipoLogico.NOT, $2, null,@1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion :=  NOT expresion");
+                                            instruccionesR.unshift("expresion.val= new Logico(!,expresion.val,null,linea.columna)");
+                                        }
+    | expresion IGUALDAD expresion       { $$ = new Relacional(TiposRelacional.IGUAL, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion IGUALDAD expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(==,expresion.val,expresion2.val,linea.columna)");
+                                        }
+	| expresion DIFERENTE expresion      { $$ = new Relacional(TiposRelacional.DIFERENTE, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion DIFERENTE expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(!=,expresion.val,expresion2.val,linea.columna)");
+                                        }
+    | expresion MAYORIGUAL expresion     { $$ = new Relacional(TiposRelacional.MAYORI, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion MAYORI expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(>=,expresion.val,expresion2.val,linea.columna)");
+                                        }
+    | expresion MENORIGUAL expresion     { $$ = new Relacional(TiposRelacional.MENORI, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion MENORI expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(<=,expresion.val,expresion2.val,linea.columna)");
+                                        }
+	| expresion MAYOR expresion          { $$ = new Relacional(TiposRelacional.MAYOR, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion MAYOR expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(>,expresion.val,expresion2.val,linea.columna)");
+                                        }
+	| expresion MENOR expresion          { $$ = new Relacional(TiposRelacional.MENOR, $1, $3, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := expresion MENOR expresion");
+                                            instruccionesR.unshift("expresion.val= new Relacional(<,expresion.val,expresion2.val,linea.columna)");
+                                        }
+    | MENOS expresion %prec UMENOS       { $$ = new Unario(TUnario.NEGATIVO, $2, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := MENOS expresion");
+                                            instruccionesR.unshift("expresion.val= new Unario(NEGATIVOlexval,expresion.val,linea.columna)");
+                                        }
+    | expresion INC                      { $$ = new Unario(TUnario.INCREMENTO, $1, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := INC expresion");
+                                            instruccionesR.unshift("expresion.val= new Unario(INC.lexval,expresion.val,linea.columna)");
+                                        }
+    | expresion DEC                      { $$ = new Unario(TUnario.DECREMENTO, $1, @1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := DEC expresion");
+                                            instruccionesR.unshift("expresion.val= new Unario(DEC.lexval,expresion.val,linea.columna)");
+                                        }
+    | BEGIN                              { $$ = new Begin(@1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := BEGIN");
+                                            instruccionesR.unshift("expresion.val= new Begin(BEGIN.lexval,linea.columna)");
+                                        }
+    | END                                { $$ = new End(@1.first_line, @1.first_column); 
+                                            gramatical.unshift("expresion := END");
+                                            instruccionesR.unshift("expresion.val= new End(END.lexval,linea.columna)");
+                                        }
+    | NULL                               { $$ = Tipos.NULL; 
+                                            gramatical.unshift("expresion := NULL");
+                                            instruccionesR.unshift("expresion.val= NULL.lexval");
+                                        }
+    | ternario                           { $$=$1; 
+                                            gramatical.unshift("expresion := ternario");
+                                            instruccionesR.unshift("expresion.val= ternario.val");
+                                        }
+    | nativas                            { $$=$1; 
+                                            gramatical.unshift("expresion := nativas");
+                                            instruccionesR.unshift("expresion.val= nativas.val");
+                                        }
+    | tipoValor                          { $$=$1; 
+                                            gramatical.unshift("expresion := tipoValor");
+                                            instruccionesR.unshift("expresion.val= tipoValor.val");
+                                        }
+    | llamadaFuncion                     { $$=$1; 
+                                            gramatical.unshift("expresion := llamadaFuncion");
+                                            instruccionesR.unshift("expresion.val= llamadaFuncion.val");
+                                        }
+    | estructuras                        { $$=$1; 
+                                            gramatical.unshift("expresion := estructuras");
+                                            instruccionesR.unshift("expresion.val= estructuras.val");
+                                        }
     
-    | PARIZQ expresion PARDER            { $$ = $2; }
+    | PARIZQ expresion PARDER            { $$ = $2;
+                                            gramatical.unshift("expresion := PARIZQ expresion PARDER");
+                                            instruccionesR.unshift("expresion.val= expresion.val");
+                                        }
     ;
 
 estructuras
-    : ID CORIZQ expresion CORDER          { $$ = new ObtenerVector($1,$3,@1.first_line, @1.first_column); }
+    : ID CORIZQ expresion CORDER          { $$ = new ObtenerVector($1,$3,@1.first_line, @1.first_column); 
+                                                
+                                            }
     ;
 
 ternario
