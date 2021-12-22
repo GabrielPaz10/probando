@@ -1,13 +1,13 @@
 import { consola, errores } from "../../index";
 import { Expresion } from "../../abstractas/expresion";
-import { Instruccion } from "../../abstractas/instruccion";
+import { Instruccion } from '../../abstractas/instruccion';
 import { Error } from "../../Reportes/Error";
 import { TablaMetodos } from "../../Reportes/TablaMetodos";
 import { TablaSimbolo } from "../../Reportes/TablaSimbolos";
 import { Nodo, Valor, Tipos, TiposControl } from '../../tiposD/Tipos';
 
 export class For extends Instruccion{
-    private declaracion:Expresion
+    private declaracion:Instruccion
     private condicion: Expresion
     private paso: Expresion
     private cuerpo: Instruccion[]

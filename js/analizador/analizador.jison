@@ -29,6 +29,7 @@
     //ciclos
     const { Dowhile } = require('../ts/instrucciones/ciclos/dowhile.js')
     const { For } = require('../ts/instrucciones/ciclos/for.js')
+    const { ForIn } = require('../ts/instrucciones/ciclos/forin.js')
     const { While } = require('../ts/instrucciones/ciclos/while.js')
     //valores 
     const { ObtenerValor } = require('../ts/expresiones/valores/obtenerValor.js')
@@ -59,6 +60,8 @@
     const { ToLowerCase } = require('../ts/expresiones/funcionesNativas/toLower.js')
     const { ToUpperCase } = require('../ts/expresiones/funcionesNativas/toUpper.js')
     const { Typeof } = require('../ts/expresiones/funcionesNativas/typeof.js')
+    const { Pop } = require('../ts/expresiones/funcionesNativas/Pop.js')
+    const { Push } = require('../ts/expresiones/funcionesNativas/Push.js')
     
 %}
 
@@ -230,11 +233,12 @@ local
     : condicionales                 { $$=$1; }
     | vector PTCOMA                 { $$=$1; }
     | ciclos                        { $$=$1; }
-    | llamadaFuncion PTCOMA         { $$=$1; }
+    //| llamadaFuncion PTCOMA         { $$=$1; }
     | asignacion PTCOMA             { $$=$1; }
     | declaracion PTCOMA            { $$=$1; }
     | control PTCOMA                { $$=$1; }
     | imprimir PTCOMA               { $$=$1; }
+    | expresion PTCOMA              { $$=$1; }
     ;
 
 vector 
@@ -353,6 +357,7 @@ expresion
     | tipoValor                          { $$=$1; }
     | llamadaFuncion                     { $$=$1; }
     | estructuras                        { $$=$1; }
+    
     | PARIZQ expresion PARDER            { $$ = $2; }
     ;
 
@@ -380,8 +385,8 @@ nativas
     | TODOUBLE PARIZQ expresion PARDER                                  { $$ = new ToDouble($3,@1.first_line, @1.first_column); }
     | RSTRING PARIZQ expresion PARDER                                   { $$ = new StringM($3,@1.first_line, @1.first_column); }
     | TYPEOF PARIZQ expresion PARDER                                    { $$ = new Typeof($3,@1.first_line, @1.first_column); }
-    | ID  PUSH PARIZQ expresion PARDER //                            {}
-    | ID  POP PARIZQ PARDER //                                       {}
+    | ID  PUSH PARIZQ expresion PARDER                             { $$= new Push($1,$4,@1.first_line, @1.first_column); }
+    | ID  POP PARIZQ PARDER                                        { $$= new Pop($1,@1.first_line, @1.first_column); }
     ;
 
 cop
@@ -437,10 +442,10 @@ ciclowhile
     ;
 
 ciclofor
-    : FOR PARIZQ asignacionfor PTCOMA expresion PTCOMA asignacion PARDER LLAVEIZQ cuerpoLocal LLAVEDER  {$$= new For($3,$5,$7,$10,@1.first_line, @1.first_column);}
-    | FOR PARIZQ declaracionfor PTCOMA expresion PTCOMA asignacion PARDER LLAVEIZQ cuerpoLocal LLAVEDER {$$= new For($3,$5,$7,$10,@1.first_line, @1.first_column);}
-    | FOR PARIZQ expresion IN expresion PARDER LLAVEIZQ cuerpoLocal LLAVEDER                            {}
-    | FOR expresion IN expresion LLAVEIZQ cuerpoLocal LLAVEDER                                          {}
+    : FOR PARIZQ asignacionfor PTCOMA expresion PTCOMA asignacion PARDER LLAVEIZQ cuerpoLocal LLAVEDER  { $$= new For($3,$5,$7,$10,@1.first_line, @1.first_column); }
+    | FOR PARIZQ declaracionfor PTCOMA expresion PTCOMA asignacion PARDER LLAVEIZQ cuerpoLocal LLAVEDER { $$= new For($3,$5,$7,$10,@1.first_line, @1.first_column); }
+    | FOR ID IN CORIZQ atributos CORDER LLAVEIZQ cuerpoLocal LLAVEDER                                   { $$= new ForIn($2,$5,new Arreglo('iterador',Tipos.ARRAY,null,$8,@1.first_line, @1.first_column),@1.first_line, @1.first_column); }
+    | FOR ID IN expresion LLAVEIZQ cuerpoLocal LLAVEDER                                                 { $$= new ForIn($2,$4,$6,@1.first_line, @1.first_column); }
     ;       
 
 asignacionfor
