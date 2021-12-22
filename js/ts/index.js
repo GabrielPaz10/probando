@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerMain = exports.ejecutar = exports.simbolos = exports.errores = exports.consola = void 0;
+exports.obtenerMain = exports.ejecutar = exports.gramatical = exports.simbolos = exports.errores = exports.consola = void 0;
 const Consola_1 = require("./Reportes/Consola");
 const TablaError_1 = require("./Reportes/TablaError");
 const TablaMetodos_1 = require("./Reportes/TablaMetodos");
@@ -18,6 +18,7 @@ const expresion_1 = require("./abstractas/expresion");
 exports.consola = new Consola_1.Consola();
 exports.errores = new TablaError_1.TablaError();
 exports.simbolos = new TablaSimbolos_1.TablaSimbolo([]);
+exports.gramatical = "";
 const analizador = require('../analizador/analizador.js');
 let main = [];
 let metodos;

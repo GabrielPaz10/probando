@@ -2,6 +2,7 @@
 %{
     //salida y errores
     const {errores,consola} =require('../ts/index.js')
+    var {gramatical}=require('../ts/index.js')
     const {Error} = require('../ts/Reportes/Error.js')
     //tipos de datos
     const {Tipos}= require('../ts/tiposD/Tipos.js')
@@ -205,19 +206,19 @@
 %% /* Definición de la gramática */
 
 init
-    : completo EOF     { return $1; }         
+    : completo EOF     { gramatical+= "init := completo EOF"; return $1;  }         
     ;
 
 completo
-    : completo global    { $1.push($2); $$=$1; }            
-    | global             { $$ = [$1]; }           
+    : completo global    { $1.push($2); $$=$1; gramatical+="completo := completo global"; }            
+    | global             { $$ = [$1]; gramatical+= "completo := global";}           
     ;
 
 global
-    : asignacion PTCOMA         { $$=$1; }
-    | declaracion PTCOMA        { $$=$1; }
+    : asignacion PTCOMA         { $$=$1;gramatical+= "global := asginacion ;"; }
+    | declaracion PTCOMA        { $$=$1;gramatical+= "global := declaracion ;"; }
     | creacionstruct PTCOMA     {}
-    | funcion                   { $$=$1; }
+    | funcion                   { $$=$1;gramatical+= "global := funcion"; }
     | vector PTCOMA             { $$=$1; }
     | expresion PTCOMA              {$$=$1;}
     | error PTCOMA            { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 

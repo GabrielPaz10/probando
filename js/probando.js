@@ -1,10 +1,15 @@
 const { ejecutar, errores, simbolos } = require("./ts/index")
+var {gramatical}= require('./ts/index')
 
 
 const bejecutar = document.getElementById('ejecutar')
 const consolaa = document.getElementById('consola')
+const  areagra = document.getElementById('reportegramatical')
 const btnerrores = document.getElementById('errores')
+const btngramatical = document.getElementById('gramatica')
 //const btntablasimbolos = document.getElementById('tabla')
+
+
 
 
 bejecutar.addEventListener('click',()=>{
@@ -14,6 +19,8 @@ bejecutar.addEventListener('click',()=>{
     
     //analizador.parse(entrada)
     consolaa.value=ejecutar(entrada)
+    console.log(gramatical+'si sirve?')
+    areagra.value= gramatical
 })
 btnerrores.addEventListener('click',()=>{
     generarTablaErrores();
@@ -21,6 +28,11 @@ btnerrores.addEventListener('click',()=>{
 // btntablasimbolos.addEventListener('click',()=>{
 //     generarTablaSimbolos();
 // })
+btngramatical.addEventListener('click',()=>{
+    
+    areagra.value= gramatical
+
+})
 
 function generarTablaErrores() {
      var div = document.getElementById("tablaerrores");
