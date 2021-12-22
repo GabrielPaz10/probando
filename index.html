@@ -77,7 +77,26 @@
             verticalRatio: 0.5,
             animationInterval: 100, // milliseconds
             animationPreload: true,
-            filterValue: 'time'
+            filterValue: 'time',
+            nodes:{// Control de nodos
+                // shape: 'dot',
+                
+                borderWidth: 3,//Ajuste de ancho de borde de nodo
+                borderWidthSelected: 10,//Haga clic en la configuración de ancho cuando esté seleccionado,
+                color:  {
+                    border: 'green',//Configuración de color del borde
+                    background: '#F6DDCC'
+                },
+            },
+            edges:{//Control de la relación
+                width:2,//Ancho de línea de relación
+                arrows:{//Flecha
+                    to:{enabled:true,//Si la flecha se muestra y se enciende
+                        scaleFactor:0.5,//Tamaño de la flecha
+                        type:'arrow',//Tipos de flechas: círculo, barra, flechas.
+                    },
+                },
+            },
 
         };
     var container = document.getElementById('grafo'); 
