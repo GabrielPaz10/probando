@@ -301,6 +301,8 @@ asignacion
     : ID IGUAL expresion                { $$ = new Asignacion($1, $3, @1.first_line, @1.first_column); }
     | ID INC                            { $$ = new AsignacionDecInc($1, TipoAsignacion.INCREMENTO, @1.first_line, @1.first_column); }
     | ID DEC                            { $$ = new AsignacionDecInc($1, TipoAsignacion.DECREMENTO, @1.first_line, @1.first_column); }
+    | ID IGUAL CORIZQ CORDER            { $$ = new Asignacion($1, [], @1.first_line, @1.first_column); }
+    
     ;
 
 //vector
@@ -369,7 +371,7 @@ nativas
     | COS PARIZQ expresion PARDER                                       { $$ = new Cos($3,@1.first_line, @1.first_column); }
     | TAN PARIZQ expresion PARDER                                       { $$ = new Tan($3,@1.first_line, @1.first_column); }
     | cop                                                               { $$=$1;}
-    | expresion  SUBSTRING PARIZQ expresion COMA expresion PARDER  { $$ = new Substring($1,$5,$7,@1.first_line, @1.first_column); }
+    | expresion  SUBSTRING PARIZQ expresion COMA expresion PARDER  { $$ = new Substring($1,$4,$6,@1.first_line, @1.first_column); }
     | expresion  LENGTH PARIZQ PARDER                              { $$ = new Length($1,@1.first_line, @1.first_column); }
     | expresion  UPPERCASE PARIZQ PARDER                           { $$ = new ToUpperCase($1,@1.first_line, @1.first_column); }
     | expresion  LOWERCASE PARIZQ PARDER                           { $$ = new ToLowerCase($1,@1.first_line, @1.first_column); }
@@ -383,7 +385,7 @@ nativas
     ;
 
 cop
-    : expresion  COPOSITION PARIZQ expresion PARDER                { $$ = new CaracterOfPosition($1,$5,@1.first_line, @1.first_column); }
+    : expresion  COPOSITION PARIZQ expresion PARDER                { $$ = new CaracterOfPosition($1,$4,@1.first_line, @1.first_column); }
     ;
 condicionales
     : ifcondicion               { $$ = $1; }

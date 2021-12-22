@@ -9,8 +9,8 @@ export class Funcion extends Instruccion{
     private tipo:Tipos
     private id:string
     private parametros:Parametros[]
-    private cuerpo: any[]
-    constructor(tipo:Tipos,id:string,parametros:Parametros[],cuerpo:any[],linea:number,columna:number){
+    private cuerpo: Instruccion[]
+    constructor(tipo:Tipos,id:string,parametros:Parametros[],cuerpo:Instruccion[],linea:number,columna:number){
         super(linea,columna)
         this.tipo=tipo
         this.id=id

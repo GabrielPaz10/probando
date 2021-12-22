@@ -75,11 +75,13 @@ export class LlamarFuncion extends Expresion{
         }
         return stLocal2
     }
-    private ejecutarMetodo(cuerpo:any[],tsGlobal:TablaSimbolo,tsLocal:TablaSimbolo, metodos:TablaMetodos,entorno:string){
+    private ejecutarMetodo(cuerpo:Instruccion[],tsGlobal:TablaSimbolo,tsLocal:TablaSimbolo, metodos:TablaMetodos,entorno:string){
         for(var i in cuerpo){
             const control= cuerpo[i].ejecutar(tsGlobal,tsLocal,metodos,entorno)
             if (control!==null && control!==undefined) {
-                return control
+                if (control.tipo===TiposControl.BREAK ||control.tipo===TiposControl.CONTINUE||control.tipo===TiposControl.RETURN) {
+                    return control
+                }
             }
         }
         return null

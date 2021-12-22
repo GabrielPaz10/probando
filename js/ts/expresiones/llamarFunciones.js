@@ -82,7 +82,9 @@ class LlamarFuncion extends expresion_1.Expresion {
         for (var i in cuerpo) {
             const control = cuerpo[i].ejecutar(tsGlobal, tsLocal, metodos, entorno);
             if (control !== null && control !== undefined) {
-                return control;
+                if (control.tipo === Tipos_1.TiposControl.BREAK || control.tipo === Tipos_1.TiposControl.CONTINUE || control.tipo === Tipos_1.TiposControl.RETURN) {
+                    return control;
+                }
             }
         }
         return null;
