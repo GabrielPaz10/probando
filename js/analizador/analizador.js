@@ -84,22 +84,22 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- gramatical+= "init := completo EOF"; return $$[$0-1];  
+ gramatical.unshift("init := completo EOF"); return $$[$0-1];  
 break;
 case 2:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1]; gramatical+="completo := completo global"; 
+ $$[$0-1].push($$[$0]); this.$=$$[$0-1]; gramatical.unshift("completo := completo global"); 
 break;
 case 3:
- this.$ = [$$[$0]]; gramatical+= "completo := global";
+ this.$ = [$$[$0]]; gramatical.unshift("completo := global");
 break;
 case 4:
- this.$=$$[$0-1];gramatical+= "global := asginacion ;"; 
+ this.$=$$[$0-1];gramatical.unshift("global := asginacion ;"); 
 break;
 case 5:
- this.$=$$[$0-1];gramatical+= "global := declaracion ;"; 
+ this.$=$$[$0-1];gramatical.unshift("global := declaracion ;"); 
 break;
 case 7:
- this.$=$$[$0];gramatical+= "global := funcion"; 
+ this.$=$$[$0];gramatical.unshift("global := funcion"); 
 break;
 case 8: case 16: case 18: case 19: case 20: case 21: case 22: case 125:
  this.$=$$[$0-1]; 
@@ -168,7 +168,7 @@ break;
 case 44:
  $$[$0-2].push($$[$0]); this.$= $$[$0-2]; 
 break;
-case 45: case 53:
+case 45:
  this.$ = [$$[$0]]; 
 break;
 case 46:
@@ -184,13 +184,18 @@ case 49:
 this.$ = new Print([],_$[$0-2].first_line, _$[$0-2].first_column,true); 
 break;
 case 50:
- this.$ = new Declaracion($$[$0-3], $$[$0-2], $$[$0], _$[$0-3].first_line, _$[$0-3].first_column) ; 
+ this.$ = new Declaracion($$[$0-3], $$[$0-2], $$[$0], _$[$0-3].first_line, _$[$0-3].first_column) ;
+                                            gramatical.unshift("declaracion := tipo listaId IGUAL expresion ");
 break;
 case 51:
- this.$ = new Declaracion($$[$0-1], $$[$0], null, _$[$0-1].first_line, _$[$0-1].first_column) ; 
+ this.$ = new Declaracion($$[$0-1], $$[$0], null, _$[$0-1].first_line, _$[$0-1].first_column) ;
+                                            gramatical.unshift("declaracion := tipo listaId ");
 break;
 case 52:
- $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 
+ $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; gramatical.unshift("listaId := listaId COMA ID");
+break;
+case 53:
+ this.$ = [$$[$0]]; gramatical.unshift("listaId := ID");
 break;
 case 54:
  this.$ = new Asignacion($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
@@ -706,8 +711,7 @@ _handle_error:
 }};
 
     //salida y errores
-    const {errores,consola} =require('../ts/index.js')
-    var {gramatical}=require('../ts/index.js')
+    const {errores,consola,gramatical} =require('../ts/index.js')
     const {Error} = require('../ts/Reportes/Error.js')
     //tipos de datos
     const {Tipos}= require('../ts/tiposD/Tipos.js')

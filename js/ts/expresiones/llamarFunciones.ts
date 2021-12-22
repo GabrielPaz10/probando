@@ -22,7 +22,7 @@ export class LlamarFuncion extends Expresion{
             if (metodo.tipo!==Tipos.VOID) {
                 if (metodo.parametros.length===this.parametros.length) {
                     var local2 = this.obtenerEntorno(metodo,tsGlobal,tsLocal,metodos,entorno)
-                    const control = this.ejecutarMetodo(metodo.cuerpo,tsGlobal,local2,metodos,entorno)
+                    const control = this.ejecutarMetodo(metodo.cuerpo,tsGlobal,local2,metodos,entorno+this.id)
                     //retornos
                     if (control!==null&&control!==undefined) {
                         if (control.tipo==TiposControl.RETURN) {
@@ -31,7 +31,7 @@ export class LlamarFuncion extends Expresion{
                                     return control.valor
                                 }
                             }
-                            this.ponerError(`No se pude retornar tipo ${control.valor.tipo}`,this.linea,this.columna,entorno)
+                            this.ponerError(`No se pude retornar tipo ${control.valor.tipo}`,this.linea,this.columna,entorno+this.id)
                         }
                     }
                 }else if(metodo.parametros.length>=this.parametros.length){
@@ -42,14 +42,14 @@ export class LlamarFuncion extends Expresion{
             } else if (metodo.tipo===Tipos.VOID) {
                 if (metodo.parametros.length===this.parametros.length) {
                     var tsLocal2 = this.obtenerEntorno(metodo,tsGlobal,tsLocal,metodos,entorno)
-                    const control = this.ejecutarMetodo(metodo.cuerpo,tsGlobal,tsLocal2,metodos, entorno)
+                    const control = this.ejecutarMetodo(metodo.cuerpo,tsGlobal,tsLocal2,metodos, entorno+this.id)
                     //para los retornos
                     if (control!==null&&control!==undefined) {
                         if (control===TiposControl.RETURN) {
                             if (control.valor===null) {
                                 return
                             }
-                            this.ponerError(`No se puede retornar tipo: ${control.valor.tipo} en metodo VOID`,this.linea,this.columna,entorno)
+                            this.ponerError(`No se puede retornar tipo: ${control.valor.tipo} en metodo VOID`,this.linea,this.columna,entorno+this.id)
                         }
                     }
                     return

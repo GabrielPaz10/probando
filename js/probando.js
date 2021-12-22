@@ -20,7 +20,7 @@ bejecutar.addEventListener('click',()=>{
     //analizador.parse(entrada)
     consolaa.value=ejecutar(entrada)
     console.log(gramatical+'si sirve?')
-    areagra.value= gramatical
+    areagra.value= gramatical.join('\n')
 })
 btnerrores.addEventListener('click',()=>{
     generarTablaErrores();
@@ -30,7 +30,7 @@ btntablasimbolos.addEventListener('click',()=>{
 })
 btngramatical.addEventListener('click',()=>{
     
-    areagra.value= gramatical
+    areagra.value= gramatical.join('\n')
 
 })
 

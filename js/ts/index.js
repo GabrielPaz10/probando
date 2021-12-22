@@ -18,7 +18,7 @@ const expresion_1 = require("./abstractas/expresion");
 exports.consola = new Consola_1.Consola();
 exports.errores = new TablaError_1.TablaError();
 exports.simbolos = new TablaSimbolos_1.TablaSimbolo([]);
-exports.gramatical = "";
+exports.gramatical = [];
 const analizador = require('../analizador/analizador.js');
 let main = [];
 let metodos;

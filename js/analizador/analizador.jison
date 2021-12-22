@@ -1,8 +1,7 @@
 //importaciones
 %{
     //salida y errores
-    const {errores,consola} =require('../ts/index.js')
-    var {gramatical}=require('../ts/index.js')
+    const {errores,consola,gramatical} =require('../ts/index.js')
     const {Error} = require('../ts/Reportes/Error.js')
     //tipos de datos
     const {Tipos}= require('../ts/tiposD/Tipos.js')
@@ -206,19 +205,19 @@
 %% /* Definición de la gramática */
 
 init
-    : completo EOF     { gramatical+= "init := completo EOF"; return $1;  }         
+    : completo EOF     { gramatical.unshift("init := completo EOF"); return $1;  }         
     ;
 
 completo
-    : completo global    { $1.push($2); $$=$1; gramatical+="completo := completo global"; }            
-    | global             { $$ = [$1]; gramatical+= "completo := global";}           
+    : completo global    { $1.push($2); $$=$1; gramatical.unshift("completo := completo global"); }            
+    | global             { $$ = [$1]; gramatical.unshift("completo := global");}           
     ;
 
 global
-    : asignacion PTCOMA         { $$=$1;gramatical+= "global := asginacion ;"; }
-    | declaracion PTCOMA        { $$=$1;gramatical+= "global := declaracion ;"; }
+    : asignacion PTCOMA         { $$=$1;gramatical.unshift("global := asginacion ;"); }
+    | declaracion PTCOMA        { $$=$1;gramatical.unshift("global := declaracion ;"); }
     | creacionstruct PTCOMA     {}
-    | funcion                   { $$=$1;gramatical+= "global := funcion"; }
+    | funcion                   { $$=$1;gramatical.unshift("global := funcion"); }
     | vector PTCOMA             { $$=$1; }
     | expresion PTCOMA              {$$=$1;}
     | error PTCOMA            { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
@@ -312,13 +311,15 @@ imprimir
     ;
 
 declaracion
-    : tipo listaId IGUAL expresion       { $$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column) ; }
-    | tipo listaId                       { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) ; }
+    : tipo listaId IGUAL expresion       { $$ = new Declaracion($1, $2, $4, @1.first_line, @1.first_column) ;
+                                            gramatical.unshift("declaracion := tipo listaId IGUAL expresion ");}
+    | tipo listaId                       { $$ = new Declaracion($1, $2, null, @1.first_line, @1.first_column) ;
+                                            gramatical.unshift("declaracion := tipo listaId ");}
     ;
 
 listaId
-    : listaId COMA ID                   { $1.push($3); $$ = $1; }
-    | ID                                { $$ = [$1]; }
+    : listaId COMA ID                   { $1.push($3); $$ = $1; gramatical.unshift("listaId := listaId COMA ID");}
+    | ID                                { $$ = [$1]; gramatical.unshift("listaId := ID");}
     ; 
 
 asignacion
