@@ -93,7 +93,7 @@
 "]"         return 'CORDER';
 "{"         return 'LLAVEIZQ';
 "}"         return 'LLAVEDER';
-"."         return 'PUNTO';
+//"."         return 'PUNTO';
 ","         return 'COMA';
 "="         return 'IGUAL';
 "?"         return 'PREGUNTA';
@@ -120,20 +120,20 @@
 "cos"           return 'COS';
 "tan"           return 'TAN';
 // funciones nativas 
-"caracterOfPosition"    return 'COPOSITION';
-"subString"     return 'SUBSTRING';
+".caracterOfPosition"    return 'COPOSITION';
+".subString"     return 'SUBSTRING';
 "begin"         return 'BEGIN';
 "end"           return 'END';
-"length"        return 'LENGTH';
-"toLowercase"   return 'LOWERCASE';
-"toUppercase"   return 'UPPERCASE';
-"parse"         return 'PARSE';
+".length"        return 'LENGTH';
+".toLowercase"   return 'LOWERCASE';
+".toUppercase"   return 'UPPERCASE';
+".parse"         return 'PARSE';
 "toInt"         return 'TOINT';
 "toDouble"      return 'TODOUBLE';
 "string"        return 'RSTRING';
 "typeof"        return 'TYPEOF';
-"pop"           return 'POP';
-"push"          return 'PUSH';
+".pop"           return 'POP';
+".push"          return 'PUSH';
 
 
 
@@ -312,7 +312,7 @@ tipoValor
     | CARACTER                          { $$ = new SetearValor(Tipos.CHAR, $1, @1.first_line, @1.first_column); }
     | TRUE                              { $$ = new SetearValor(Tipos.BOOLEAN, true, @1.first_line, @1.first_column); }
     | FALSE                             { $$ = new SetearValor(Tipos.BOOLEAN, false, @1.first_line, @1.first_column); }
-    | ID                                 { $$= new ObtenerValor($1,@1.first_line, @1.first_column);}
+    | ID                                { $$= new ObtenerValor($1,@1.first_line, @1.first_column);}
     ;
 
 tipo
@@ -351,7 +351,6 @@ expresion
     | tipoValor                          { $$=$1; }
     | llamadaFuncion                     { $$=$1; }
     | estructuras                        { $$=$1; }
-    
     | PARIZQ expresion PARDER            { $$ = $2; }
     ;
 
@@ -370,21 +369,21 @@ nativas
     | COS PARIZQ expresion PARDER                                       { $$ = new Cos($3,@1.first_line, @1.first_column); }
     | TAN PARIZQ expresion PARDER                                       { $$ = new Tan($3,@1.first_line, @1.first_column); }
     | cop                                                               { $$=$1;}
-    | expresion PUNTO SUBSTRING PARIZQ expresion COMA expresion PARDER  { $$ = new Substring($1,$5,$7,@1.first_line, @1.first_column); }
-    | expresion PUNTO LENGTH PARIZQ PARDER                              { $$ = new Length($1,@1.first_line, @1.first_column); }
-    | expresion PUNTO UPPERCASE PARIZQ PARDER                           { $$ = new ToUpperCase($1,@1.first_line, @1.first_column); }
-    | expresion PUNTO LOWERCASE PARIZQ PARDER                           { $$ = new ToLowerCase($1,@1.first_line, @1.first_column); }
-    | tipo PUNTO PARSE PARIZQ expresion PARDER                          { $$ = new Parse($1,$5,@1.first_line, @1.first_column); }
+    | expresion  SUBSTRING PARIZQ expresion COMA expresion PARDER  { $$ = new Substring($1,$5,$7,@1.first_line, @1.first_column); }
+    | expresion  LENGTH PARIZQ PARDER                              { $$ = new Length($1,@1.first_line, @1.first_column); }
+    | expresion  UPPERCASE PARIZQ PARDER                           { $$ = new ToUpperCase($1,@1.first_line, @1.first_column); }
+    | expresion  LOWERCASE PARIZQ PARDER                           { $$ = new ToLowerCase($1,@1.first_line, @1.first_column); }
+    | tipo  PARSE PARIZQ expresion PARDER                          { $$ = new Parse($1,$5,@1.first_line, @1.first_column); }
     | TOINT PARIZQ expresion PARDER                                     { $$ = new ToInt($3,@1.first_line, @1.first_column); }
     | TODOUBLE PARIZQ expresion PARDER                                  { $$ = new ToDouble($3,@1.first_line, @1.first_column); }
     | RSTRING PARIZQ expresion PARDER                                   { $$ = new StringM($3,@1.first_line, @1.first_column); }
     | TYPEOF PARIZQ expresion PARDER                                    { $$ = new Typeof($3,@1.first_line, @1.first_column); }
-    | ID PUNTO PUSH PARIZQ expresion PARDER //                            {}
-    | ID PUNTO POP PARIZQ PARDER //                                       {}
+    | ID  PUSH PARIZQ expresion PARDER //                            {}
+    | ID  POP PARIZQ PARDER //                                       {}
     ;
 
 cop
-    : expresion PUNTO COPOSITION PARIZQ expresion PARDER                { $$ = new CaracterOfPosition($1,$5,@1.first_line, @1.first_column); }
+    : expresion  COPOSITION PARIZQ expresion PARDER                { $$ = new CaracterOfPosition($1,$5,@1.first_line, @1.first_column); }
     ;
 condicionales
     : ifcondicion               { $$ = $1; }
