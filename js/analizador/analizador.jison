@@ -1,7 +1,7 @@
 //importaciones
 %{
     //salida y errores
-    const {errores,consola,gramatical} =require('../ts/index.js')
+    const {errores,consola,gramatical,instruccionesR} =require('../ts/index.js')
     const {Error} = require('../ts/Reportes/Error.js')
     //tipos de datos
     const {Tipos}= require('../ts/tiposD/Tipos.js')
@@ -205,21 +205,44 @@
 %% /* Definición de la gramática */
 
 init
-    : completo EOF     { gramatical.unshift("init := completo EOF"); return $1;  }         
+    : completo EOF     { gramatical.unshift("init := completo EOF");
+                        instruccionesR.unshift("{ init.val = completo.val }");
+                        return $1;  }         
     ;
 
 completo
-    : completo global    { $1.push($2); $$=$1; gramatical.unshift("completo := completo global"); }            
-    | global             { $$ = [$1]; gramatical.unshift("completo := global");}           
+    : completo global    { $1.push($2); $$=$1; 
+                            gramatical.unshift("completo := completo global"); 
+                            instruccionesR.unshift('{ completo.val.agregar(global) }');
+                            }
+    | global             { $$ = [$1]; 
+                            gramatical.unshift("completo := global");
+                            instruccionesR.unshift(" { completo.val = [global] } ");
+                            }
     ;
 
 global
-    : asignacion PTCOMA         { $$=$1;gramatical.unshift("global := asginacion ;"); }
-    | declaracion PTCOMA        { $$=$1;gramatical.unshift("global := declaracion ;"); }
+    : asignacion PTCOMA         { $$=$1;
+                                    gramatical.unshift("global := asginacion ;"); 
+                                    instruccionesR.unshift("{ global.val = asignacion.val }");
+                                    }
+    | declaracion PTCOMA        { $$=$1; 
+                                    gramatical.unshift("global := declaracion ;"); 
+                                    instruccionesR.unshift("{ global.val = declaracion.val }";)
+                                    }
     | creacionstruct PTCOMA     {}
-    | funcion                   { $$=$1;gramatical.unshift("global := funcion"); }
-    | vector PTCOMA             { $$=$1; }
-    | expresion PTCOMA              {$$=$1;}
+    | funcion                   { $$=$1;
+                                    gramatical.unshift("global := funcion"); 
+                                    instruccionesR.unshift("{ global.val = funcion.val }");
+                                    }
+    | vector PTCOMA             { $$=$1;
+                                    gramatical.unshift("global := vector PTCOMA"); 
+                                    instruccionesR.unshift("{ global.val = vector.val }");
+                                    }
+    | expresion PTCOMA              {$$=$1;
+                                        gramatical.unshift("global := expresion PTCOMA"); 
+                                        instruccionesR.unshift("{ global.val = expresion.val }");
+                                    }
     | error PTCOMA            { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
                                 errores.agregar(new Error('Sintactico',`Se esperaba ${yytext}`, this._$.first_line , this._$.first_column,'')); }
     | error LLAVEDER          { consola.actualizar(`Se esperaba ${yytext}, l: ${this._$.first_line}, c: ${this._$.first_column}\n`); 
@@ -231,25 +254,62 @@ creacionstruct
     ;
 
 cuerpoLocal
-    : cuerpoLocal local { $1.push($2); $$=$1; }
-    | local             { $$ =[$1]; }
+    : cuerpoLocal local { $1.push($2); 
+                            $$=$1; 
+                            gramatical.unshift("cuerpoLocal := cuerpoLocal local"); 
+                            instruccionesR.unshift("{ cuerpoLocal.val.push(local.val); cuerpoLocal.val= cuerpoLocal.val; }");
+                        }
+    | local             { $$ =[$1];
+                            gramatical.unshift("cuerpoLocal := local"); 
+                            instruccionesR.unshift("{ cuerpoLocal.val = local.val }");
+                        }
     ;
 
 local
-    : condicionales                 { $$=$1; }
-    | vector PTCOMA                 { $$=$1; }
-    | ciclos                        { $$=$1; }
+    : condicionales                 { $$=$1; 
+                                        gramatical.unshift("local := condicionales"); 
+                                        instruccionesR.unshift("{ local.val = condicionales.val }");
+                                    }
+    | vector PTCOMA                 { $$=$1; 
+                                        gramatical.unshift("local := vector PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = vector.val }");
+                                    }
+    | ciclos                        { $$=$1; 
+                                        gramatical.unshift("local := ciclos"); 
+                                        instruccionesR.unshift("{ local.val = ciclos.val }");
+                                    }
     //| llamadaFuncion PTCOMA         { $$=$1; }
-    | asignacion PTCOMA             { $$=$1; }
-    | declaracion PTCOMA            { $$=$1; }
-    | control PTCOMA                { $$=$1; }
-    | imprimir PTCOMA               { $$=$1; }
-    | expresion PTCOMA              { $$=$1; }
+    | asignacion PTCOMA             { $$=$1; 
+                                        gramatical.unshift("local := asignacion PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = asignacion.val }");
+                                    }
+    | declaracion PTCOMA            { $$=$1; 
+                                        gramatical.unshift("local := declaracion PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = declaracion.val }");
+                                    }
+    | control PTCOMA                { $$=$1; 
+                                        gramatical.unshift("local := control PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = control.val }");
+                                    }
+    | imprimir PTCOMA               { $$=$1; 
+                                        gramatical.unshift("local := imprimir PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = imprimir.val }");
+                                    }
+    | expresion PTCOMA              { $$=$1; 
+                                        gramatical.unshift("local := expresion PTCOMA"); 
+                                        instruccionesR.unshift("{ local.val = expresion.val }");
+                                    }
     ;
 
 vector 
-    : declaracionVector                                             { $$=$1; }
-    | asignacionVector                                              { $$=$1; }
+    : declaracionVector                                             { $$=$1; 
+                                                                        gramatical.unshift("vector := declaracionVector"); 
+                                                                        instruccionesR.unshift("{ vector.val = declaracionVector.val }");
+                                                                    }
+    | asignacionVector                                              { $$=$1; 
+                                                                        gramatical.unshift("vector := asignacionVector"); 
+                                                                        instruccionesR.unshift("{ vector.val = asignacionVector.val }");
+                                                                    }
     ;
 
 structs
@@ -266,12 +326,21 @@ asigStruct
     ;
 
 declaracionVector
-    : tipo  CORIZQ CORDER ID IGUAL CORIZQ atributos CORDER           { $$= new Arreglo($4,$1,null,$7,@1.first_line, @1.first_column) ; }
-    | tipo  CORIZQ CORDER ID                                         { $$= new Arreglo($4,$1,null,null,@1.first_line, @1.first_column) ;}
+    : tipo  CORIZQ CORDER ID IGUAL CORIZQ atributos CORDER          { $$= new Arreglo($4,$1,null,$7,@1.first_line, @1.first_column) ; 
+                                                                        gramatical.unshift("declaracionVector := tipo CORIZQ CORDER ID IGUAL CORIZQ atributos CORDER"); 
+                                                                        instruccionesR.unshift("{ declaraionVector.val = new Arreglo(ID.lexval, tipo.val, null,atributos.val,fila,columna) }");
+                                                                    }
+    | tipo  CORIZQ CORDER ID                                        { $$= new Arreglo($4,$1,null,null,@1.first_line, @1.first_column) ;
+                                                                        gramatical.unshift("declaracionVector := tipo CORIZQ CORDER ID"); 
+                                                                        instruccionesR.unshift("{ declaraionVector.val = new Arreglo(ID.lexval, tipo.val, null,null,fila,columna) }");
+                                                                    }
     ;
 
 asignacionVector
-    : ID CORIZQ expresion CORDER IGUAL expresion                    { $$ = new AsignacionArreglo($1,$3,$6,@1.first_line, @1.first_column); }
+    : ID CORIZQ expresion CORDER IGUAL expresion                    { $$ = new AsignacionArreglo($1,$3,$6,@1.first_line, @1.first_column); 
+                                                                        gramatical.unshift("asignacionVector := tipo CORIZQ expresion CORDER ID IGUAL expresion"); 
+                                                                        instruccionesR.unshift("{ asignacionVector.val = new AsignacionArreglo(tipo.val, expresion.val, expresion2.val,fila,columna) }");
+                                                                    }
     ;
 
 funcion

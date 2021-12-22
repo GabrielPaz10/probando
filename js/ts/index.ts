@@ -22,6 +22,7 @@ export const consola = new Consola()
 export const errores = new TablaError()
 export const simbolos = new TablaSimbolo([])
 export let gramatical= []
+export let instruccionesR = []
 const analizador = require('../analizador/analizador.js')
 let main :any[]=[]
 let metodos:TablaMetodos
