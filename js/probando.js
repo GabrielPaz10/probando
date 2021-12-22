@@ -7,7 +7,7 @@ const consolaa = document.getElementById('consola')
 const  areagra = document.getElementById('reportegramatical')
 const btnerrores = document.getElementById('errores')
 const btngramatical = document.getElementById('gramatica')
-//const btntablasimbolos = document.getElementById('tabla')
+const btntablasimbolos = document.getElementById('tabla')
 
 
 
@@ -25,9 +25,9 @@ bejecutar.addEventListener('click',()=>{
 btnerrores.addEventListener('click',()=>{
     generarTablaErrores();
 })
-// btntablasimbolos.addEventListener('click',()=>{
-//     generarTablaSimbolos();
-// })
+btntablasimbolos.addEventListener('click',()=>{
+    generarTablaSimbolos();
+})
 btngramatical.addEventListener('click',()=>{
     
     areagra.value= gramatical
@@ -89,71 +89,73 @@ function generarTablaErrores() {
     document.getElementById('tablaerrores').appendChild(table);
     }
 
-    // function generarTablaSimbolos() {
-    //    // var div = document.getElementById("tablasimbolo");
-    //     //div.innerHTML = "";
+    function generarTablaSimbolos() {
+        var div = document.getElementById("tablasimbolo");
+        div.innerHTML = "";
     
-    //     let tables = document.createElement('table');
-    //     let theads = document.createElement('thead');
-    //     let tbodys = document.createElement('tbody');
-    //     var tablasim = simbolos.getSimbolos();
+        let tables = document.createElement('table');
+        let theads = document.createElement('thead');
+        let tbodys = document.createElement('tbody');
+        var tablasim = simbolos.getSimbolos();
     
-    //     // Creating and adding data to first row of the table
-    //     let row_1s = document.createElement('tr');
-    //     let heading_1s = document.createElement('th');
-    //     heading_1s.innerHTML = "TIPO";
-    //     let heading_2s = document.createElement('th');
-    //     heading_2s.innerHTML = "ID";
-    //     let heading_3s = document.createElement('th');
-    //     heading_3s.innerHTML = "VALOR";
-    //     let heading_4s = document.createElement('th');
-    //     heading_4s.innerHTML = "ENTORNO";
-    //     console.log("largo" + tablasim.length)
-    //     row_1s.appendChild(heading_1s);
-    //     row_1s.appendChild(heading_2s);
-    //     row_1s.appendChild(heading_3s);
-    //     row_1s.appendChild(heading_4s);
-    //     theads.appendChild(row_1s);
-    //     // Creating and adding data to second row of the table
-    //     for (var i=0; i<tablasim.length; i++) { 
-    //         let row_2s = document.createElement('tr');
-    //         let row_2_data_1s = document.createElement('td');
-    //         row_2_data_1s.innerHTML = tablasim[i].tipo;
-    //         let row_2_data_2s = document.createElement('td');
-    //         row_2_data_2s.innerHTML = tablasim[i].id;
-    //         let row_2_data_3s = document.createElement('td');
-    //         row_2_data_3s.innerHTML = tablasim[i].valor;
-    //         let row_2_data_4s = document.createElement('td');
-    //         row_2_data_4s.innerHTML = tablasim[i].entorno;
-    //         row_2s.appendChild(row_2_data_1s);
-    //         row_2s.appendChild(row_2_data_2s);
-    //         row_2s.appendChild(row_2_data_3s);
-    //         row_2s.appendChild(row_2_data_4s);
-    //         tbodys.appendChild(row_2s);
-    //          }
+        // Creating and adding data to first row of the table
+        let row_1s = document.createElement('tr');
+        let heading_1s = document.createElement('th');
+        heading_1s.innerHTML = "TIPO";
+        let heading_2s = document.createElement('th');
+        heading_2s.innerHTML = "ID";
+        let heading_3s = document.createElement('th');
+        heading_3s.innerHTML = "VALOR";
+        let heading_4s = document.createElement('th');
+        heading_4s.innerHTML = "ENTORNO";
+        console.log("largo" + tablasim.length)
+        row_1s.appendChild(heading_1s);
+        row_1s.appendChild(heading_2s);
+        row_1s.appendChild(heading_3s);
+        row_1s.appendChild(heading_4s);
+        theads.appendChild(row_1s);
+        // Creating and adding data to second row of the table
+        for (var i=0; i<tablasim.length; i++) { 
+            let row_2s = document.createElement('tr');
+            let row_2_data_1s = document.createElement('td');
+            row_2_data_1s.innerHTML = tablasim[i].tipo;
+            let row_2_data_2s = document.createElement('td');
+            row_2_data_2s.innerHTML = tablasim[i].id;
+            let row_2_data_3s = document.createElement('td');
+            row_2_data_3s.innerHTML = tablasim[i].valor;
+            let row_2_data_4s = document.createElement('td');
+            row_2_data_4s.innerHTML = tablasim[i].entorno;
+            row_2s.appendChild(row_2_data_1s);
+            row_2s.appendChild(row_2_data_2s);
+            row_2s.appendChild(row_2_data_3s);
+            row_2s.appendChild(row_2_data_4s);
+            tbodys.appendChild(row_2s);
+             }
+             tables.appendChild(theads);
+             tables.appendChild(tbodys);
         
-    //     // Adding the entire table to the body tag
-    //     document.getElementById('tablasimbolo').appendChild(tables);
-    //     }
-// var redraw;
-// window.height = 300;
-// window.width = 400;
-// var g = new Graph();
+        // Adding the entire table to the body tag
+        document.getElementById('tablasimbolo').appendChild(tables);
+        }
+var redraw;
+window.height = 300;
+window.width = 400;
+var g = new Graph();
 
-// g.addEdge("cherry", "apple");
-// g.addEdge("strawberry", "kiwi");
-// g.addEdge("banana", "banana");
+g.addEdge("cherry", "apple");
+g.addEdge("strawberry", "kiwi");
+g.addEdge("banana", "banana");
 
 
-// /* layout the graph using the Spring layout implementation */
-// var layouter = new Graph.Layout.Spring(g);
-// layouter.layout();
+/* layout the graph using the Spring layout implementation */
+var layouter = new Graph.Layout.Spring(g);
+layouter.layout();
 
-// /* draw the graph using the RaphaelJS draw implementation */
-// var renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
-// renderer.draw();
+/* draw the graph using the RaphaelJS draw implementation */
+var renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
+renderer.draw();
 
-// redraw = function() {
-//   layouter.layout();
-//   renderer.draw();
-// };
+redraw = function() {
+  layouter.layout();
+  renderer.draw();
+};
