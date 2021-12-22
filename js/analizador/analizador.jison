@@ -293,7 +293,7 @@ llamadaFuncion
 
 parametros 
     : parametros COMA tipo ID               { $1.push( new Parametros($3,null,$4)); $$=$1; } //agregar parametros de arreglos parametros COMA tipo ID LLAVEIZQ LLAVEDER
-    | parametros COMA tipo ID CORIZQ CORDER { $1.push( new Parametros(Tipos.ARRAY,$3,$4)); $$=$1; }
+    | parametros COMA tipo CORIZQ CORDER ID { $1.push( new Parametros(Tipos.ARRAY,$3,$6)); $$=$1; }
     | tipo ID                               { $$ = [new Parametros($1,null,$2)]; } //agregar parametro de arreglo tipo ID LLAVEIZQ LLAVEDER
     | tipo ID CORIZQ CORDER                 { $$ = [new Parametros(Tipos.ARRAY,$1,$2)]; }
     ;
